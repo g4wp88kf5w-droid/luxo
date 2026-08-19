@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Molesworth Maze: The Great Escape</title>
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            background-color: #1a1a1a;
+            background: #1a1a1a;
             color: white;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -17,44 +23,78 @@
             min-height: 100vh;
             overflow: hidden;
         }
+
         h1 {
             margin: 5px 0;
             font-size: 24px;
             text-align: center;
             color: #ffcc00;
         }
-        p {
-            margin: 5px 0 15px 0;
+
+        .instructions {
+            margin: 5px 0 12px;
             font-size: 14px;
+            line-height: 1.4;
             color: #cccccc;
             text-align: center;
             max-width: 500px;
+            padding: 0 10px;
         }
+
+        #scoreBoard {
+            display: flex;
+            justify-content: space-between;
+            width: 500px;
+            max-width: calc(100vw - 20px);
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
         #gameContainer {
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 500px;
+            height: 600px;
+            max-width: calc(100vw - 20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             border-radius: 8px;
             overflow: hidden;
         }
+
         canvas {
-            background-color: #333;
             display: block;
+            width: 500px;
+            height: 600px;
+            background: #333;
         }
+
         #uiOverlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.8);
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.82);
             transition: opacity 0.3s ease;
         }
+
+        #overlayTitle {
+            color: #ffcc00;
+            font-size: 28px;
+            margin: 0;
+        }
+
+        #overlayText {
+            margin: 10px 0;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
         .btn {
-            background-color: #00529b;
+            background: #00529b;
             color: white;
             border: none;
             padding: 12px 30px;
@@ -65,23 +105,49 @@
             margin-top: 15px;
             box-shadow: 0 4px 0 #003366;
         }
-        .btn:hover { background-color: #0066cc; }
-        .btn:active { transform: translateY(4px); box-shadow: none; }
-        #scoreBoard {
-            display: flex;
-            justify-content: space-between;
-            width: 500px;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 16px;
+
+        .btn:hover {
+            background: #0066cc;
         }
-        .hidden { display: none !important; }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid #ffcc00;
+            outline-offset: 3px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 520px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .instructions {
+                font-size: 12px;
+            }
+
+            #scoreBoard {
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <h1>Molesworth Maze: The Great Escape</h1>
-    <p>Help PM Chris Luxon navigate the layout to safely reach the Parliamentary Precinct! Avoid speeding cyclists and marching protestors.</p>
+
+    <p class="instructions">
+        Help PM Chris Luxon navigate the layout to safely reach the Parliamentary Precinct!
+        Avoid speeding cyclists and marching protestors.
+    </p>
 
     <div id="scoreBoard">
         <div id="livesDisplay">LIVES: ❤️ ❤️ ❤️</div>
@@ -89,316 +155,1322 @@
     </div>
 
     <div id="gameContainer">
-        <canvas id="gameCanvas" width="500" height="600"></canvas>
+
+        <canvas
+            id="gameCanvas"
+            width="500"
+            height="600"
+            aria-label="Molesworth Maze game"
+        ></canvas>
+
         <div id="uiOverlay">
-            <h2 id="overlayTitle" style="color: #ffcc00; font-size: 28px; margin: 0;">PREPARE TO CROSS</h2>
-            <p id="overlayText" style="margin: 10px 0;">Use ARROW KEYS or WASD to move.</p>
-            <button id="startBtn" class="btn">START MISSION</button>
+
+            <h2 id="overlayTitle">PREPARE TO CROSS</h2>
+
+            <p id="overlayText">
+                Use ARROW KEYS or WASD to move.<br>
+                Reach the Parliamentary gate without getting hit.
+            </p>
+
+            <button id="startBtn" class="btn">
+                START MISSION
+            </button>
+
         </div>
+
     </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // UI Elements
-        const uiOverlay = document.getElementById('uiOverlay');
-        const overlayTitle = document.getElementById('overlayTitle');
-        const overlayText = document.getElementById('overlayText');
-        const startBtn = document.getElementById('startBtn');
-        const livesDisplay = document.getElementById('livesDisplay');
-        const statusDisplay = document.getElementById('statusDisplay');
 
-        // Game State
-        let gameRunning = false;
-        let lives = 3;
-        let animationFrameId;
+        // ============================================================
+        // CANVAS & UI
+        // ============================================================
 
-        // Map Layout Definition (Y coordinates)
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const uiOverlay = document.getElementById("uiOverlay");
+        const overlayTitle = document.getElementById("overlayTitle");
+        const overlayText = document.getElementById("overlayText");
+        const startBtn = document.getElementById("startBtn");
+
+        const livesDisplay = document.getElementById("livesDisplay");
+        const statusDisplay = document.getElementById("statusDisplay");
+
+
+        // ============================================================
+        // GAME SETTINGS
+        // ============================================================
+
+        const CANVAS_WIDTH = canvas.width;
+        const CANVAS_HEIGHT = canvas.height;
+
+        const PLAYER_SPEED = 5;
+
+        const GATE_LEFT = 210;
+        const GATE_RIGHT = 290;
+
         const ROW_HEIGHT = 50;
+
+
+        // ============================================================
+        // MAP
+        // ============================================================
+
+        /*
+            The map runs from top to bottom:
+
+            0-100    Parliament
+            100-150  Cycle lane
+            150-250  Traffic lane
+            250-350  Traffic lane
+            350-400  Cycle lane
+            400-600  Apartment/start area
+        */
+
         const map = {
-            parliament: { yStart: 0, yEnd: 100, color: '#e4f0ec' }, 
-            cycleLane2: { yStart: 100, yEnd: 150, color: '#008751' }, 
-            trafficLane2: { yStart: 150, yEnd: 250, color: '#4a4a4a' }, 
-            trafficLane1: { yStart: 250, yEnd: 350, color: '#555555' }, 
-            cycleLane1: { yStart: 350, yEnd: 400, color: '#008751' }, 
-            apartment: { yStart: 400, yEnd: 600, color: '#00529b' } 
+
+            parliament: {
+                yStart: 0,
+                yEnd: 100,
+                color: "#e4f0ec"
+            },
+
+            cycleLane2: {
+                yStart: 100,
+                yEnd: 150,
+                color: "#008751"
+            },
+
+            trafficLane2: {
+                yStart: 150,
+                yEnd: 250,
+                color: "#4a4a4a"
+            },
+
+            trafficLane1: {
+                yStart: 250,
+                yEnd: 350,
+                color: "#555555"
+            },
+
+            cycleLane1: {
+                yStart: 350,
+                yEnd: 400,
+                color: "#008751"
+            },
+
+            apartment: {
+                yStart: 400,
+                yEnd: 600,
+                color: "#00529b"
+            }
         };
 
-        // Player (Chris Luxon Caricature)
+
+        // ============================================================
+        // GAME STATE
+        // ============================================================
+
+        let gameRunning = false;
+        let lives = 3;
+        let animationFrameId = null;
+
+        let collisionCooldown = 0;
+
+
+        // ============================================================
+        // PLAYER
+        // ============================================================
+
         const player = {
+
             x: 235,
             y: 520,
+
             width: 30,
             height: 45,
-            speed: 15,
-            reset: function() {
+
+            speed: PLAYER_SPEED,
+
+            reset() {
                 this.x = 235;
                 this.y = 520;
             }
         };
 
-        // Obstacle classes
-        class Cyclist {
-            constructor(y, speed, direction) {
-                this.y = y + 10;
-                this.speed = speed;
-                this.direction = direction; 
-                this.width = 25;
-                this.height = 30;
-                this.x = direction === 1 ? -40 : canvas.width + 40;
-                this.color = '#ff3333';
-            }
-            update() {
-                this.x += this.speed * this.direction;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.fillRect(this.x, this.y, this.width, this.height);
-                ctx.fillStyle = '#000';
-                ctx.fillRect(this.x + (this.direction === 1 ? 15 : 2), this.y - 5, 8, 8); 
-            }
-        }
 
-        class Protestor {
-            constructor(y, speed, direction, slogan) {
-                this.y = y + 5;
+        // ============================================================
+        // KEYBOARD INPUT
+        // ============================================================
+
+        const keys = {};
+
+        window.addEventListener("keydown", (event) => {
+
+            const key = event.key.toLowerCase();
+
+            keys[key] = true;
+
+            const movementKeys = [
+                "arrowup",
+                "arrowdown",
+                "arrowleft",
+                "arrowright",
+                "w",
+                "a",
+                "s",
+                "d",
+                " "
+            ];
+
+            if (movementKeys.includes(key)) {
+                event.preventDefault();
+            }
+        });
+
+        window.addEventListener("keyup", (event) => {
+
+            keys[event.key.toLowerCase()] = false;
+
+        });
+
+
+        // ============================================================
+        // OBSTACLES
+        // ============================================================
+
+        class Cyclist {
+
+            constructor(y, speed, direction) {
+
+                this.y = y + 10;
+
                 this.speed = speed;
                 this.direction = direction;
-                this.slogan = slogan;
-                this.width = 30;
-                this.height = 40;
-                this.x = direction === 1 ? -50 : canvas.width + 50;
+
+                this.width = 25;
+                this.height = 30;
+
+                this.x =
+                    direction === 1
+                        ? -40
+                        : CANVAS_WIDTH + 40;
+
+                this.color = "#ff3333";
             }
+
             update() {
+
                 this.x += this.speed * this.direction;
+
             }
+
             draw() {
-                ctx.fillStyle = '#cc6600';
-                ctx.fillRect(this.x, this.y + 15, this.width, this.height - 15);
-                ctx.fillStyle = '#ffcc99'; 
+
+                // Body
+                ctx.fillStyle = this.color;
+
+                ctx.fillRect(
+                    this.x,
+                    this.y,
+                    this.width,
+                    this.height
+                );
+
+                // Head
+                ctx.fillStyle = "#ffd1a9";
+
                 ctx.beginPath();
-                ctx.arc(this.x + 15, this.y + 10, 8, 0, Math.PI * 2);
+
+                ctx.arc(
+                    this.x + 12,
+                    this.y - 3,
+                    6,
+                    0,
+                    Math.PI * 2
+                );
+
                 ctx.fill();
 
-                ctx.fillStyle = '#ffffff';
-                ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 1;
+                // Helmet
+                ctx.fillStyle = "#222";
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    this.x + 12,
+                    this.y - 6,
+                    6,
+                    Math.PI,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+                // Wheels
+                ctx.strokeStyle = "#111";
+                ctx.lineWidth = 2;
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    this.x + 5,
+                    this.y + 31,
+                    6,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.stroke();
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    this.x + 20,
+                    this.y + 31,
+                    6,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.stroke();
+            }
+        }
+
+
+        class Protestor {
+
+            constructor(y, speed, direction, slogan) {
+
+                this.y = y + 5;
+
+                this.speed = speed;
+                this.direction = direction;
+
+                this.slogan = slogan;
+
+                this.width = 30;
+                this.height = 40;
+
+                this.x =
+                    direction === 1
+                        ? -50
+                        : CANVAS_WIDTH + 50;
+            }
+
+            update() {
+
+                this.x += this.speed * this.direction;
+
+            }
+
+            draw() {
+
+                // Body
+                ctx.fillStyle = "#cc6600";
+
+                ctx.fillRect(
+                    this.x,
+                    this.y + 15,
+                    this.width,
+                    this.height - 15
+                );
+
+                // Head
+                ctx.fillStyle = "#ffcc99";
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    this.x + 15,
+                    this.y + 10,
+                    8,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+                // Sign
                 const signX = this.x - 10;
                 const signY = this.y - 20;
-                ctx.fillRect(signX, signY, 50, 18);
-                ctx.strokeRect(signX, signY, 50, 18);
-                
-                ctx.fillStyle = '#663300';
-                ctx.fillRect(this.x + 14, signY + 18, 3, 15);
 
-                ctx.fillStyle = '#000000';
-                ctx.font = 'bold 8px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(this.slogan, signX + 25, signY + 12);
+                ctx.fillStyle = "#ffffff";
+                ctx.strokeStyle = "#000000";
+                ctx.lineWidth = 1;
+
+                ctx.fillRect(
+                    signX,
+                    signY,
+                    50,
+                    18
+                );
+
+                ctx.strokeRect(
+                    signX,
+                    signY,
+                    50,
+                    18
+                );
+
+                // Sign pole
+                ctx.fillStyle = "#663300";
+
+                ctx.fillRect(
+                    this.x + 14,
+                    signY + 18,
+                    3,
+                    25
+                );
+
+                // Slogan
+                ctx.fillStyle = "#000000";
+                ctx.font = "bold 8px Arial";
+                ctx.textAlign = "center";
+
+                ctx.fillText(
+                    this.slogan,
+                    signX + 25,
+                    signY + 12
+                );
             }
         }
+
 
         let obstacles = [];
-        const slogans = ["FIX THE ROADS", "SAVE OUR CITY", "NO CUTS", "MORE BUSES", "BIKE POWER"];
+
+        const slogans = [
+            "FIX THE ROADS",
+            "SAVE OUR CITY",
+            "NO CUTS",
+            "MORE BUSES",
+            "BIKE POWER"
+        ];
+
+
+        // ============================================================
+        // SPAWN OBSTACLES
+        // ============================================================
 
         function spawnObstacles() {
-            if (!gameRunning) return;
 
-            if (Math.random() < 0.03) {
-                obstacles.push(new Cyclist(map.cycleLane1.yStart, 3.5, 1));
+            if (!gameRunning) {
+                return;
             }
-            if (Math.random() < 0.03) {
-                obstacles.push(new Cyclist(map.cycleLane2.yStart, 4, -1));
+
+            // Cyclists travelling left → right
+            if (Math.random() < 0.025) {
+
+                obstacles.push(
+                    new Cyclist(
+                        map.cycleLane1.yStart,
+                        3.5,
+                        1
+                    )
+                );
             }
-            if (Math.random() < 0.02) {
-                let slogan = slogans[Math.floor(Math.random() * slogans.length)];
-                obstacles.push(new Protestor(map.trafficLane1.yStart, 1.8, -1, slogan));
+
+            // Cyclists travelling right → left
+            if (Math.random() < 0.025) {
+
+                obstacles.push(
+                    new Cyclist(
+                        map.cycleLane2.yStart,
+                        4,
+                        -1
+                    )
+                );
             }
-            if (Math.random() < 0.02) {
-                let slogan = slogans[Math.floor(Math.random() * slogans.length)];
-                obstacles.push(new Protestor(map.trafficLane2.yStart, 2.2, 1, slogan));
+
+            // Protestors travelling right → left
+            if (Math.random() < 0.018) {
+
+                const slogan =
+                    slogans[
+                        Math.floor(
+                            Math.random() * slogans.length
+                        )
+                    ];
+
+                obstacles.push(
+                    new Protestor(
+                        map.trafficLane1.yStart,
+                        1.8,
+                        -1,
+                        slogan
+                    )
+                );
+            }
+
+            // Protestors travelling left → right
+            if (Math.random() < 0.018) {
+
+                const slogan =
+                    slogans[
+                        Math.floor(
+                            Math.random() * slogans.length
+                        )
+                    ];
+
+                obstacles.push(
+                    new Protestor(
+                        map.trafficLane2.yStart,
+                        2.2,
+                        1,
+                        slogan
+                    )
+                );
             }
         }
+
+
+        // ============================================================
+        // BACKGROUND
+        // ============================================================
 
         function drawBackground() {
+
+            // --------------------------------------------------------
+            // Apartment / starting area
+            // --------------------------------------------------------
+
             ctx.fillStyle = map.apartment.color;
-            ctx.fillRect(0, map.apartment.yStart, canvas.width, 200);
-            
+
+            ctx.fillRect(
+                0,
+                map.apartment.yStart,
+                CANVAS_WIDTH,
+                map.apartment.yEnd - map.apartment.yStart
+            );
+
+
+            // Apartment buildings
+
+            ctx.fillStyle = "#174d75";
+
+            ctx.fillRect(
+                20,
+                430,
+                90,
+                140
+            );
+
+            ctx.fillRect(
+                390,
+                440,
+                90,
+                130
+            );
+
+            // Windows
+
+            ctx.fillStyle = "#ffcc66";
+
+            for (let x = 35; x < 100; x += 25) {
+
+                for (let y = 450; y < 550; y += 30) {
+
+                    ctx.fillRect(
+                        x,
+                        y,
+                        10,
+                        14
+                    );
+                }
+            }
+
+            for (let x = 405; x < 470; x += 25) {
+
+                for (let y = 460; y < 550; y += 30) {
+
+                    ctx.fillRect(
+                        x,
+                        y,
+                        10,
+                        14
+                    );
+                }
+            }
+
+
+            // --------------------------------------------------------
+            // Cycle lane 1
+            // --------------------------------------------------------
+
             ctx.fillStyle = map.cycleLane1.color;
-            ctx.fillRect(0, map.cycleLane1.yStart, canvas.width, ROW_HEIGHT);
-            drawCycleMarkings(map.cycleLane1.yStart);
+
+            ctx.fillRect(
+                0,
+                map.cycleLane1.yStart,
+                CANVAS_WIDTH,
+                map.cycleLane1.yEnd - map.cycleLane1.yStart
+            );
+
+            drawCycleMarkings(
+                map.cycleLane1.yStart
+            );
+
+
+            // --------------------------------------------------------
+            // Traffic lane 1
+            // --------------------------------------------------------
 
             ctx.fillStyle = map.trafficLane1.color;
-            ctx.fillRect(0, map.trafficLane1.yStart, canvas.width, ROW_HEIGHT);
+
+            ctx.fillRect(
+                0,
+                map.trafficLane1.yStart,
+                CANVAS_WIDTH,
+                map.trafficLane1.yEnd - map.trafficLane1.yStart
+            );
+
+
+            // --------------------------------------------------------
+            // Traffic lane 2
+            // --------------------------------------------------------
+
             ctx.fillStyle = map.trafficLane2.color;
-            ctx.fillRect(0, map.trafficLane2.yStart, canvas.width, ROW_HEIGHT);
-            
-            ctx.strokeStyle = '#ffffff';
-            ctx.setLineDash([]);
+
+            ctx.fillRect(
+                0,
+                map.trafficLane2.yStart,
+                CANVAS_WIDTH,
+                map.trafficLane2.yEnd - map.trafficLane2.yStart
+            );
+
+
+            // Road centre markings
+
+            ctx.strokeStyle = "#ffffff";
             ctx.lineWidth = 2;
+            ctx.setLineDash([20, 15]);
+
             ctx.beginPath();
-            ctx.moveTo(0, 250);
-            ctx.lineTo(canvas.width, 250);
+
+            ctx.moveTo(
+                0,
+                250
+            );
+
+            ctx.lineTo(
+                CANVAS_WIDTH,
+                250
+            );
+
             ctx.stroke();
 
+            ctx.setLineDash([]);
+
+
+            // --------------------------------------------------------
+            // Cycle lane 2
+            // --------------------------------------------------------
+
             ctx.fillStyle = map.cycleLane2.color;
-            ctx.fillRect(0, map.cycleLane2.yStart, canvas.width, ROW_HEIGHT);
-            drawCycleMarkings(map.cycleLane2.yStart);
+
+            ctx.fillRect(
+                0,
+                map.cycleLane2.yStart,
+                CANVAS_WIDTH,
+                map.cycleLane2.yEnd - map.cycleLane2.yStart
+            );
+
+            drawCycleMarkings(
+                map.cycleLane2.yStart
+            );
+
+
+            // --------------------------------------------------------
+            // Parliament
+            // --------------------------------------------------------
 
             ctx.fillStyle = map.parliament.color;
-            ctx.fillRect(0, 0, canvas.width, map.parliament.yEnd);
-            
-            ctx.fillStyle = '#7f8c8d';
-            ctx.fillRect(180, 20, 140, 60); 
-            ctx.fillStyle = '#bdc3c7';
-            ctx.fillRect(200, 10, 100, 15);
-            ctx.fillStyle = '#000'; 
-            ctx.fillRect(230, 60, 40, 20);
+
+            ctx.fillRect(
+                0,
+                map.parliament.yStart,
+                CANVAS_WIDTH,
+                map.parliament.yEnd - map.parliament.yStart
+            );
+
+
+            // Parliament building
+
+            ctx.fillStyle = "#7f8c8d";
+
+            ctx.fillRect(
+                180,
+                25,
+                140,
+                55
+            );
+
+            // Roof
+
+            ctx.fillStyle = "#bdc3c7";
+
+            ctx.fillRect(
+                195,
+                15,
+                110,
+                15
+            );
+
+            // Columns
+
+            ctx.fillStyle = "#ecf0f1";
+
+            for (let x = 195; x <= 305; x += 22) {
+
+                ctx.fillRect(
+                    x,
+                    35,
+                    8,
+                    40
+                );
+            }
+
+
+            // --------------------------------------------------------
+            // Gate
+            // --------------------------------------------------------
+
+            ctx.fillStyle = "#2c3e50";
+
+            ctx.fillRect(
+                GATE_LEFT,
+                80,
+                GATE_RIGHT - GATE_LEFT,
+                20
+            );
+
+            ctx.fillStyle = "#ffcc00";
+
+            ctx.font = "bold 10px Arial";
+            ctx.textAlign = "center";
+
+            ctx.fillText(
+                "PARLIAMENT",
+                (GATE_LEFT + GATE_RIGHT) / 2,
+                94
+            );
+
+
+            // Gate arrows
+
+            ctx.fillStyle = "#ffcc00";
+
+            ctx.beginPath();
+
+            ctx.moveTo(GATE_LEFT - 12, 88);
+            ctx.lineTo(GATE_LEFT - 2, 82);
+            ctx.lineTo(GATE_LEFT - 2, 94);
+            ctx.closePath();
+
+            ctx.fill();
+
+            ctx.beginPath();
+
+            ctx.moveTo(GATE_RIGHT + 12, 88);
+            ctx.lineTo(GATE_RIGHT + 2, 82);
+            ctx.lineTo(GATE_RIGHT + 2, 94);
+            ctx.closePath();
+
+            ctx.fill();
         }
 
+
+        // ============================================================
+        // CYCLE LANE MARKINGS
+        // ============================================================
+
         function drawCycleMarkings(y) {
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '10px Arial';
-            ctx.textAlign = 'center';
-            for (let x = 40; x < canvas.width; x += 120) {
-                ctx.fillText("🚲 ONLY", x, y + 30);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "10px Arial";
+            ctx.textAlign = "center";
+
+            for (
+                let x = 40;
+                x < CANVAS_WIDTH;
+                x += 120
+            ) {
+
+                ctx.fillText(
+                    "🚲 ONLY",
+                    x,
+                    y + 30
+                );
             }
         }
 
-        function drawPlayer() {
-            const cx = player.x + player.width / 2;
-            const cy = player.y + player.height / 2;
 
-            ctx.fillStyle = '#002f6c';
+        // ============================================================
+        // PLAYER
+        // ============================================================
+
+        function drawPlayer() {
+
+            const cx =
+                player.x +
+                player.width / 2;
+
+            // Body
+
+            ctx.fillStyle = "#002f6c";
+
             ctx.beginPath();
-            ctx.moveTo(player.x, player.y + player.height);
-            ctx.lineTo(player.x + 5, player.y + 18);
-            ctx.lineTo(player.x + player.width - 5, player.y + 18);
-            ctx.lineTo(player.x + player.width, player.y + player.height);
+
+            ctx.moveTo(
+                player.x,
+                player.y + player.height
+            );
+
+            ctx.lineTo(
+                player.x + 5,
+                player.y + 18
+            );
+
+            ctx.lineTo(
+                player.x + player.width - 5,
+                player.y + 18
+            );
+
+            ctx.lineTo(
+                player.x + player.width,
+                player.y + player.height
+            );
+
             ctx.closePath();
+
             ctx.fill();
 
-            ctx.fillStyle = '#ffffff';
-ctx.beginPath();
-ctx.moveTo(cx - 4, player.y + 18);
-ctx.lineTo(cx, player.y + 24);
-ctx.lineTo(cx + 4, player.y + 18);
-ctx.fill();
-ctx.fillStyle = '#0099ff';
-ctx.fillRect(cx - 1.5, player.y + 23, 3, 10);
-ctx.fillStyle = '#ffd1a9';
-ctx.beginPath();
-ctx.arc(cx, player.y + 10, 10, 0, Math.PI * 2);
-ctx.fill();
-ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-ctx.beginPath();
-ctx.arc(cx - 3, player.y + 6, 3, 0, Math.PI * 2);
-ctx.fill();
-ctx.fillStyle = '#ffffff';
-ctx.fillRect(cx - 5, player.y + 12, 10, 3);
-ctx.strokeStyle = '#333';
-ctx.lineWidth = 0.5;
-ctx.strokeRect(cx - 5, player.y + 12, 10, 3);
-ctx.fillStyle = '#333';
-ctx.beginPath();
-ctx.arc(cx - 3, player.y + 7, 1.2, 0, Math.PI * 2);
-ctx.arc(cx + 3, player.y + 7, 1.2, 0, Math.PI * 2);
-ctx.fill();
-}
-const keys = {};
-window.addEventListener('keydown', e => {
-keys[e.key.toLowerCase()] = true;
-if(["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(e.key)) {
-e.preventDefault();
-}
-});
-window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-function handleInput() {
-if (keys['arrowup'] || keys['w']) player.y -= player.speed;
-if (keys['arrowdown'] || keys['s']) player.y += player.speed;
-if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
-if (keys['arrowright'] || keys['d']) player.x += player.speed;
-if (player.x < 0) player.x = 0;
-if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
-if (player.y > canvas.height - player.height) player.y = canvas.height - player.height;
-}
-function checkCollisions() {
-for (let i = 0; i < obstacles.length; i++) {
-let o = obstacles[i];
-if (player.x < o.x + o.width &&
-player.x + player.width > o.x &&
-player.y < o.y + o.height &&
-player.y + player.height > o.y) {
-handleFailure();
-return;
-}
-}
-if (player.y < map.parliament.yEnd - 15) {
-if (player.x > 210 && player.x < 280) {
-handleWin();
-} else {
-player.y = map.parliament.yEnd - 15;
-statusDisplay.textContent = "STATUS: Find the entry gate!";
-}
-}
-}
-function handleFailure() {
-lives--;
-updateLivesUI();
-player.reset();
-obstacles = [];
-statusDisplay.textContent = "STATUS: Blocked by Infrastructure!";
-if (lives <= 0) {
-endGame(false, "MISSION FAILED", "Wellington's layout won this round. Try again!");
-}
-} [1]
-function handleWin() {
-endGame(true, "MISSION ACCOMPLISHED!", "You successfully bypassed the lines and entered Parliament!");
-}
-function updateLivesUI() {
-let hearts = "";
-for(let i=0; i<3; i++) {
-hearts += i < lives ? "❤️ " : "🖤 ";
-}
-livesDisplay.textContent = LIVES: ${hearts};
-}
-function endGame(success, title, text) {
-gameRunning = false;
-cancelAnimationFrame(animationFrameId);
-overlayTitle.textContent = title;
-overlayTitle.style.color = success ? "#00efff" : "#ff3333";
-overlayText.textContent = text;
-startBtn.textContent = "TRY AGAIN";
-uiOverlay.classList.remove('hidden');
-}
-function gameLoop() {
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-drawBackground();
-handleInput();
-spawnObstacles();
-for (let i = obstacles.length - 1; i >= 0; i--) {
-obstacles[i].update();
-obstacles[i].draw();
-if (obstacles[i].x < -100 || obstacles[i].x > canvas.width + 100) {
-obstacles.splice(i, 1);
-}
-}
-drawPlayer();
-checkCollisions();
-if (gameRunning) {
-animationFrameId = requestAnimationFrame(gameLoop);
-}
-}
-startBtn.addEventListener('click', () => {
-if (gameRunning) return;
-lives = 3;
-updateLivesUI();
-statusDisplay.textContent = "STATUS: In Transit";
-player.reset();
-obstacles = [];
-uiOverlay.classList.add('hidden');
-gameRunning = true;
-gameLoop();
-});
-drawBackground();
+
+            // Tie / shirt detail
+
+            ctx.fillStyle = "#ffffff";
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                cx - 4,
+                player.y + 18
+            );
+
+            ctx.lineTo(
+                cx,
+                player.y + 24
+            );
+
+            ctx.lineTo(
+                cx + 4,
+                player.y + 18
+            );
+
+            ctx.fill();
+
+
+            // Tie
+
+            ctx.fillStyle = "#0099ff";
+
+            ctx.fillRect(
+                cx - 1.5,
+                player.y + 23,
+                3,
+                10
+            );
+
+
+            // Head
+
+            ctx.fillStyle = "#ffd1a9";
+
+            ctx.beginPath();
+
+            ctx.arc(
+                cx,
+                player.y + 10,
+                10,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            // Hair
+
+            ctx.fillStyle = "#d8d8d8";
+
+            ctx.beginPath();
+
+            ctx.arc(
+                cx,
+                player.y + 5,
+                9,
+                Math.PI,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            // Eyes
+
+            ctx.fillStyle = "#333";
+
+            ctx.beginPath();
+
+            ctx.arc(
+                cx - 3,
+                player.y + 8,
+                1.2,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.arc(
+                cx + 3,
+                player.y + 8,
+                1.2,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            // Smile
+
+            ctx.strokeStyle = "#333";
+            ctx.lineWidth = 0.7;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                cx,
+                player.y + 10,
+                4,
+                0.2,
+                Math.PI - 0.2
+            );
+
+            ctx.stroke();
+        }
+
+
+        // ============================================================
+        // INPUT
+        // ============================================================
+
+        function handleInput() {
+
+            if (
+                keys["arrowup"] ||
+                keys["w"]
+            ) {
+                player.y -= player.speed;
+            }
+
+            if (
+                keys["arrowdown"] ||
+                keys["s"]
+            ) {
+                player.y += player.speed;
+            }
+
+            if (
+                keys["arrowleft"] ||
+                keys["a"]
+            ) {
+                player.x -= player.speed;
+            }
+
+            if (
+                keys["arrowright"] ||
+                keys["d"]
+            ) {
+                player.x += player.speed;
+            }
+
+
+            // Horizontal boundaries
+
+            if (player.x < 0) {
+                player.x = 0;
+            }
+
+            if (
+                player.x >
+                CANVAS_WIDTH - player.width
+            ) {
+                player.x =
+                    CANVAS_WIDTH - player.width;
+            }
+
+
+            // Bottom boundary
+
+            if (
+                player.y >
+                CANVAS_HEIGHT - player.height
+            ) {
+                player.y =
+                    CANVAS_HEIGHT - player.height;
+            }
+
+
+            /*
+                Don't allow the player to simply walk through
+                the Parliament wall. The only opening is the gate.
+            */
+
+            if (
+                player.y < map.parliament.yEnd &&
+                !isAtGate()
+            ) {
+
+                player.y = map.parliament.yEnd;
+            }
+        }
+
+
+        // ============================================================
+        // GATE CHECK
+        // ============================================================
+
+        function isAtGate() {
+
+            const playerLeft = player.x;
+            const playerRight =
+                player.x + player.width;
+
+            return (
+                playerRight > GATE_LEFT &&
+                playerLeft < GATE_RIGHT
+            );
+        }
+
+
+        // ============================================================
+        // COLLISION DETECTION
+        // ============================================================
+
+        function rectanglesOverlap(a, b) {
+
+            return (
+                a.x < b.x + b.width &&
+                a.x + a.width > b.x &&
+                a.y < b.y + b.height &&
+                a.y + a.height > b.y
+            );
+        }
+
+
+        function checkCollisions() {
+
+            if (collisionCooldown > 0) {
+                collisionCooldown--;
+                return;
+            }
+
+
+            // Check obstacle collisions
+
+            for (const obstacle of obstacles) {
+
+                if (
+                    rectanglesOverlap(
+                        player,
+                        obstacle
+                    )
+                ) {
+
+                    handleFailure();
+
+                    return;
+                }
+            }
+
+
+            // Check whether player has reached Parliament
+
+            if (
+                player.y < map.parliament.yEnd
+            ) {
+
+                if (isAtGate()) {
+
+                    handleWin();
+
+                } else {
+
+                    player.y =
+                        map.parliament.yEnd;
+
+                    statusDisplay.textContent =
+                        "STATUS: Find the entry gate!";
+                }
+            }
+        }
+
+
+        // ============================================================
+        // FAILURE
+        // ============================================================
+
+        function handleFailure() {
+
+            lives--;
+
+            updateLivesUI();
+
+            player.reset();
+
+            obstacles = [];
+
+            collisionCooldown = 30;
+
+            statusDisplay.textContent =
+                "STATUS: Blocked by Infrastructure!";
+
+            if (lives <= 0) {
+
+                endGame(
+                    false,
+                    "MISSION FAILED",
+                    "Wellington's layout won this round. Try again!"
+                );
+            }
+        }
+
+
+        // ============================================================
+        // WIN
+        // ============================================================
+
+        function handleWin() {
+
+            endGame(
+                true,
+                "MISSION ACCOMPLISHED!",
+                "You successfully bypassed the lines and entered Parliament!"
+            );
+        }
+
+
+        // ============================================================
+        // LIVES UI
+        // ============================================================
+
+        function updateLivesUI() {
+
+            let hearts = "";
+
+            for (let i = 0; i < 3; i++) {
+
+                hearts +=
+                    i < lives
+                        ? "❤️ "
+                        : "🖤 ";
+            }
+
+            // FIXED: template literal
+            livesDisplay.textContent =
+                `LIVES: ${hearts}`;
+        }
+
+
+        // ============================================================
+        // END GAME
+        // ============================================================
+
+        function endGame(
+            success,
+            title,
+            text
+        ) {
+
+            gameRunning = false;
+
+            if (animationFrameId !== null) {
+
+                cancelAnimationFrame(
+                    animationFrameId
+                );
+
+                animationFrameId = null;
+            }
+
+            overlayTitle.textContent = title;
+
+            overlayTitle.style.color =
+                success
+                    ? "#00efff"
+                    : "#ff3333";
+
+            overlayText.textContent = text;
+
+            startBtn.textContent =
+                "TRY AGAIN";
+
+            uiOverlay.classList.remove(
+                "hidden"
+            );
+
+            statusDisplay.textContent =
+                success
+                    ? "STATUS: Mission Complete"
+                    : "STATUS: Mission Failed";
+        }
+
+
+        // ============================================================
+        // GAME LOOP
+        // ============================================================
+
+        function gameLoop() {
+
+            if (!gameRunning) {
+                return;
+            }
+
+
+            // Clear canvas
+
+            ctx.clearRect(
+                0,
+                0,
+                CANVAS_WIDTH,
+                CANVAS_HEIGHT
+            );
+
+
+            // Draw world
+
+            drawBackground();
+
+
+            // Player input
+
+            handleInput();
+
+
+            // Spawn new obstacles
+
+            spawnObstacles();
+
+
+            // Update and draw obstacles
+
+            for (
+                let i = obstacles.length - 1;
+                i >= 0;
+                i--
+            ) {
+
+                const obstacle =
+                    obstacles[i];
+
+                obstacle.update();
+                obstacle.draw();
+
+
+                // Remove objects well outside screen
+
+                if (
+                    obstacle.x <
+                    -150 ||
+                    obstacle.x >
+                    CANVAS_WIDTH + 150
+                ) {
+
+                    obstacles.splice(i, 1);
+                }
+            }
+
+
+            // Draw player
+
+            drawPlayer();
+
+
+            // Collision / goal checking
+
+            checkCollisions();
+
+
+            // Continue loop
+
+            if (gameRunning) {
+
+                animationFrameId =
+                    requestAnimationFrame(
+                        gameLoop
+                    );
+            }
+        }
+
+
+        // ============================================================
+        // START / RESTART
+        // ============================================================
+
+        startBtn.addEventListener(
+            "click",
+            () => {
+
+                if (gameRunning) {
+                    return;
+                }
+
+
+                // Reset state
+
+                lives = 3;
+
+                collisionCooldown = 0;
+
+                obstacles = [];
+
+                player.reset();
+
+
+                // Reset UI
+
+                updateLivesUI();
+
+                statusDisplay.textContent =
+                    "STATUS: In Transit";
+
+
+                // Hide overlay
+
+                uiOverlay.classList.add(
+                    "hidden"
+                );
+
+
+                // Start game
+
+                gameRunning = true;
+
+                gameLoop();
+            }
+        );
+
+
+        // ============================================================
+        // INITIAL DRAW
+        // ============================================================
+
+        updateLivesUI();
+
+        drawBackground();
+
+    </script>
+
+</body>
+</html>
