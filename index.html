@@ -44,9 +44,13 @@ body {
     color: white;
 }
 
+button {
+    font-family: inherit;
+}
+
 
 /* =========================================================
-   MAIN GAME WRAPPER
+   APP
 ========================================================= */
 
 #app {
@@ -59,7 +63,7 @@ body {
     align-items: center;
     justify-content: center;
 
-    padding: 6px;
+    padding: 5px;
 }
 
 
@@ -69,7 +73,7 @@ body {
 
 #gameHeader {
     width: 100%;
-    height: 42px;
+    height: 38px;
 
     display: flex;
     align-items: center;
@@ -93,6 +97,7 @@ body {
 
 #statusDisplay {
     color: #ddd;
+    text-align: right;
 }
 
 
@@ -131,12 +136,11 @@ canvas {
 
 
 /* =========================================================
-   OVERLAY SCREENS
+   OVERLAYS
 ========================================================= */
 
 .overlay {
     position: absolute;
-
     inset: 0;
 
     display: flex;
@@ -147,7 +151,7 @@ canvas {
 
     text-align: center;
 
-    padding: 25px;
+    padding: 24px;
 
     background:
         radial-gradient(
@@ -164,13 +168,13 @@ canvas {
 }
 
 .overlay h1 {
-    margin: 0 0 8px 0;
+    margin: 0 0 10px 0;
 
     color: #ffcc00;
 
-    font-size: clamp(22px, 6vw, 31px);
+    font-size: clamp(21px, 5.8vw, 31px);
 
-    line-height: 1.05;
+    line-height: 1.08;
 
     text-transform: uppercase;
 
@@ -179,19 +183,19 @@ canvas {
 }
 
 .overlay h2 {
-    margin: 5px 0 20px;
+    margin: 5px 0 18px;
 
     color: #fff;
 
     font-size: clamp(15px, 4vw, 21px);
 
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 }
 
 .overlay p {
     max-width: 390px;
 
-    margin: 8px auto 18px;
+    margin: 7px auto 17px;
 
     color: #ddd;
 
@@ -212,7 +216,7 @@ canvas {
 
 
 /* =========================================================
-   BUTTONS
+   GAME BUTTON
 ========================================================= */
 
 .gameButton {
@@ -251,21 +255,16 @@ canvas {
         0 1px 0 #003b70;
 }
 
-.gameButton.secondary {
-    background: #555;
-    box-shadow: 0 4px 0 #333;
-}
-
 
 /* =========================================================
-   MOBILE CONTROL PANEL
+   MOBILE CONTROLS
 ========================================================= */
 
 #controls {
     width: 100%;
     max-width: 500px;
 
-    height: 92px;
+    height: 88px;
 
     display: grid;
 
@@ -277,7 +276,7 @@ canvas {
 
     gap: 5px;
 
-    padding: 5px 25px 4px;
+    padding: 4px 25px;
 
     flex-shrink: 0;
 }
@@ -324,9 +323,6 @@ canvas {
         0 1px 0 #111;
 }
 
-
-/* Position controls like a D-pad */
-
 #upButton {
     grid-column: 2;
     grid-row: 1;
@@ -349,28 +345,7 @@ canvas {
 
 
 /* =========================================================
-   DESKTOP
-========================================================= */
-
-@media (min-width: 700px) {
-
-    #controls {
-        margin-top: 5px;
-
-        height: 72px;
-
-        padding-left: 80px;
-        padding-right: 80px;
-    }
-
-    #gameHeader {
-        height: 34px;
-    }
-}
-
-
-/* =========================================================
-   SMALL PHONES
+   SMALL SCREENS
 ========================================================= */
 
 @media (max-height: 700px) {
@@ -445,14 +420,12 @@ canvas {
             class="overlay">
 
             <h1>
-                A VERY DIFFICULT JOURNEY
+                A VERY DIFFICULT
                 <br>
-                ACROSS MOLESWORTH STREET
+                JOURNEY ACROSS
+                <br>
+                MOLESWORTH STREET
             </h1>
-
-            <h2>
-                BIKE LANE EDITION
-            </h2>
 
             <p>
                 Help Chris Luxon make the very difficult
@@ -464,7 +437,7 @@ canvas {
                 <br>
                 Three lives.
                 <br>
-                Plenty of things trying to stop him.
+                And a frankly unreasonable number of protesters.
             </p>
 
             <button
@@ -520,7 +493,7 @@ canvas {
             </h1>
 
             <p id="gameOverText">
-                Wellington's roads won this round.
+                Molesworth Street has defeated Chris Luxon.
             </p>
 
             <button
@@ -530,7 +503,6 @@ canvas {
             </button>
 
         </div>
-
 
     </div>
 
@@ -543,29 +515,25 @@ canvas {
 
         <button
             class="controlButton"
-            id="upButton"
-            aria-label="Move up">
+            id="upButton">
             ▲
         </button>
 
         <button
             class="controlButton"
-            id="leftButton"
-            aria-label="Move left">
+            id="leftButton">
             ◀
         </button>
 
         <button
             class="controlButton"
-            id="downButton"
-            aria-label="Move down">
+            id="downButton">
             ▼
         </button>
 
         <button
             class="controlButton"
-            id="rightButton"
-            aria-label="Move right">
+            id="rightButton">
             ▶
         </button>
 
@@ -576,9 +544,9 @@ canvas {
 
 <script>
 
-/* ============================================================
+/* =========================================================
    CANVAS
-============================================================ */
+========================================================= */
 
 const canvas =
     document.getElementById("gameCanvas");
@@ -590,9 +558,9 @@ const W = canvas.width;
 const H = canvas.height;
 
 
-/* ============================================================
+/* =========================================================
    UI
-============================================================ */
+========================================================= */
 
 const titleScreen =
     document.getElementById("titleScreen");
@@ -634,9 +602,9 @@ const gameOverText =
     document.getElementById("gameOverText");
 
 
-/* ============================================================
+/* =========================================================
    GAME STATE
-============================================================ */
+========================================================= */
 
 let gameRunning = false;
 
@@ -651,60 +619,46 @@ let animationFrame = null;
 let obstacles = [];
 
 
-/* ============================================================
+/* =========================================================
    LEVEL SETTINGS
-============================================================ */
+========================================================= */
 
 const levels = {
 
     1: {
         speedMultiplier: 0.65,
-        spawnMultiplier: 0.65,
-        groupChance: 0.10,
+        spawnMultiplier: 1.0,
+        groupChance: 0.28,
         label: "GETTING STARTED"
     },
 
     2: {
         speedMultiplier: 0.85,
-        spawnMultiplier: 0.85,
-        groupChance: 0.25,
+        spawnMultiplier: 1.35,
+        groupChance: 0.42,
         label: "TRAFFIC INCREASED"
     },
 
     3: {
         speedMultiplier: 1.10,
-        spawnMultiplier: 1.10,
-        groupChance: 0.45,
+        spawnMultiplier: 1.70,
+        groupChance: 0.60,
         label: "THIS IS GETTING DIFFICULT"
     },
 
     4: {
-        speedMultiplier: 1.40,
-        spawnMultiplier: 1.35,
-        groupChance: 0.65,
+        speedMultiplier: 1.35,
+        spawnMultiplier: 2.05,
+        groupChance: 0.78,
         label: "VERY DIFFICULT"
     }
 
 };
 
 
-/* ============================================================
+/* =========================================================
    MAP
-============================================================ */
-
-/*
-    TOP = PARLIAMENT
-
-    0 - 100       Parliament
-    100 - 150     Cycle lane
-    150 - 250     Traffic
-    250 - 350     Traffic
-    350 - 400     Cycle lane
-    400 - 600     Apartment zone
-
-    This deliberately follows Frogger's structure:
-    each level starts at the bottom and finishes at the top.
-*/
+========================================================= */
 
 const map = {
 
@@ -741,9 +695,9 @@ const map = {
 };
 
 
-/* ============================================================
+/* =========================================================
    PLAYER
-============================================================ */
+========================================================= */
 
 const player = {
 
@@ -757,26 +711,11 @@ const player = {
 
     speed: 4.2,
 
-    moveUp() {
-        this.y -= this.speed;
-    },
-
-    moveDown() {
-        this.y += this.speed;
-    },
-
-    moveLeft() {
-        this.x -= this.speed;
-    },
-
-    moveRight() {
-        this.x += this.speed;
-    },
-
     reset() {
 
         this.x =
-            W / 2 - this.width / 2;
+            W / 2 -
+            this.width / 2;
 
         this.y = 520;
 
@@ -785,9 +724,9 @@ const player = {
 };
 
 
-/* ============================================================
+/* =========================================================
    INPUT
-============================================================ */
+========================================================= */
 
 const keys = {
 
@@ -799,9 +738,9 @@ const keys = {
 };
 
 
-/* ============================================================
+/* =========================================================
    KEYBOARD
-============================================================ */
+========================================================= */
 
 window.addEventListener(
     "keydown",
@@ -814,32 +753,44 @@ window.addEventListener(
             key === "arrowup" ||
             key === "w"
         ) {
+
             keys.up = true;
+
             event.preventDefault();
+
         }
 
         if (
             key === "arrowdown" ||
             key === "s"
         ) {
+
             keys.down = true;
+
             event.preventDefault();
+
         }
 
         if (
             key === "arrowleft" ||
             key === "a"
         ) {
+
             keys.left = true;
+
             event.preventDefault();
+
         }
 
         if (
             key === "arrowright" ||
             key === "d"
         ) {
+
             keys.right = true;
+
             event.preventDefault();
+
         }
 
     },
@@ -858,37 +809,45 @@ window.addEventListener(
             key === "arrowup" ||
             key === "w"
         ) {
+
             keys.up = false;
+
         }
 
         if (
             key === "arrowdown" ||
             key === "s"
         ) {
+
             keys.down = false;
+
         }
 
         if (
             key === "arrowleft" ||
             key === "a"
         ) {
+
             keys.left = false;
+
         }
 
         if (
             key === "arrowright" ||
             key === "d"
         ) {
+
             keys.right = false;
+
         }
 
     }
 );
 
 
-/* ============================================================
-   MOBILE BUTTONS
-============================================================ */
+/* =========================================================
+   MOBILE CONTROLS
+========================================================= */
 
 function setupControl(
     elementId,
@@ -896,7 +855,9 @@ function setupControl(
 ) {
 
     const button =
-        document.getElementById(elementId);
+        document.getElementById(
+            elementId
+        );
 
 
     function press(event) {
@@ -905,26 +866,17 @@ function setupControl(
 
         keys[direction] = true;
 
-        button.classList.add("active");
+        button.classList.add(
+            "active"
+        );
 
-        /*
-            Pointer capture makes the controls much
-            more reliable on mobile.
-        */
+        try {
 
-        if (
-            button.setPointerCapture
-        ) {
+            button.setPointerCapture(
+                event.pointerId
+            );
 
-            try {
-
-                button.setPointerCapture(
-                    event.pointerId
-                );
-
-            } catch (_) {}
-
-        }
+        } catch (_) {}
 
     }
 
@@ -935,7 +887,9 @@ function setupControl(
 
         keys[direction] = false;
 
-        button.classList.remove("active");
+        button.classList.remove(
+            "active"
+        );
 
     }
 
@@ -988,9 +942,9 @@ setupControl(
 );
 
 
-/* ============================================================
-   APPLY PLAYER MOVEMENT
-============================================================ */
+/* =========================================================
+   PLAYER INPUT
+========================================================= */
 
 function handleInput() {
 
@@ -1000,25 +954,21 @@ function handleInput() {
 
 
     if (keys.up) {
-        player.moveUp();
+        player.y -= player.speed;
     }
 
     if (keys.down) {
-        player.moveDown();
+        player.y += player.speed;
     }
 
     if (keys.left) {
-        player.moveLeft();
+        player.x -= player.speed;
     }
 
     if (keys.right) {
-        player.moveRight();
+        player.x += player.speed;
     }
 
-
-    /*
-        Keep player inside screen.
-    */
 
     player.x =
         Math.max(
@@ -1028,6 +978,7 @@ function handleInput() {
                 player.x
             )
         );
+
 
     player.y =
         Math.max(
@@ -1041,9 +992,9 @@ function handleInput() {
 }
 
 
-/* ============================================================
+/* =========================================================
    CYCLIST
-============================================================ */
+========================================================= */
 
 class Cyclist {
 
@@ -1054,7 +1005,6 @@ class Cyclist {
     ) {
 
         this.width = 30;
-
         this.height = 32;
 
         this.y =
@@ -1090,11 +1040,10 @@ class Cyclist {
         const y = this.y;
 
 
-        /*
-           Wheels
-        */
+        /* Wheels */
 
-        ctx.strokeStyle = "#111";
+        ctx.strokeStyle =
+            "#111";
 
         ctx.lineWidth = 3;
 
@@ -1119,9 +1068,7 @@ class Cyclist {
         ctx.stroke();
 
 
-        /*
-           Bike frame
-        */
+        /* Frame */
 
         ctx.strokeStyle =
             "#222";
@@ -1163,9 +1110,7 @@ class Cyclist {
         ctx.stroke();
 
 
-        /*
-           Rider
-        */
+        /* Rider */
 
         ctx.fillStyle =
             "#d83b3b";
@@ -1178,9 +1123,7 @@ class Cyclist {
         );
 
 
-        /*
-           Head
-        */
+        /* Head */
 
         ctx.fillStyle =
             "#f2c09c";
@@ -1202,9 +1145,9 @@ class Cyclist {
 }
 
 
-/* ============================================================
-   PROTESTER
-============================================================ */
+/* =========================================================
+   PROTESTOR
+========================================================= */
 
 class Protestor {
 
@@ -1217,7 +1160,6 @@ class Protestor {
     ) {
 
         this.width = 30;
-
         this.height = 42;
 
         this.y =
@@ -1256,9 +1198,7 @@ class Protestor {
         const y = this.y;
 
 
-        /*
-           Body
-        */
+        /* Body */
 
         ctx.fillStyle =
             "#c96a24";
@@ -1271,9 +1211,7 @@ class Protestor {
         );
 
 
-        /*
-           Head
-        */
+        /* Head */
 
         ctx.fillStyle =
             "#ffd0a6";
@@ -1291,9 +1229,29 @@ class Protestor {
         ctx.fill();
 
 
-        /*
-           Sign
-        */
+        /* Raised arm */
+
+        ctx.strokeStyle =
+            "#ffd0a6";
+
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x + 7,
+            y + 23
+        );
+
+        ctx.lineTo(
+            x - 2,
+            y + 9
+        );
+
+        ctx.stroke();
+
+
+        /* Sign */
 
         const signX =
             x - 14;
@@ -1324,9 +1282,7 @@ class Protestor {
         );
 
 
-        /*
-           Sign pole
-        */
+        /* Sign pole */
 
         ctx.fillStyle =
             "#74451f";
@@ -1339,9 +1295,7 @@ class Protestor {
         );
 
 
-        /*
-           Slogan
-        */
+        /* Slogan */
 
         ctx.fillStyle =
             "#111";
@@ -1363,9 +1317,9 @@ class Protestor {
 }
 
 
-/* ============================================================
-   SLOGANS
-============================================================ */
+/* =========================================================
+   PROTESTOR SLOGANS
+========================================================= */
 
 const slogans = [
 
@@ -1375,14 +1329,17 @@ const slogans = [
     "NO CUTS",
     "BIKE POWER",
     "SORT IT OUT",
-    "DO SOMETHING"
+    "SANCTIONS NOW!",
+    "FIRE WINNIE!",
+    "SANCTIONS NOW!",
+    "FIRE WINNIE!"
 
 ];
 
 
-/* ============================================================
+/* =========================================================
    SPAWN OBSTACLES
-============================================================ */
+========================================================= */
 
 function spawnObstacles() {
 
@@ -1396,12 +1353,13 @@ function spawnObstacles() {
 
 
     /*
-       Cyclists — lower lane
+       Cyclists.
+       More frequent at higher levels.
     */
 
     if (
         Math.random() <
-        0.012 *
+        0.014 *
         settings.spawnMultiplier
     ) {
 
@@ -1417,13 +1375,9 @@ function spawnObstacles() {
     }
 
 
-    /*
-       Cyclists — upper lane
-    */
-
     if (
         Math.random() <
-        0.012 *
+        0.014 *
         settings.spawnMultiplier
     ) {
 
@@ -1440,19 +1394,19 @@ function spawnObstacles() {
 
 
     /*
-       Protesters — lower traffic lane
+       Lower protestor lane.
     */
 
     if (
         Math.random() <
-        0.009 *
+        0.014 *
         settings.spawnMultiplier
     ) {
 
         spawnProtestorGroup(
             map.traffic1.y,
             -1,
-            1.6 *
+            1.55 *
             settings.speedMultiplier
         );
 
@@ -1460,19 +1414,19 @@ function spawnObstacles() {
 
 
     /*
-       Protesters — upper traffic lane
+       Upper protestor lane.
     */
 
     if (
         Math.random() <
-        0.009 *
+        0.014 *
         settings.spawnMultiplier
     ) {
 
         spawnProtestorGroup(
             map.traffic2.y,
             1,
-            1.8 *
+            1.7 *
             settings.speedMultiplier
         );
 
@@ -1481,9 +1435,9 @@ function spawnObstacles() {
 }
 
 
-/* ============================================================
-   PROTESTER GROUPS
-============================================================ */
+/* =========================================================
+   PROTESTOR GROUPS
+========================================================= */
 
 function spawnProtestorGroup(
     laneY,
@@ -1495,24 +1449,48 @@ function spawnProtestorGroup(
         levels[currentLevel];
 
 
-    /*
-       Level 1 = mostly individual protesters
-       Level 4 = groups of 3–5
-    */
-
     let groupSize = 1;
+
+
+    /*
+       More groups as the game progresses.
+    */
 
     if (
         Math.random() <
         settings.groupChance
     ) {
 
-        groupSize =
+        if (currentLevel === 1) {
+
+            groupSize = 2;
+
+        } else if (
             currentLevel === 2
-                ? 2
-                : currentLevel === 3
+        ) {
+
+            groupSize =
+                Math.random() < 0.6
+                    ? 2
+                    : 3;
+
+        } else if (
+            currentLevel === 3
+        ) {
+
+            groupSize =
+                Math.random() < 0.5
                     ? 3
                     : 4;
+
+        } else {
+
+            groupSize =
+                Math.random() < 0.5
+                    ? 4
+                    : 5;
+
+        }
 
     }
 
@@ -1538,7 +1516,7 @@ function spawnProtestorGroup(
                 speed,
                 direction,
                 slogan,
-                i * 48
+                i * 46
             )
         );
 
@@ -1547,14 +1525,14 @@ function spawnProtestorGroup(
 }
 
 
-/* ============================================================
+/* =========================================================
    BACKGROUND
-============================================================ */
+========================================================= */
 
 function drawBackground() {
 
     /*
-       Apartment area
+       Apartments
     */
 
     ctx.fillStyle =
@@ -1569,7 +1547,7 @@ function drawBackground() {
 
 
     /*
-       Cycle lane 1
+       Lower cycle lane
     */
 
     ctx.fillStyle =
@@ -1582,14 +1560,11 @@ function drawBackground() {
         50
     );
 
-
-    drawCycleLane(
-        350
-    );
+    drawCycleLane(350);
 
 
     /*
-       Traffic lane 1
+       Lower traffic
     */
 
     ctx.fillStyle =
@@ -1602,14 +1577,11 @@ function drawBackground() {
         100
     );
 
-
-    drawRoadMarkings(
-        250
-    );
+    drawRoadMarkings(250);
 
 
     /*
-       Traffic lane 2
+       Upper traffic
     */
 
     ctx.fillStyle =
@@ -1622,14 +1594,11 @@ function drawBackground() {
         100
     );
 
-
-    drawRoadMarkings(
-        150
-    );
+    drawRoadMarkings(150);
 
 
     /*
-       Cycle lane 2
+       Upper cycle lane
     */
 
     ctx.fillStyle =
@@ -1642,10 +1611,7 @@ function drawBackground() {
         50
     );
 
-
-    drawCycleLane(
-        100
-    );
+    drawCycleLane(100);
 
 
     /*
@@ -1664,16 +1630,14 @@ function drawBackground() {
 }
 
 
-/* ============================================================
+/* =========================================================
    ROAD MARKINGS
-============================================================ */
+========================================================= */
 
-function drawRoadMarkings(
-    y
-) {
+function drawRoadMarkings(y) {
 
     ctx.strokeStyle =
-        "rgba(255,255,255,.7)";
+        "rgba(255,255,255,.65)";
 
     ctx.lineWidth = 2;
 
@@ -1699,10 +1663,6 @@ function drawRoadMarkings(
     ctx.setLineDash([]);
 
 
-    /*
-       Direction arrows
-    */
-
     ctx.fillStyle =
         "rgba(255,255,255,.25)";
 
@@ -1712,10 +1672,12 @@ function drawRoadMarkings(
     ctx.textAlign =
         "center";
 
+
     const direction =
         y === 250
             ? "→"
             : "←";
+
 
     for (
         let x = 60;
@@ -1734,13 +1696,11 @@ function drawRoadMarkings(
 }
 
 
-/* ============================================================
+/* =========================================================
    CYCLE LANE
-============================================================ */
+========================================================= */
 
-function drawCycleLane(
-    y
-) {
+function drawCycleLane(y) {
 
     ctx.fillStyle =
         "rgba(255,255,255,.9)";
@@ -1750,6 +1710,7 @@ function drawCycleLane(
 
     ctx.textAlign =
         "center";
+
 
     for (
         let x = 55;
@@ -1768,14 +1729,28 @@ function drawCycleLane(
 }
 
 
-/* ============================================================
-   PARLIAMENT / BEEHIVE
-============================================================ */
+/* =========================================================
+   BEEHIVE
+   Based on the supplied reference photograph.
+
+   The important visual characteristics are:
+
+   - very wide circular footprint
+   - broad lower storeys
+   - progressively narrower upper storeys
+   - large glass entrance at ground level
+   - rows of vertical windows
+   - strong horizontal floor bands
+   - vertical fins around the roof
+   - smaller cylindrical roof section
+   - NZ flag
+   - large lawn in front
+========================================================= */
 
 function drawParliament() {
 
     /*
-       Parliament grounds
+       Parliament grounds.
     */
 
     ctx.fillStyle =
@@ -1790,33 +1765,623 @@ function drawParliament() {
 
 
     /*
-       Grass in front
+       Lawn.
     */
 
     ctx.fillStyle =
-        "#68935f";
+        "#5e9254";
 
     ctx.fillRect(
         0,
-        72,
+        73,
         W,
-        28
+        27
     );
 
 
     /*
-       Beehive shadow
+       Subtle lawn stripes.
     */
 
     ctx.fillStyle =
-        "rgba(0,0,0,.20)";
+        "rgba(255,255,255,.06)";
+
+    for (
+        let x = 0;
+        x < W;
+        x += 18
+    ) {
+
+        ctx.fillRect(
+            x,
+            73,
+            9,
+            27
+        );
+
+    }
+
+
+    /*
+       Building shadow.
+    */
+
+    ctx.fillStyle =
+        "rgba(0,0,0,.18)";
 
     ctx.beginPath();
 
     ctx.ellipse(
+        250,
+        78,
+        185,
+        13,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Main Beehive body.
+    */
+
+    ctx.save();
+
+    ctx.translate(
         W / 2,
-        72,
-        110,
+        0
+    );
+
+
+    /*
+       LOWER BASE / ENTRANCE
+    */
+
+    ctx.fillStyle =
+        "#737b79";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -178,
+        70
+    );
+
+    ctx.lineTo(
+        178,
+        70
+    );
+
+    ctx.lineTo(
+        160,
+        50
+    );
+
+    ctx.lineTo(
+        -160,
+        50
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+       Large glass entrance.
+    */
+
+    ctx.fillStyle =
+        "#263f4b";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -128,
+        70
+    );
+
+    ctx.lineTo(
+        128,
+        70
+    );
+
+    ctx.lineTo(
+        113,
+        35
+    );
+
+    ctx.lineTo(
+        -113,
+        35
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+       Glass vertical reflections.
+    */
+
+    ctx.fillStyle =
+        "rgba(100,180,210,.20)";
+
+    for (
+        let x = -105;
+        x <= 105;
+        x += 26
+    ) {
+
+        ctx.fillRect(
+            x,
+            37,
+            12,
+            32
+        );
+
+    }
+
+
+    /*
+       Glass mullions.
+    */
+
+    ctx.strokeStyle =
+        "#151f22";
+
+    ctx.lineWidth = 2;
+
+    for (
+        let x = -105;
+        x <= 105;
+        x += 26
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            35
+        );
+
+        ctx.lineTo(
+            x,
+            70
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /*
+       Large entrance columns.
+    */
+
+    ctx.fillStyle =
+        "#d0d3cf";
+
+    const columns = [
+        -142,
+        -112,
+        -82,
+        -52,
+        -22,
+        22,
+        52,
+        82,
+        112,
+        142
+    ];
+
+
+    columns.forEach(
+        x => {
+
+            ctx.fillRect(
+                x - 3,
+                32,
+                6,
+                39
+            );
+
+        }
+    );
+
+
+    /*
+       LOWER CURVED FLOOR
+    */
+
+    ctx.fillStyle =
+        "#8c9391";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -158,
+        38
+    );
+
+    ctx.quadraticCurveTo(
+        0,
+        10,
+        158,
+        38
+    );
+
+    ctx.lineTo(
+        151,
+        49
+    );
+
+    ctx.quadraticCurveTo(
+        0,
+        22,
+        -151,
+        49
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+       MAIN BEEHIVE TIERS
+    */
+
+    const tiers = [
+
+        {
+            y: 30,
+            width: 155,
+            height: 14
+        },
+
+        {
+            y: 22,
+            width: 145,
+            height: 13
+        },
+
+        {
+            y: 14,
+            width: 132,
+            height: 12
+        },
+
+        {
+            y: 6,
+            width: 118,
+            height: 11
+        },
+
+        {
+            y: -2,
+            width: 103,
+            height: 10
+        }
+
+    ];
+
+
+    /*
+       Draw broad overlapping elliptical
+       storeys.
+    */
+
+    tiers.forEach(
+        tier => {
+
+            ctx.fillStyle =
+                "#9ca3a1";
+
+            ctx.beginPath();
+
+            ctx.ellipse(
+                0,
+                tier.y,
+                tier.width,
+                tier.height,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+    );
+
+
+    /*
+       More accurate main silhouette:
+       broad at bottom, narrower toward top.
+    */
+
+    ctx.fillStyle =
+        "#929997";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -158,
+        39
+    );
+
+    ctx.quadraticCurveTo(
+        -143,
+        22,
+        -132,
+        4
+    );
+
+    ctx.quadraticCurveTo(
+        -117,
+        -22,
+        -92,
+        -38
+    );
+
+    ctx.quadraticCurveTo(
+        -60,
+        -57,
+        0,
+        -61
+    );
+
+    ctx.quadraticCurveTo(
+        60,
+        -57,
+        92,
+        -38
+    );
+
+    ctx.quadraticCurveTo(
+        117,
+        -22,
+        132,
+        4
+    );
+
+    ctx.quadraticCurveTo(
+        143,
+        22,
+        158,
+        39
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+       Horizontal floor bands.
+    */
+
+    ctx.strokeStyle =
+        "#737a78";
+
+    ctx.lineWidth = 3;
+
+
+    const bands = [
+        -43,
+        -30,
+        -17,
+        -4,
+        9,
+        22
+    ];
+
+
+    bands.forEach(
+        y => {
+
+            const halfWidth =
+                94 +
+                (y + 43) * 2.3;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                -halfWidth,
+                y
+            );
+
+            ctx.quadraticCurveTo(
+                0,
+                y + 5,
+                halfWidth,
+                y
+            );
+
+            ctx.stroke();
+
+        }
+    );
+
+
+    /*
+       Vertical windows.
+
+       These are intentionally dense,
+       matching the reference photograph.
+    */
+
+    ctx.fillStyle =
+        "#263c46";
+
+
+    const windowRows = [
+        {
+            y: -38,
+            count: 13,
+            width: 175
+        },
+        {
+            y: -25,
+            count: 15,
+            width: 220
+        },
+        {
+            y: -12,
+            count: 17,
+            width: 255
+        },
+        {
+            y: 1,
+            count: 19,
+            width: 280
+        },
+        {
+            y: 14,
+            count: 21,
+            width: 300
+        },
+        {
+            y: 27,
+            count: 23,
+            width: 320
+        }
+    ];
+
+
+    windowRows.forEach(
+        row => {
+
+            const spacing =
+                row.width /
+                row.count;
+
+            const start =
+                -row.width / 2;
+
+
+            for (
+                let i = 0;
+                i < row.count;
+                i++
+            ) {
+
+                const x =
+                    start +
+                    i * spacing +
+                    2;
+
+                ctx.fillRect(
+                    x,
+                    row.y,
+                    5,
+                    9
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+       Vertical architectural fins
+       around upper roof.
+    */
+
+    ctx.fillStyle =
+        "#6f7775";
+
+
+    const finCount = 27;
+
+    for (
+        let i = 0;
+        i < finCount;
+        i++
+    ) {
+
+        const angle =
+            Math.PI +
+            (
+                Math.PI *
+                i /
+                (finCount - 1)
+            );
+
+        const radiusX = 92;
+        const radiusY = 21;
+
+        const x =
+            Math.cos(angle) *
+            radiusX;
+
+        const y =
+            -61 +
+            Math.sin(angle) *
+            radiusY;
+
+
+        ctx.save();
+
+        ctx.translate(
+            x,
+            y
+        );
+
+        ctx.rotate(
+            angle +
+            Math.PI / 2
+        );
+
+        ctx.fillRect(
+            -2,
+            -14,
+            4,
+            28
+        );
+
+        ctx.restore();
+
+    }
+
+
+    /*
+       Upper cylindrical roof.
+    */
+
+    ctx.fillStyle =
+        "#737a78";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        -61,
+        55,
+        13,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#9da3a0";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        -66,
+        53,
         10,
         0,
         0,
@@ -1827,192 +2392,39 @@ function drawParliament() {
 
 
     /*
-       Beehive
+       Roof detail.
     */
-
-    ctx.save();
-
-    ctx.translate(
-        W / 2,
-        57
-    );
-
-
-    /*
-       Main silhouette
-    */
-
-    ctx.fillStyle =
-        "#929a98";
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        -90,
-        30
-    );
-
-    ctx.bezierCurveTo(
-        -80,
-        5,
-        -72,
-        -20,
-        -62,
-        -42
-    );
-
-    ctx.bezierCurveTo(
-        -52,
-        -65,
-        -33,
-        -78,
-        0,
-        -82
-    );
-
-    ctx.bezierCurveTo(
-        33,
-        -78,
-        52,
-        -65,
-        62,
-        -42
-    );
-
-    ctx.bezierCurveTo(
-        72,
-        -20,
-        80,
-        5,
-        90,
-        30
-    );
-
-    ctx.closePath();
-
-    ctx.fill();
-
-
-    /*
-       Darker base
-    */
-
-    ctx.fillStyle =
-        "#737b79";
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        -90,
-        30
-    );
-
-    ctx.lineTo(
-        90,
-        30
-    );
-
-    ctx.lineTo(
-        82,
-        43
-    );
-
-    ctx.lineTo(
-        -82,
-        43
-    );
-
-    ctx.closePath();
-
-    ctx.fill();
-
-
-    /*
-       Horizontal curved tiers
-    */
-
-    const tierData = [
-
-        [-56, 35],
-        [-38, 46],
-        [-19, 58],
-        [1, 70],
-        [21, 78]
-
-    ];
-
 
     ctx.strokeStyle =
-        "#68716f";
+        "#616866";
 
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
 
+    for (
+        let x = -40;
+        x <= 40;
+        x += 10
+    ) {
 
-    tierData.forEach(
-        ([y, width]) => {
+        ctx.beginPath();
 
-            ctx.beginPath();
+        ctx.moveTo(
+            x,
+            -72
+        );
 
-            ctx.ellipse(
-                0,
-                y,
-                width,
-                5,
-                0,
-                0,
-                Math.PI * 2
-            );
+        ctx.lineTo(
+            x,
+            -59
+        );
 
-            ctx.stroke();
+        ctx.stroke();
 
-        }
-    );
-
-
-    /*
-       Highlight
-    */
-
-    ctx.fillStyle =
-        "rgba(255,255,255,.12)";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        -18,
-        -18,
-        22,
-        50,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
+    }
 
 
     /*
-       Dome
-    */
-
-    ctx.fillStyle =
-        "#7d8583";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        0,
-        -79,
-        24,
-        Math.PI,
-        0
-    );
-
-    ctx.fill();
-
-
-    /*
-       Flagpole
+       FLAGPOLE
     */
 
     ctx.strokeStyle =
@@ -2024,19 +2436,19 @@ function drawParliament() {
 
     ctx.moveTo(
         0,
-        -101
+        -75
     );
 
     ctx.lineTo(
         0,
-        -125
+        -105
     );
 
     ctx.stroke();
 
 
     /*
-       NZ flag
+       New Zealand flag.
     */
 
     ctx.fillStyle =
@@ -2044,14 +2456,14 @@ function drawParliament() {
 
     ctx.fillRect(
         1,
-        -124,
-        30,
-        16
+        -104,
+        31,
+        17
     );
 
 
     /*
-       Union Jack
+       White diagonal cross.
     */
 
     ctx.strokeStyle =
@@ -2063,26 +2475,30 @@ function drawParliament() {
 
     ctx.moveTo(
         2,
-        -123
+        -103
     );
 
     ctx.lineTo(
         30,
-        -109
+        -88
     );
 
     ctx.moveTo(
         30,
-        -123
+        -103
     );
 
     ctx.lineTo(
         2,
-        -109
+        -88
     );
 
     ctx.stroke();
 
+
+    /*
+       Red cross.
+    */
 
     ctx.strokeStyle =
         "#d32f2f";
@@ -2093,29 +2509,29 @@ function drawParliament() {
 
     ctx.moveTo(
         2,
-        -123
+        -103
     );
 
     ctx.lineTo(
         30,
-        -109
+        -88
     );
 
     ctx.moveTo(
         30,
-        -123
+        -103
     );
 
     ctx.lineTo(
         2,
-        -109
+        -88
     );
 
     ctx.stroke();
 
 
     /*
-       Southern Cross
+       Southern Cross stars.
     */
 
     ctx.fillStyle =
@@ -2123,10 +2539,10 @@ function drawParliament() {
 
     const stars = [
 
-        [23, -120],
-        [27, -116],
-        [23, -111],
-        [18, -116]
+        [24, -100],
+        [28, -96],
+        [24, -91],
+        [19, -96]
 
     ];
 
@@ -2139,7 +2555,7 @@ function drawParliament() {
             ctx.arc(
                 x,
                 y,
-                1.5,
+                1.4,
                 0,
                 Math.PI * 2
             );
@@ -2155,14 +2571,14 @@ function drawParliament() {
 }
 
 
-/* ============================================================
+/* =========================================================
    APARTMENTS
-============================================================ */
+========================================================= */
 
 function drawApartments() {
 
     /*
-       Left building — CEO HOUSE
+       Main CEO HOUSE building.
     */
 
     ctx.fillStyle =
@@ -2177,7 +2593,7 @@ function drawApartments() {
 
 
     /*
-       Roof
+       Roof.
     */
 
     ctx.fillStyle =
@@ -2211,7 +2627,7 @@ function drawApartments() {
 
 
     /*
-       CEO HOUSE sign
+       CEO HOUSE sign.
     */
 
     ctx.fillStyle =
@@ -2242,7 +2658,7 @@ function drawApartments() {
 
 
     /*
-       Windows
+       Windows.
     */
 
     ctx.fillStyle =
@@ -2273,7 +2689,7 @@ function drawApartments() {
 
 
     /*
-       Right building
+       Right-hand building.
     */
 
     ctx.fillStyle =
@@ -2315,7 +2731,7 @@ function drawApartments() {
 
 
     /*
-       Bottom road/sidewalk
+       Sidewalk.
     */
 
     ctx.fillStyle =
@@ -2331,9 +2747,9 @@ function drawApartments() {
 }
 
 
-/* ============================================================
-   PLAYER
-============================================================ */
+/* =========================================================
+   CHRIS LUXON
+========================================================= */
 
 function drawPlayer() {
 
@@ -2346,7 +2762,7 @@ function drawPlayer() {
 
 
     /*
-       Body / suit
+       Body / suit.
     */
 
     ctx.fillStyle =
@@ -2380,7 +2796,7 @@ function drawPlayer() {
 
 
     /*
-       White shirt
+       White shirt.
     */
 
     ctx.fillStyle =
@@ -2419,7 +2835,7 @@ function drawPlayer() {
 
 
     /*
-       Blue tie
+       Blue tie.
     */
 
     ctx.fillStyle =
@@ -2458,7 +2874,7 @@ function drawPlayer() {
 
 
     /*
-       Ears — deliberately large
+       Ears.
     */
 
     ctx.fillStyle =
@@ -2486,7 +2902,7 @@ function drawPlayer() {
 
 
     /*
-       HUGE BALD HEAD
+       VERY LARGE BALD HEAD.
     */
 
     ctx.fillStyle =
@@ -2508,7 +2924,7 @@ function drawPlayer() {
 
 
     /*
-       Bald head highlight
+       Bald highlight.
     */
 
     ctx.fillStyle =
@@ -2530,7 +2946,7 @@ function drawPlayer() {
 
 
     /*
-       Eyebrows
+       Eyebrows.
     */
 
     ctx.strokeStyle =
@@ -2564,7 +2980,7 @@ function drawPlayer() {
 
 
     /*
-       Eyes
+       Eyes.
     */
 
     ctx.fillStyle =
@@ -2592,7 +3008,7 @@ function drawPlayer() {
 
 
     /*
-       Nose
+       Nose.
     */
 
     ctx.strokeStyle =
@@ -2621,7 +3037,7 @@ function drawPlayer() {
 
 
     /*
-       Mouth
+       Mouth.
     */
 
     ctx.strokeStyle =
@@ -2645,7 +3061,7 @@ function drawPlayer() {
 
 
     /*
-       Small flag pin
+       Flag pin.
     */
 
     ctx.fillStyle =
@@ -2661,21 +3077,14 @@ function drawPlayer() {
 }
 
 
-/* ============================================================
+/* =========================================================
    COLLISION
-============================================================ */
+========================================================= */
 
-function checkCollision(
-    a,
-    b
-) {
+function checkCollision(a, b) {
 
     /*
        Slightly forgiving collision box.
-
-       This is deliberate:
-       the visible character is larger than the
-       actual collision area, making gameplay fairer.
     */
 
     const padding = 5;
@@ -2705,9 +3114,9 @@ function checkCollision(
 }
 
 
-/* ============================================================
-   COLLISION HANDLING
-============================================================ */
+/* =========================================================
+   COLLISION CHECK
+========================================================= */
 
 function checkCollisions() {
 
@@ -2733,34 +3142,26 @@ function checkCollisions() {
 
 
     /*
-       Reaching Parliament.
-
-       Player must be reasonably central to
-       the Beehive entrance.
+       Parliament entrance.
     */
 
     if (
         player.y <= 35
     ) {
 
-        const playerCentre =
+        const centre =
             player.x +
             player.width / 2;
 
 
         if (
-            playerCentre > 205 &&
-            playerCentre < 295
+            centre > 205 &&
+            centre < 295
         ) {
 
             completeLevel();
 
         } else {
-
-            /*
-               Don't let the player simply
-               walk off the top.
-            */
 
             player.y = 36;
 
@@ -2774,9 +3175,9 @@ function checkCollisions() {
 }
 
 
-/* ============================================================
+/* =========================================================
    LOSE LIFE
-============================================================ */
+========================================================= */
 
 function loseLife() {
 
@@ -2784,10 +3185,6 @@ function loseLife() {
 
     updateLives();
 
-
-    /*
-       Stop controls briefly.
-    */
 
     keys.up = false;
     keys.down = false;
@@ -2810,23 +3207,21 @@ function loseLife() {
         "HIT! TRY AGAIN";
 
 
-    /*
-       Reset player and clear traffic.
-
-       This prevents the player from being
-       immediately hit again.
-    */
-
     player.reset();
+
+    /*
+       Clear the road after a collision.
+       This gives the player a fair restart.
+    */
 
     obstacles = [];
 
 }
 
 
-/* ============================================================
-   COMPLETE LEVEL
-============================================================ */
+/* =========================================================
+   LEVEL COMPLETE
+========================================================= */
 
 function completeLevel() {
 
@@ -2863,7 +3258,11 @@ function completeLevel() {
 
     levelDescription.textContent =
         levels[currentLevel].label +
-        ". The traffic is faster and the protesters are arriving in bigger groups.";
+        ". Faster traffic, more protesters and increasingly ridiculous signs await.";
+
+
+    nextLevelButton.textContent =
+        "NEXT LEVEL";
 
 
     levelScreen.classList.remove(
@@ -2873,9 +3272,9 @@ function completeLevel() {
 }
 
 
-/* ============================================================
+/* =========================================================
    FINAL WIN
-============================================================ */
+========================================================= */
 
 function showFinalWin() {
 
@@ -2895,11 +3294,20 @@ function showFinalWin() {
 
 
     levelDescription.textContent =
-        "Four levels of Molesworth Street have been conquered. Chris Luxon has finally reached Parliament.";
+        "Four increasingly difficult levels of Molesworth Street have been conquered. Somehow, Chris Luxon made it all the way from CEO House to the Beehive.";
 
 
     nextLevelButton.textContent =
         "PLAY AGAIN";
+
+
+    /*
+       Special flag indicating the button
+       should restart rather than advance.
+    */
+
+    nextLevelButton.dataset.final =
+        "true";
 
 
     levelScreen.classList.remove(
@@ -2909,9 +3317,9 @@ function showFinalWin() {
 }
 
 
-/* ============================================================
+/* =========================================================
    GAME OVER
-============================================================ */
+========================================================= */
 
 function gameOver() {
 
@@ -2927,7 +3335,7 @@ function gameOver() {
 
 
     gameOverText.textContent =
-        "Molesworth Street has defeated Chris Luxon. The journey continues another day.";
+        "Molesworth Street has defeated Chris Luxon. The protesters remain undefeated.";
 
 
     gameOverScreen.classList.remove(
@@ -2937,9 +3345,9 @@ function gameOver() {
 }
 
 
-/* ============================================================
-   UPDATE LIVES
-============================================================ */
+/* =========================================================
+   LIVES
+========================================================= */
 
 function updateLives() {
 
@@ -2965,9 +3373,9 @@ function updateLives() {
 }
 
 
-/* ============================================================
+/* =========================================================
    START GAME
-============================================================ */
+========================================================= */
 
 function startGame() {
 
@@ -3003,29 +3411,28 @@ function startGame() {
     );
 
 
-    gameRunning = true;
+    nextLevelButton.dataset.final =
+        "false";
 
+
+    gameRunning = true;
 
     gameLoop();
 
 }
 
 
-/* ============================================================
-   NEXT LEVEL
-============================================================ */
+/* =========================================================
+   NEXT LEVEL / PLAY AGAIN
+========================================================= */
 
 nextLevelButton.addEventListener(
     "click",
     () => {
 
-        /*
-           If all four levels were completed,
-           the button starts a new game.
-        */
-
         if (
-            currentLevel > MAX_LEVEL
+            nextLevelButton.dataset.final ===
+            "true"
         ) {
 
             startGame();
@@ -3056,9 +3463,9 @@ nextLevelButton.addEventListener(
 );
 
 
-/* ============================================================
-   PLAY / RESTART
-============================================================ */
+/* =========================================================
+   PLAY
+========================================================= */
 
 playButton.addEventListener(
     "click",
@@ -3066,15 +3473,19 @@ playButton.addEventListener(
 );
 
 
+/* =========================================================
+   RESTART
+========================================================= */
+
 restartButton.addEventListener(
     "click",
     startGame
 );
 
 
-/* ============================================================
+/* =========================================================
    GAME LOOP
-============================================================ */
+========================================================= */
 
 function gameLoop() {
 
@@ -3084,7 +3495,7 @@ function gameLoop() {
 
 
     /*
-       Clear
+       Clear.
     */
 
     ctx.clearRect(
@@ -3096,28 +3507,28 @@ function gameLoop() {
 
 
     /*
-       Background
+       Background.
     */
 
     drawBackground();
 
 
     /*
-       Input
+       Player input.
     */
 
     handleInput();
 
 
     /*
-       Spawn traffic
+       Spawn traffic.
     */
 
     spawnObstacles();
 
 
     /*
-       Update + draw obstacles
+       Update and draw obstacles.
     */
 
     for (
@@ -3135,19 +3546,14 @@ function gameLoop() {
         obstacle.draw();
 
 
-        /*
-           Remove objects which have
-           completely left the screen.
-        */
-
         if (
             obstacle.x <
-            -120
+            -130
 
             ||
 
             obstacle.x >
-            W + 120
+            W + 130
         ) {
 
             obstacles.splice(
@@ -3161,21 +3567,22 @@ function gameLoop() {
 
 
     /*
-       Player
+       Draw player last so he remains
+       visually prominent.
     */
 
     drawPlayer();
 
 
     /*
-       Collision
+       Check collisions and goal.
     */
 
     checkCollisions();
 
 
     /*
-       Continue
+       Continue.
     */
 
     if (gameRunning) {
@@ -3190,9 +3597,9 @@ function gameLoop() {
 }
 
 
-/* ============================================================
+/* =========================================================
    INITIAL DRAW
-============================================================ */
+========================================================= */
 
 drawBackground();
 
@@ -3201,14 +3608,16 @@ drawPlayer();
 updateLives();
 
 
-/* ============================================================
-   PREVENT MOBILE GESTURES
-============================================================ */
+/* =========================================================
+   MOBILE GESTURE PREVENTION
+========================================================= */
 
 document.addEventListener(
     "touchmove",
     event => {
+
         event.preventDefault();
+
     },
     {
         passive: false
@@ -3219,7 +3628,9 @@ document.addEventListener(
 document.addEventListener(
     "gesturestart",
     event => {
+
         event.preventDefault();
+
     },
     {
         passive: false
