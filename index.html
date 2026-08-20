@@ -2,19 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>A vErY DiFfiCulT jOuRNey ACroSs MoLeswORth StrEet</title>
+<meta
+    name="viewport"
+    content="width=device-width,
+             initial-scale=1.0,
+             maximum-scale=1.0,
+             user-scalable=no,
+             viewport-fit=cover"
+>
+
+<title>A Very Difficult Journey Across Molesworth Street</title>
 
 <style>
+
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-    user-select: none;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -22,357 +30,971 @@ html, body {
     overflow: hidden;
     background: #111;
     font-family: Arial, Helvetica, sans-serif;
+    touch-action: none;
 }
 
 body {
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#gameShell {
-    width: min(100vw, 520px);
-    height: 100vh;
-    max-height: 900px;
-    position: relative;
-    background: #222;
-    overflow: hidden;
-}
-
-canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: #222;
-    touch-action: none;
-}
-
-/* ---------------- TITLE / OVERLAYS ---------------- */
-
-.overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 50;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 25px;
-    text-align: center;
-    background:
-        linear-gradient(
-            rgba(0,0,0,0.86),
-            rgba(0,0,0,0.93)
-        );
     color: white;
-}
-
-.overlay.hidden {
-    display: none;
-}
-
-.title {
-    color: #ffcc00;
-    font-size: clamp(25px, 7vw, 38px);
-    line-height: 1.05;
-    margin: 0 0 15px;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.subtitle {
-    color: #ddd;
-    font-size: 15px;
-    line-height: 1.4;
-    max-width: 390px;
-    margin-bottom: 22px;
-}
-
-.levelText {
-    color: #00e6ff;
-    font-size: 17px;
-    font-weight: bold;
-    margin-bottom: 10px;
 }
 
 button {
-    border: 0;
-    border-radius: 9px;
-    font-weight: 900;
-    cursor: pointer;
-    touch-action: manipulation;
+    font-family: inherit;
 }
 
-#startButton {
-    padding: 15px 34px;
-    font-size: 19px;
-    color: white;
-    background: #075ca8;
-    box-shadow: 0 5px 0 #03345f;
-}
+#app {
+    width: min(100vw, 520px);
+    height: 100vh;
+    max-height: 100vh;
 
-#startButton:active {
-    transform: translateY(3px);
-    box-shadow: 0 2px 0 #03345f;
-}
-
-#gameUI {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 20;
-    pointer-events: none;
-    padding: 7px 10px;
-}
-
-#topBar {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    color: white;
+    justify-content: center;
+
+    padding: 5px;
+}
+
+#gameHeader {
+    width: 100%;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 8px;
+
+    font-weight: bold;
     font-size: 13px;
-    font-weight: 900;
-    text-shadow: 1px 1px 2px #000;
+
+    flex-shrink: 0;
 }
 
 #levelDisplay {
     color: #ffcc00;
 }
 
-#statusDisplay {
-    color: #fff;
-}
-
 #livesDisplay {
     letter-spacing: 1px;
 }
 
-/* ---------------- MOBILE CONTROLS ---------------- */
+#statusDisplay {
+    color: #ddd;
+    text-align: right;
+}
+
+#gameContainer {
+    position: relative;
+
+    width: 100%;
+    max-width: 500px;
+
+    aspect-ratio: 5 / 6;
+
+    background: #222;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.65);
+
+    flex-shrink: 1;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #333;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 24px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(20,30,40,.84),
+            rgba(0,0,0,.96)
+        );
+
+    z-index: 20;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.overlay h1 {
+    margin: 0 0 10px 0;
+
+    color: #ffcc00;
+
+    font-size: clamp(21px, 5.8vw, 31px);
+
+    line-height: 1.08;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        2px 2px 0 #000;
+}
+
+.overlay h2 {
+    margin: 5px 0 18px;
+
+    color: #fff;
+
+    font-size: clamp(15px, 4vw, 21px);
+
+    letter-spacing: 1.5px;
+}
+
+.overlay p {
+    max-width: 390px;
+
+    margin: 7px auto 17px;
+
+    color: #ddd;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+.levelMessage {
+    color: #ffcc00 !important;
+
+    font-size: 24px !important;
+
+    font-weight: bold;
+
+    margin-bottom: 5px !important;
+}
+
+.gameButton {
+    appearance: none;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #00529b;
+
+    color: white;
+
+    padding: 13px 32px;
+
+    min-width: 180px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 0 #003b70;
+
+    user-select: none;
+
+    touch-action: manipulation;
+}
+
+.gameButton:active {
+    transform: translateY(3px);
+
+    box-shadow:
+        0 1px 0 #003b70;
+}
 
 #controls {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 8px;
-    z-index: 30;
-    display: flex;
-    justify-content: center;
-    pointer-events: none;
+    width: 100%;
+    max-width: 500px;
+
+    height: 88px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    grid-template-rows:
+        1fr 1fr;
+
+    gap: 5px;
+
+    padding: 4px 25px;
+
+    flex-shrink: 0;
 }
 
-#dpad {
-    width: 154px;
-    height: 154px;
-    position: relative;
-    pointer-events: auto;
-}
+.controlButton {
+    border: 1px solid #555;
 
-.control {
-    position: absolute;
-    width: 52px;
-    height: 52px;
-    background: rgba(255,255,255,0.22);
-    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            #3d3d3d,
+            #272727
+        );
+
     color: white;
-    font-size: 25px;
-    border-radius: 12px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+    user-select: none;
+
+    touch-action: none;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    box-shadow:
+        0 3px 0 #111;
+
+    cursor: pointer;
 }
 
-.control:active,
-.control.pressed {
-    background: rgba(255,204,0,0.7);
-    color: #111;
+.controlButton:active,
+.controlButton.active {
+    background: #00529b;
+
+    transform: translateY(2px);
+
+    box-shadow:
+        0 1px 0 #111;
 }
 
-#upBtn {
-    top: 0;
-    left: 51px;
+#upButton {
+    grid-column: 2;
+    grid-row: 1;
 }
 
-#leftBtn {
-    top: 51px;
-    left: 0;
+#leftButton {
+    grid-column: 1;
+    grid-row: 2;
 }
 
-#rightBtn {
-    top: 51px;
-    right: 0;
+#downButton {
+    grid-column: 2;
+    grid-row: 2;
 }
 
-#downBtn {
-    bottom: 0;
-    left: 51px;
+#rightButton {
+    grid-column: 3;
+    grid-row: 2;
 }
 
-/* ---------------- END SEQUENCE ---------------- */
 
-#endingOverlay {
+/* =========================================================
+   FINAL HELICOPTER SEQUENCE
+========================================================= */
+
+#helicopterSequence {
     position: absolute;
     inset: 0;
-    z-index: 100;
+
+    z-index: 50;
+
+    pointer-events: none;
+
+    background: transparent;
+
+    overflow: hidden;
+}
+
+#finalBlackout {
+    position: absolute;
+    inset: 0;
+
     background: #000;
+
     opacity: 0;
+
+    z-index: 100;
+
     pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
+
+    transition: opacity 4s ease;
 }
 
-#endingText {
-    color: white;
-    font-family: "Courier New", Courier, monospace;
-    font-weight: 900;
-    font-size: clamp(21px, 6vw, 32px);
-    line-height: 1.35;
-    text-align: center;
-    opacity: 0;
-    text-shadow: 0 0 3px white;
-}
-
-.cursor {
-    display: inline-block;
-    width: 9px;
-    height: 1.1em;
-    background: white;
-    margin-left: 3px;
-    vertical-align: -2px;
-    animation: blink 0.8s infinite;
-}
-
-@keyframes blink {
-    50% { opacity: 0; }
-}
-
-/* ---------------- LEVEL COMPLETE ---------------- */
-
-#levelOverlay {
+#finalText {
     position: absolute;
-    inset: 0;
-    z-index: 60;
-    display: none;
+
+    left: 8%;
+    right: 8%;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: white;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size:
+        clamp(18px, 5vw, 27px);
+
+    line-height: 1.45;
+
+    font-weight: bold;
+
+    text-align: center;
+
+    opacity: 0;
+
+    z-index: 110;
+
+    text-shadow:
+        0 0 2px #fff;
+
+    white-space: normal;
+}
+
+
+/* =========================================================
+   HELICOPTER
+========================================================= */
+
+.helicopter {
+    position: absolute;
+
+    width: 170px;
+    height: 90px;
+
+    left: -210px;
+    top: 285px;
+
+    transform: scale(.9);
+
+    z-index: 80;
+}
+
+.heli-body {
+    position: absolute;
+
+    left: 45px;
+    top: 25px;
+
+    width: 82px;
+    height: 38px;
+
+    background: #68716d;
+
+    border: 3px solid #252927;
+
+    border-radius:
+        45% 55% 45% 40%;
+
+    box-shadow:
+        inset -8px -5px 0 rgba(0,0,0,.16);
+}
+
+.heli-window {
+    position: absolute;
+
+    left: 55px;
+    top: 30px;
+
+    width: 33px;
+    height: 20px;
+
+    background: #263d4a;
+
+    border: 2px solid #151a1b;
+
+    border-radius:
+        60% 35% 35% 60%;
+}
+
+.heli-door-window {
+    position: absolute;
+
+    left: 91px;
+    top: 31px;
+
+    width: 25px;
+    height: 18px;
+
+    background: #263d4a;
+
+    border: 2px solid #151a1b;
+
+    border-radius: 30%;
+}
+
+.heli-tail {
+    position: absolute;
+
+    left: 116px;
+    top: 36px;
+
+    width: 49px;
+    height: 8px;
+
+    background: #5b625f;
+
+    border: 2px solid #252927;
+
+    transform:
+        rotate(-8deg);
+
+    transform-origin: left center;
+}
+
+.heli-tail-fin {
+    position: absolute;
+
+    left: 145px;
+    top: 23px;
+
+    width: 20px;
+    height: 22px;
+
+    background: #5b625f;
+
+    clip-path:
+        polygon(0 100%, 100% 0, 75% 100%);
+}
+
+.heli-skid-left,
+.heli-skid-right {
+    position: absolute;
+
+    top: 64px;
+
+    width: 45px;
+    height: 5px;
+
+    border-bottom: 4px solid #242826;
+
+    border-radius: 50%;
+}
+
+.heli-skid-left {
+    left: 42px;
+}
+
+.heli-skid-right {
+    left: 92px;
+}
+
+.heli-strut-left,
+.heli-strut-right {
+    position: absolute;
+
+    top: 55px;
+
+    width: 3px;
+    height: 14px;
+
+    background: #252927;
+}
+
+.heli-strut-left {
+    left: 52px;
+}
+
+.heli-strut-right {
+    left: 105px;
+}
+
+.heli-rotor {
+    position: absolute;
+
+    left: 40px;
+    top: 10px;
+
+    width: 100px;
+    height: 4px;
+
+    background: #1c211f;
+
+    border-radius: 50%;
+
+    transform-origin: center;
+
+    animation:
+        rotorSpin .08s linear infinite;
+}
+
+.heli-rotor::after {
+    content: "";
+
+    position: absolute;
+
+    left: 48px;
+    top: -8px;
+
+    width: 4px;
+    height: 20px;
+
+    background: #1c211f;
+
+    border-radius: 50%;
+}
+
+.heli-light {
+    position: absolute;
+
+    left: 48px;
+    top: 52px;
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #e22;
+
+    box-shadow:
+        0 0 8px rgba(255,0,0,.7);
+}
+
+@keyframes rotorSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+
+/* =========================================================
+   CASH
+========================================================= */
+
+.cash-note {
+    position: absolute;
+
+    width: 30px;
+    height: 14px;
+
+    background: #8dbf72;
+
+    border: 1px solid #284c26;
+
+    color: #183518;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 7px;
+
+    font-weight: bold;
+
+    display: flex;
+
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.72);
-    color: white;
-    text-align: center;
+
+    z-index: 70;
+
+    opacity: 0;
+
+    transform:
+        rotate(0deg);
 }
 
-#levelOverlay.visible {
+
+/* =========================================================
+   SCATTERED OBSTACLES
+========================================================= */
+
+.scattered-object {
+    position: absolute;
+
+    z-index: 75;
+
+    pointer-events: none;
+
+    transition:
+        transform 1.5s cubic-bezier(.1,.8,.2,1),
+        opacity 1.8s ease;
+}
+
+
+/* =========================================================
+   FINAL SCREEN
+========================================================= */
+
+#finalSequenceMessage {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 120;
+
     display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: none;
 }
 
-#levelMessage {
-    font-size: 28px;
-    font-weight: 900;
-    color: #ffcc00;
+
+/* =========================================================
+   SMALL SCREENS
+========================================================= */
+
+@media (max-height: 700px) {
+
+    #app {
+        padding: 2px;
+    }
+
+    #gameHeader {
+        height: 28px;
+        font-size: 11px;
+    }
+
+    #controls {
+        height: 72px;
+    }
+
+    .controlButton {
+        font-size: 18px;
+    }
+
 }
 
 </style>
 </head>
 
+
 <body>
 
-<div id="gameShell">
+<div id="app">
 
-    <canvas id="gameCanvas"></canvas>
+    <div id="gameHeader">
 
-    <div id="gameUI">
-        <div id="topBar">
-            <div id="levelDisplay">LEVEL 1</div>
-            <div id="statusDisplay">MAKE THE JOURNEY</div>
-            <div id="livesDisplay">❤️ ❤️ ❤️</div>
+        <div id="levelDisplay">
+            LEVEL 1
         </div>
+
+        <div id="livesDisplay">
+            ❤️ ❤️ ❤️
+        </div>
+
+        <div id="statusDisplay">
+            READY
+        </div>
+
     </div>
+
+
+    <div id="gameContainer">
+
+        <canvas
+            id="gameCanvas"
+            width="500"
+            height="600">
+        </canvas>
+
+
+        <!-- =================================================
+             TITLE SCREEN
+        ================================================== -->
+
+        <div
+            id="titleScreen"
+            class="overlay">
+
+            <h1>
+                A VERY DIFFICULT
+                <br>
+                JOURNEY ACROSS
+                <br>
+                MOLESWORTH STREET
+            </h1>
+
+            <p>
+                Help Chris Luxon make the very difficult
+                journey from his apartment to Parliament.
+            </p>
+
+            <p>
+                Four increasingly difficult levels.
+                <br>
+                Three lives.
+                <br>
+                And a frankly unreasonable number of protesters.
+            </p>
+
+            <button
+                id="playButton"
+                class="gameButton">
+                PLAY
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             LEVEL COMPLETE
+        ================================================== -->
+
+        <div
+            id="levelScreen"
+            class="overlay hidden">
+
+            <div
+                id="levelMessage"
+                class="levelMessage">
+                LEVEL COMPLETE
+            </div>
+
+            <h2 id="levelTitle">
+                YOU MADE IT!
+            </h2>
+
+            <p id="levelDescription">
+                Somehow, Luxon reached Parliament.
+            </p>
+
+            <button
+                id="nextLevelButton"
+                class="gameButton">
+                NEXT LEVEL
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             GAME OVER
+        ================================================== -->
+
+        <div
+            id="gameOverScreen"
+            class="overlay hidden">
+
+            <h1 id="gameOverTitle">
+                MISSION FAILED
+            </h1>
+
+            <p id="gameOverText">
+                Molesworth Street has defeated Chris Luxon.
+            </p>
+
+            <button
+                id="restartButton"
+                class="gameButton">
+                TRY AGAIN
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             HELICOPTER END SEQUENCE
+        ================================================== -->
+
+        <div
+            id="helicopterSequence"
+            class="hidden">
+
+            <div
+                id="helicopter"
+                class="helicopter">
+
+                <div class="heli-rotor"></div>
+
+                <div class="heli-body"></div>
+
+                <div class="heli-window"></div>
+
+                <div class="heli-door-window"></div>
+
+                <div class="heli-tail"></div>
+
+                <div class="heli-tail-fin"></div>
+
+                <div class="heli-skid-left"></div>
+
+                <div class="heli-skid-right"></div>
+
+                <div class="heli-strut-left"></div>
+
+                <div class="heli-strut-right"></div>
+
+                <div class="heli-light"></div>
+
+            </div>
+
+
+            <div id="cashContainer"></div>
+
+            <div id="scatteredContainer"></div>
+
+            <div id="finalBlackout"></div>
+
+            <div id="finalSequenceMessage">
+
+                <div id="finalText"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MOBILE CONTROLS
+    ====================================================== -->
 
     <div id="controls">
-        <div id="dpad">
-            <button class="control" id="upBtn">▲</button>
-            <button class="control" id="leftBtn">◀</button>
-            <button class="control" id="rightBtn">▶</button>
-            <button class="control" id="downBtn">▼</button>
-        </div>
-    </div>
 
-    <!-- TITLE SCREEN -->
-    <div class="overlay" id="titleOverlay">
+        <button
+            class="controlButton"
+            id="upButton">
+            ▲
+        </button>
 
-        <h1 class="title">
-            A Very Difficult Journey<br>
-            Across Molesworth Street
-        </h1>
+        <button
+            class="controlButton"
+            id="leftButton">
+            ◀
+        </button>
 
-        <div class="subtitle">
-            Help Christchurch Luxon make the very difficult journey
-            to Parliament from his apartment.
-        </div>
+        <button
+            class="controlButton"
+            id="downButton">
+            ▼
+        </button>
 
-        <div class="levelText">
-            LEVELS 1–4
-        </div>
-
-        <button id="startButton">
-            START JOURNEY
+        <button
+            class="controlButton"
+            id="rightButton">
+            ▶
         </button>
 
     </div>
 
-    <!-- LEVEL TRANSITION -->
-    <div id="levelOverlay">
-        <div id="levelMessage"></div>
-    </div>
-
-    <!-- ENDING -->
-    <div id="endingOverlay">
-        <div id="endingText"></div>
-    </div>
-
 </div>
 
+
 <script>
-
-/* =========================================================
-   SETUP
-========================================================= */
-
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-const shell = document.getElementById("gameShell");
-
-const titleOverlay = document.getElementById("titleOverlay");
-const startButton = document.getElementById("startButton");
-
-const levelDisplay = document.getElementById("levelDisplay");
-const statusDisplay = document.getElementById("statusDisplay");
-const livesDisplay = document.getElementById("livesDisplay");
-
-const levelOverlay = document.getElementById("levelOverlay");
-const levelMessage = document.getElementById("levelMessage");
-
-const controls = {
-    up: document.getElementById("upBtn"),
-    down: document.getElementById("downBtn"),
-    left: document.getElementById("leftBtn"),
-    right: document.getElementById("rightBtn")
-};
-
-const endingOverlay = document.getElementById("endingOverlay");
-const endingText = document.getElementById("endingText");
-
 
 /* =========================================================
    CANVAS
 ========================================================= */
 
-const W = 500;
-const H = 760;
+const canvas =
+    document.getElementById("gameCanvas");
 
-canvas.width = W;
-canvas.height = H;
+const ctx =
+    canvas.getContext("2d");
+
+const W = canvas.width;
+const H = canvas.height;
+
+
+/* =========================================================
+   UI
+========================================================= */
+
+const titleScreen =
+    document.getElementById("titleScreen");
+
+const levelScreen =
+    document.getElementById("levelScreen");
+
+const gameOverScreen =
+    document.getElementById("gameOverScreen");
+
+const playButton =
+    document.getElementById("playButton");
+
+const nextLevelButton =
+    document.getElementById("nextLevelButton");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const levelDisplay =
+    document.getElementById("levelDisplay");
+
+const livesDisplay =
+    document.getElementById("livesDisplay");
+
+const statusDisplay =
+    document.getElementById("statusDisplay");
+
+const levelTitle =
+    document.getElementById("levelTitle");
+
+const levelDescription =
+    document.getElementById("levelDescription");
+
+const gameOverTitle =
+    document.getElementById("gameOverTitle");
+
+const gameOverText =
+    document.getElementById("gameOverText");
+
+
+/* =========================================================
+   HELICOPTER UI
+========================================================= */
+
+const helicopterSequence =
+    document.getElementById(
+        "helicopterSequence"
+    );
+
+const helicopter =
+    document.getElementById(
+        "helicopter"
+    );
+
+const cashContainer =
+    document.getElementById(
+        "cashContainer"
+    );
+
+const scatteredContainer =
+    document.getElementById(
+        "scatteredContainer"
+    );
+
+const finalBlackout =
+    document.getElementById(
+        "finalBlackout"
+    );
+
+const finalText =
+    document.getElementById(
+        "finalText"
+    );
 
 
 /* =========================================================
@@ -380,87 +1002,101 @@ canvas.height = H;
 ========================================================= */
 
 let gameRunning = false;
-let endingSequence = false;
 
-let level = 1;
+let currentLevel = 1;
+
+const MAX_LEVEL = 4;
+
 let lives = 3;
 
-let animationId = null;
+let animationFrame = null;
 
-const keys = {
-    up: false,
-    down: false,
-    left: false,
-    right: false
-};
+let obstacles = [];
+
+
+/*
+   Prevent the helicopter sequence from
+   accidentally triggering more than once.
+*/
+
+let helicopterTriggered = false;
+
+let helicopterAnimating = false;
 
 
 /* =========================================================
-   LEVEL CONFIGURATION
+   LEVEL SETTINGS
 ========================================================= */
 
 const levels = {
+
     1: {
         speedMultiplier: 0.65,
-        spawnMultiplier: 0.65,
-        label: "LEVEL 1 — A GENTLE START"
+        spawnMultiplier: 1.0,
+        groupChance: 0.28,
+        label: "GETTING STARTED"
     },
 
     2: {
-        speedMultiplier: 0.9,
-        spawnMultiplier: 0.9,
-        label: "LEVEL 2 — TRAFFIC INCREASED"
+        speedMultiplier: 0.85,
+        spawnMultiplier: 1.35,
+        groupChance: 0.42,
+        label: "TRAFFIC INCREASED"
     },
 
     3: {
-        speedMultiplier: 1.15,
-        spawnMultiplier: 1.2,
-        label: "LEVEL 3 — THIS IS GETTING DIFFICULT"
+        speedMultiplier: 1.10,
+        spawnMultiplier: 1.70,
+        groupChance: 0.60,
+        label: "THIS IS GETTING DIFFICULT"
     },
 
     4: {
-        speedMultiplier: 1.45,
-        spawnMultiplier: 1.55,
-        label: "LEVEL 4 — VERY DIFFICULT"
+        speedMultiplier: 1.35,
+        spawnMultiplier: 2.05,
+        groupChance: 0.78,
+        label: "VERY DIFFICULT"
     }
+
 };
 
 
 /* =========================================================
-   ROAD LAYOUT
+   MAP
 ========================================================= */
 
-const zones = {
+const map = {
 
     parliament: {
         y: 0,
-        h: 170
+        height: 100
     },
 
     cycle2: {
-        y: 170,
-        h: 60
+        y: 100,
+        height: 50
     },
 
-    road2: {
-        y: 230,
-        h: 105
+    traffic2: {
+        y: 150,
+        height: 100
     },
 
-    road1: {
-        y: 335,
-        h: 105
+    traffic1: {
+        y: 250,
+        height: 100
     },
 
     cycle1: {
-        y: 440,
-        h: 60
+        y: 350,
+        height: 50
     },
 
-    apartment: {
-        y: 500,
-        h: 260
+    apartments: {
+        y: 400,
+        height: 200
     }
+
 };
 
 
@@ -470,43 +1106,303 @@ const zones = {
 
 const player = {
 
-    x: W / 2 - 18,
+    x: W / 2 - 16,
 
-    y: zones.apartment.y + 170,
+    y: 520,
 
-    width: 36,
-    height: 62,
+    width: 32,
 
-    speed: 4.4,
+    height: 48,
+
+    speed: 4.2,
 
     reset() {
 
-        this.x = W / 2 - this.width / 2;
-        this.y = zones.apartment.y + 170;
+        this.x =
+            W / 2 -
+            this.width / 2;
+
+        this.y = 520;
 
     }
+
 };
 
 
 /* =========================================================
-   OBSTACLES
+   INPUT
 ========================================================= */
 
-let obstacles = [];
+const keys = {
 
-const protestorSlogans = [
+    up: false,
+    down: false,
+    left: false,
+    right: false
 
-    "FIX ROADS",
-    "SAVE CITY",
-    "NO CUTS",
-    "MORE BUSES",
-    "BIKE POWER",
-    "SANCTIONS NOW!",
-    "FIRE WINNIE",
-    "SANCTIONS NOW!",
-    "FIRE WINNIE"
+};
 
-];
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+window.addEventListener(
+    "keydown",
+    event => {
+
+        const key =
+            event.key.toLowerCase();
+
+        if (
+            key === "arrowup" ||
+            key === "w"
+        ) {
+
+            keys.up = true;
+
+            event.preventDefault();
+
+        }
+
+        if (
+            key === "arrowdown" ||
+            key === "s"
+        ) {
+
+            keys.down = true;
+
+            event.preventDefault();
+
+        }
+
+        if (
+            key === "arrowleft" ||
+            key === "a"
+        ) {
+
+            keys.left = true;
+
+            event.preventDefault();
+
+        }
+
+        if (
+            key === "arrowright" ||
+            key === "d"
+        ) {
+
+            keys.right = true;
+
+            event.preventDefault();
+
+        }
+
+    },
+    { passive: false }
+);
+
+
+window.addEventListener(
+    "keyup",
+    event => {
+
+        const key =
+            event.key.toLowerCase();
+
+        if (
+            key === "arrowup" ||
+            key === "w"
+        ) {
+
+            keys.up = false;
+
+        }
+
+        if (
+            key === "arrowdown" ||
+            key === "s"
+        ) {
+
+            keys.down = false;
+
+        }
+
+        if (
+            key === "arrowleft" ||
+            key === "a"
+        ) {
+
+            keys.left = false;
+
+        }
+
+        if (
+            key === "arrowright" ||
+            key === "d"
+        ) {
+
+            keys.right = false;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   MOBILE CONTROLS
+========================================================= */
+
+function setupControl(
+    elementId,
+    direction
+) {
+
+    const button =
+        document.getElementById(
+            elementId
+        );
+
+
+    function press(event) {
+
+        event.preventDefault();
+
+        if (
+            helicopterAnimating
+        ) {
+
+            return;
+
+        }
+
+        keys[direction] = true;
+
+        button.classList.add(
+            "active"
+        );
+
+        try {
+
+            button.setPointerCapture(
+                event.pointerId
+            );
+
+        } catch (_) {}
+
+    }
+
+
+    function release(event) {
+
+        event.preventDefault();
+
+        keys[direction] = false;
+
+        button.classList.remove(
+            "active"
+        );
+
+    }
+
+
+    button.addEventListener(
+        "pointerdown",
+        press,
+        { passive: false }
+    );
+
+    button.addEventListener(
+        "pointerup",
+        release,
+        { passive: false }
+    );
+
+    button.addEventListener(
+        "pointercancel",
+        release,
+        { passive: false }
+    );
+
+    button.addEventListener(
+        "pointerleave",
+        release,
+        { passive: false }
+    );
+
+}
+
+
+setupControl(
+    "upButton",
+    "up"
+);
+
+setupControl(
+    "downButton",
+    "down"
+);
+
+setupControl(
+    "leftButton",
+    "left"
+);
+
+setupControl(
+    "rightButton",
+    "right"
+);
+
+
+/* =========================================================
+   PLAYER INPUT
+========================================================= */
+
+function handleInput() {
+
+    if (!gameRunning) {
+        return;
+    }
+
+
+    if (keys.up) {
+        player.y -= player.speed;
+    }
+
+    if (keys.down) {
+        player.y += player.speed;
+    }
+
+    if (keys.left) {
+        player.x -= player.speed;
+    }
+
+    if (keys.right) {
+        player.x += player.speed;
+    }
+
+
+    player.x =
+        Math.max(
+            0,
+            Math.min(
+                W - player.width,
+                player.x
+            )
+        );
+
+
+    player.y =
+        Math.max(
+            0,
+            Math.min(
+                H - player.height,
+                player.y
+            )
+        );
+
+}
 
 
 /* =========================================================
@@ -515,81 +1411,142 @@ const protestorSlogans = [
 
 class Cyclist {
 
-    constructor(y, speed, direction) {
+    constructor(
+        laneY,
+        speed,
+        direction
+    ) {
 
-        this.type = "cyclist";
+        this.width = 30;
+        this.height = 32;
 
-        this.y = y + 14;
+        this.y =
+            laneY +
+            (50 - this.height) / 2;
 
-        this.width = 27;
-        this.height = 34;
+        this.direction =
+            direction;
 
-        this.speed = speed;
-        this.direction = direction;
+        this.speed =
+            speed;
 
         this.x =
             direction === 1
-            ? -60
-            : W + 60;
-
-        this.rotation = 0;
+                ? -60
+                : W + 60;
 
     }
+
 
     update() {
 
         this.x +=
             this.speed *
-            this.direction *
-            levels[level].speedMultiplier;
-
-        this.rotation += 0.12;
+            this.direction;
 
     }
+
 
     draw() {
 
-        ctx.save();
+        const x = this.x;
+        const y = this.y;
 
-        ctx.translate(
-            this.x + this.width / 2,
-            this.y + this.height / 2
-        );
 
-        ctx.fillStyle = "#111";
+        ctx.strokeStyle =
+            "#111";
 
-        ctx.beginPath();
-        ctx.arc(-8, 11, 8, 0, Math.PI * 2);
-        ctx.arc(8, 11, 8, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = "#111";
         ctx.lineWidth = 3;
 
         ctx.beginPath();
-        ctx.moveTo(-8, 11);
-        ctx.lineTo(0, -2);
-        ctx.lineTo(8, 11);
-        ctx.moveTo(0, -2);
-        ctx.lineTo(8, 0);
+
+        ctx.arc(
+            x + 7,
+            y + 25,
+            6,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.arc(
+            x + 23,
+            y + 25,
+            6,
+            0,
+            Math.PI * 2
+        );
+
         ctx.stroke();
 
-        ctx.fillStyle = "#e91e63";
-        ctx.fillRect(-7, -14, 14, 15);
 
-        ctx.fillStyle = "#ffd1a9";
+        ctx.strokeStyle =
+            "#222";
+
+        ctx.lineWidth = 2;
+
         ctx.beginPath();
-        ctx.arc(0, -20, 6, 0, Math.PI * 2);
-        ctx.fill();
 
-        ctx.fillStyle = "#222";
+        ctx.moveTo(
+            x + 7,
+            y + 25
+        );
+
+        ctx.lineTo(
+            x + 13,
+            y + 14
+        );
+
+        ctx.lineTo(
+            x + 23,
+            y + 25
+        );
+
+        ctx.lineTo(
+            x + 7,
+            y + 25
+        );
+
+        ctx.moveTo(
+            x + 13,
+            y + 14
+        );
+
+        ctx.lineTo(
+            x + 21,
+            y + 12
+        );
+
+        ctx.stroke();
+
+
+        ctx.fillStyle =
+            "#d83b3b";
+
+        ctx.fillRect(
+            x + 10,
+            y + 8,
+            8,
+            10
+        );
+
+
+        ctx.fillStyle =
+            "#f2c09c";
+
         ctx.beginPath();
-        ctx.arc(0, -23, 7, Math.PI, Math.PI * 2);
-        ctx.fill();
 
-        ctx.restore();
+        ctx.arc(
+            x + 14,
+            y + 5,
+            5,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
 
     }
+
 }
 
 
@@ -599,526 +1556,347 @@ class Cyclist {
 
 class Protestor {
 
-    constructor(y, speed, direction, slogan) {
+    constructor(
+        laneY,
+        speed,
+        direction,
+        slogan,
+        offset = 0
+    ) {
 
-        this.type = "protestor";
+        this.width = 30;
+        this.height = 42;
 
-        this.y = y + 10;
+        this.y =
+            laneY +
+            (50 - this.height) / 2;
 
-        this.width = 35;
-        this.height = 48;
+        this.direction =
+            direction;
 
-        this.speed = speed;
-        this.direction = direction;
+        this.speed =
+            speed;
 
-        this.slogan = slogan;
+        this.slogan =
+            slogan;
 
         this.x =
             direction === 1
-            ? -80
-            : W + 80;
-
-        this.rotation = 0;
+                ? -70 - offset
+                : W + 70 + offset;
 
     }
+
 
     update() {
 
         this.x +=
             this.speed *
-            this.direction *
-            levels[level].speedMultiplier;
+            this.direction;
 
     }
 
+
     draw() {
 
-        ctx.save();
+        const x = this.x;
+        const y = this.y;
 
-        ctx.translate(
-            this.x + this.width / 2,
-            this.y + this.height / 2
-        );
 
-        /* body */
-
-        ctx.fillStyle = "#d56a00";
+        ctx.fillStyle =
+            "#c96a24";
 
         ctx.fillRect(
-            -14,
-            -3,
-            28,
-            28
+            x + 5,
+            y + 18,
+            20,
+            24
         );
 
-        /* head */
 
-        ctx.fillStyle = "#ffd1a9";
-
-        ctx.beginPath();
-        ctx.arc(0, -13, 9, 0, Math.PI * 2);
-        ctx.fill();
-
-        /* hair */
-
-        ctx.fillStyle = "#382010";
+        ctx.fillStyle =
+            "#ffd0a6";
 
         ctx.beginPath();
-        ctx.arc(0, -17, 9, Math.PI, Math.PI * 2);
+
+        ctx.arc(
+            x + 15,
+            y + 11,
+            8,
+            0,
+            Math.PI * 2
+        );
+
         ctx.fill();
 
-        /* sign */
 
-        ctx.fillStyle = "#fff";
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 2;
+        ctx.strokeStyle =
+            "#ffd0a6";
+
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x + 7,
+            y + 23
+        );
+
+        ctx.lineTo(
+            x - 2,
+            y + 9
+        );
+
+        ctx.stroke();
+
+
+        const signX =
+            x - 14;
+
+        const signY =
+            y - 18;
+
+        ctx.fillStyle =
+            "#fff";
+
+        ctx.strokeStyle =
+            "#111";
+
+        ctx.lineWidth = 1;
 
         ctx.fillRect(
-            -27,
-            -42,
-            54,
+            signX,
+            signY,
+            58,
             18
         );
 
         ctx.strokeRect(
-            -27,
-            -42,
-            54,
+            signX,
+            signY,
+            58,
             18
         );
 
-        ctx.fillStyle = "#111";
-        ctx.font = "bold 7px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+
+        ctx.fillStyle =
+            "#74451f";
+
+        ctx.fillRect(
+            x + 14,
+            signY + 18,
+            3,
+            17
+        );
+
+
+        ctx.fillStyle =
+            "#111";
+
+        ctx.font =
+            "bold 7px Arial";
+
+        ctx.textAlign =
+            "center";
 
         ctx.fillText(
             this.slogan,
-            0,
-            -33
+            signX + 29,
+            signY + 12
         );
-
-        /* stick */
-
-        ctx.fillStyle = "#633";
-
-        ctx.fillRect(
-            -1.5,
-            -24,
-            3,
-            35
-        );
-
-        ctx.restore();
 
     }
+
 }
 
 
 /* =========================================================
-   SCATTERED OBJECTS
+   PROTESTOR SLOGANS
 ========================================================= */
 
-let debris = [];
+const slogans = [
 
-class Debris {
+    "FIX ROADS",
+    "MORE BUSES",
+    "SAVE CITY",
+    "NO CUTS",
+    "BIKE POWER",
+    "SORT IT OUT",
+    "SANCTIONS NOW!",
+    "FIRE WINNIE!",
+    "SANCTIONS NOW!",
+    "FIRE WINNIE!"
 
-    constructor(x, y, type) {
+];
 
-        this.x = x;
-        this.y = y;
 
-        this.type = type;
+/* =========================================================
+   SPAWN OBSTACLES
+========================================================= */
 
-        this.vx =
-            (Math.random() - 0.5) * 9;
+function spawnObstacles() {
 
-        this.vy =
-            -Math.random() * 8 - 3;
+    if (!gameRunning) {
+        return;
+    }
 
-        this.gravity = 0.25;
 
-        this.rotation =
-            Math.random() * Math.PI;
+    const settings =
+        levels[currentLevel];
 
-        this.rotationSpeed =
-            (Math.random() - 0.5) * 0.3;
 
-        this.life = 180;
+    if (
+        Math.random() <
+        0.014 *
+        settings.spawnMultiplier
+    ) {
+
+        obstacles.push(
+            new Cyclist(
+                map.cycle1.y,
+                2.5 *
+                settings.speedMultiplier,
+                1
+            )
+        );
 
     }
 
-    update() {
 
-        this.x += this.vx;
-        this.y += this.vy;
+    if (
+        Math.random() <
+        0.014 *
+        settings.spawnMultiplier
+    ) {
 
-        this.vy += this.gravity;
-
-        this.rotation += this.rotationSpeed;
-
-        this.life--;
+        obstacles.push(
+            new Cyclist(
+                map.cycle2.y,
+                2.8 *
+                settings.speedMultiplier,
+                -1
+            )
+        );
 
     }
 
-    draw() {
 
-        ctx.save();
+    if (
+        Math.random() <
+        0.014 *
+        settings.spawnMultiplier
+    ) {
 
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
+        spawnProtestorGroup(
+            map.traffic1.y,
+            -1,
+            1.55 *
+            settings.speedMultiplier
+        );
 
-        if (this.type === "bike") {
+    }
 
-            ctx.strokeStyle = "#111";
-            ctx.lineWidth = 4;
 
-            ctx.beginPath();
-            ctx.arc(-8, 5, 8, 0, Math.PI * 2);
-            ctx.arc(8, 5, 8, 0, Math.PI * 2);
-            ctx.stroke();
+    if (
+        Math.random() <
+        0.014 *
+        settings.spawnMultiplier
+    ) {
+
+        spawnProtestorGroup(
+            map.traffic2.y,
+            1,
+            1.7 *
+            settings.speedMultiplier
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PROTESTOR GROUPS
+========================================================= */
+
+function spawnProtestorGroup(
+    laneY,
+    direction,
+    speed
+) {
+
+    const settings =
+        levels[currentLevel];
+
+
+    let groupSize = 1;
+
+
+    if (
+        Math.random() <
+        settings.groupChance
+    ) {
+
+        if (
+            currentLevel === 1
+        ) {
+
+            groupSize = 2;
+
+        } else if (
+            currentLevel === 2
+        ) {
+
+            groupSize =
+                Math.random() < 0.6
+                    ? 2
+                    : 3;
+
+        } else if (
+            currentLevel === 3
+        ) {
+
+            groupSize =
+                Math.random() < 0.5
+                    ? 3
+                    : 4;
 
         } else {
 
-            ctx.fillStyle = "#d56a00";
-
-            ctx.fillRect(
-                -8,
-                -8,
-                16,
-                16
-            );
-
-            ctx.fillStyle = "#ffd1a9";
-
-            ctx.beginPath();
-            ctx.arc(0, -12, 5, 0, Math.PI * 2);
-            ctx.fill();
-
-        }
-
-        ctx.restore();
-
-    }
-}
-
-
-/* =========================================================
-   HELICOPTER
-========================================================= */
-
-const helicopter = {
-
-    active: false,
-
-    x: -180,
-
-    y: 285,
-
-    width: 150,
-
-    height: 75,
-
-    speed: 5.5,
-
-    targetX: 270,
-
-    boarded: false,
-
-    cashTimer: 0,
-
-    reset() {
-
-        this.active = false;
-        this.x = -180;
-        this.y = 285;
-        this.boarded = false;
-        this.cashTimer = 0;
-
-    },
-
-    update() {
-
-        if (!this.active) return;
-
-        this.x += this.speed;
-
-        if (!this.boarded &&
-            this.x + this.width / 2 > player.x) {
-
-            this.boarded = true;
-
-            statusDisplay.textContent =
-                "LUXON HAS FOUND A WAY OUT";
-
-        }
-
-        if (this.boarded) {
-
-            player.x =
-                this.x + 45;
-
-            player.y =
-                this.y + 20;
-
-            this.cashTimer++;
-
-            if (this.cashTimer % 4 === 0) {
-
-                createCash();
-
-            }
-
-        }
-
-    },
-
-    draw() {
-
-        if (!this.active) return;
-
-        ctx.save();
-
-        /* rotor */
-
-        ctx.strokeStyle = "#222";
-        ctx.lineWidth = 4;
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            this.x + 25,
-            this.y + 4
-        );
-
-        ctx.lineTo(
-            this.x + 115,
-            this.y + 4
-        );
-
-        ctx.stroke();
-
-        /* tail */
-
-        ctx.fillStyle = "#263238";
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            this.x + 105,
-            this.y + 30
-        );
-
-        ctx.lineTo(
-            this.x + 150,
-            this.y + 12
-        );
-
-        ctx.lineTo(
-            this.x + 145,
-            this.y + 42
-        );
-
-        ctx.closePath();
-
-        ctx.fill();
-
-        /* body */
-
-        ctx.fillStyle = "#455a64";
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-            this.x + 65,
-            this.y + 35,
-            60,
-            28,
-            0,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-        /* cockpit */
-
-        ctx.fillStyle = "#b9e4f7";
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-            this.x + 90,
-            this.y + 30,
-            27,
-            20,
-            0,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-        /* landing skids */
-
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 4;
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            this.x + 25,
-            this.y + 60
-        );
-
-        ctx.lineTo(
-            this.x + 100,
-            this.y + 60
-        );
-
-        ctx.moveTo(
-            this.x + 38,
-            this.y + 50
-        );
-
-        ctx.lineTo(
-            this.x + 30,
-            this.y + 62
-        );
-
-        ctx.moveTo(
-            this.x + 87,
-            this.y + 50
-        );
-
-        ctx.lineTo(
-            this.x + 95,
-            this.y + 62
-        );
-
-        ctx.stroke();
-
-        /* AIR FORCE */
-
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 10px Arial";
-        ctx.textAlign = "center";
-
-        ctx.fillText(
-            "AIR FORCE",
-            this.x + 55,
-            this.y + 40
-        );
-
-        ctx.restore();
-
-    }
-
-};
-
-
-/* =========================================================
-   CASH
-========================================================= */
-
-let cash = [];
-
-function createCash() {
-
-    cash.push({
-
-        x:
-            helicopter.x +
-            40 +
-            Math.random() * 60,
-
-        y:
-            helicopter.y +
-            60,
-
-        vx:
-            (Math.random() - 0.5) * 1.8,
-
-        vy:
-            1 + Math.random() * 2,
-
-        rotation:
-            Math.random() * 6.28,
-
-        rotationSpeed:
-            (Math.random() - 0.5) * 0.15,
-
-        life: 220
-
-    });
-
-}
-
-function updateCash() {
-
-    for (let i = cash.length - 1; i >= 0; i--) {
-
-        const c = cash[i];
-
-        c.x += c.vx;
-        c.y += c.vy;
-
-        c.vy += 0.025;
-
-        c.rotation += c.rotationSpeed;
-
-        c.life--;
-
-        if (c.life <= 0) {
-
-            cash.splice(i, 1);
+            groupSize =
+                Math.random() < 0.5
+                    ? 4
+                    : 5;
 
         }
 
     }
 
-}
 
-function drawCash() {
+    for (
+        let i = 0;
+        i < groupSize;
+        i++
+    ) {
 
-    for (const c of cash) {
+        const slogan =
+            slogans[
+                Math.floor(
+                    Math.random() *
+                    slogans.length
+                )
+            ];
 
-        ctx.save();
 
-        ctx.translate(c.x, c.y);
-        ctx.rotate(c.rotation);
-
-        ctx.fillStyle = "#70b85a";
-
-        ctx.fillRect(
-            -9,
-            -5,
-            18,
-            10
+        obstacles.push(
+            new Protestor(
+                laneY,
+                speed,
+                direction,
+                slogan,
+                i * 46
+            )
         );
-
-        ctx.strokeStyle = "#234";
-        ctx.lineWidth = 1;
-
-        ctx.strokeRect(
-            -9,
-            -5,
-            18,
-            10
-        );
-
-        ctx.fillStyle = "#245";
-
-        ctx.font = "bold 7px Arial";
-        ctx.textAlign = "center";
-
-        ctx.fillText(
-            "$",
-            0,
-            3
-        );
-
-        ctx.restore();
 
     }
 
@@ -1131,387 +1909,72 @@ function drawCash() {
 
 function drawBackground() {
 
-    /* apartment area */
-
-    ctx.fillStyle = "#315a76";
-
-    ctx.fillRect(
-        0,
-        zones.apartment.y,
-        W,
-        zones.apartment.h
-    );
-
-    drawApartment();
-
-    /* cycle lane 1 */
-
-    ctx.fillStyle = "#07864d";
+    ctx.fillStyle =
+        "#315d7c";
 
     ctx.fillRect(
         0,
-        zones.cycle1.y,
+        400,
         W,
-        zones.cycle1.h
+        200
     );
 
-    drawCycleLane(zones.cycle1.y);
 
-    /* roads */
-
-    ctx.fillStyle = "#555";
+    ctx.fillStyle =
+        "#087f4f";
 
     ctx.fillRect(
         0,
-        zones.road1.y,
+        350,
         W,
-        zones.road1.h
+        50
     );
 
-    ctx.fillStyle = "#484848";
+    drawCycleLane(350);
+
+
+    ctx.fillStyle =
+        "#444";
 
     ctx.fillRect(
         0,
-        zones.road2.y,
-        W,
-        zones.road2.h
-    );
-
-    drawRoadMarkings(zones.road1.y);
-    drawRoadMarkings(zones.road2.y);
-
-    /* cycle lane 2 */
-
-    ctx.fillStyle = "#07864d";
-
-    ctx.fillRect(
-        0,
-        zones.cycle2.y,
-        W,
-        zones.cycle2.h
-    );
-
-    drawCycleLane(zones.cycle2.y);
-
-    /* parliament grass */
-
-    ctx.fillStyle = "#5ca34d";
-
-    ctx.fillRect(
-        0,
-        zones.parliament.y,
-        W,
-        zones.parliament.h
-    );
-
-    /* Beehive */
-
-    drawBeehive();
-
-}
-
-
-/* =========================================================
-   APARTMENT / CEO HOUSE
-========================================================= */
-
-function drawApartment() {
-
-    /* building */
-
-    ctx.fillStyle = "#d2d6d8";
-
-    ctx.fillRect(
-        100,
-        525,
-        300,
-        210
-    );
-
-    /* windows */
-
-    for (let y = 550; y < 710; y += 42) {
-
-        for (let x = 120; x < 390; x += 42) {
-
-            ctx.fillStyle = "#355c78";
-
-            ctx.fillRect(
-                x,
-                y,
-                25,
-                23
-            );
-
-            ctx.strokeStyle = "#eee";
-            ctx.lineWidth = 2;
-
-            ctx.strokeRect(
-                x,
-                y,
-                25,
-                23
-            );
-
-        }
-
-    }
-
-    /* roof */
-
-    ctx.fillStyle = "#444";
-
-    ctx.fillRect(
-        85,
-        510,
-        330,
-        20
-    );
-
-    /* CEO HOUSE */
-
-    ctx.fillStyle = "#111";
-
-    ctx.fillRect(
-        145,
-        532,
-        210,
-        30
-    );
-
-    ctx.fillStyle = "#ffcc00";
-
-    ctx.font = "bold 18px Arial";
-    ctx.textAlign = "center";
-
-    ctx.fillText(
-        "CEO HOUSE",
         250,
-        554
-    );
-
-}
-
-
-/* =========================================================
-   BEEHIVE
-========================================================= */
-
-function drawBeehive() {
-
-    const cx = 250;
-
-    /* grass */
-
-    ctx.fillStyle = "#4f9843";
-
-    ctx.fillRect(
-        0,
-        0,
         W,
-        155
+        100
     );
 
-    /* building shadow */
+    drawRoadMarkings(250);
 
-    ctx.fillStyle = "#c7c7c7";
 
-    ctx.beginPath();
-
-    ctx.moveTo(95, 150);
-    ctx.lineTo(405, 150);
-    ctx.lineTo(385, 135);
-    ctx.lineTo(115, 135);
-
-    ctx.closePath();
-
-    ctx.fill();
-
-    /* lower columns */
-
-    ctx.fillStyle = "#eee";
-
-    for (let x = 115; x <= 385; x += 24) {
-
-        ctx.fillRect(
-            x,
-            105,
-            8,
-            48
-        );
-
-    }
-
-    /* main stepped tiers */
-
-    const tiers = [
-        {
-            x: 100,
-            y: 92,
-            w: 300,
-            h: 32
-        },
-        {
-            x: 120,
-            y: 67,
-            w: 260,
-            h: 28
-        },
-        {
-            x: 140,
-            y: 45,
-            w: 220,
-            h: 25
-        },
-        {
-            x: 160,
-            y: 27,
-            w: 180,
-            h: 22
-        }
-    ];
-
-    for (const t of tiers) {
-
-        ctx.fillStyle = "#d6d6d6";
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-            cx,
-            t.y + t.h / 2,
-            t.w / 2,
-            t.h / 2,
-            0,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-        ctx.strokeStyle = "#999";
-        ctx.lineWidth = 1;
-
-        ctx.stroke();
-
-        /* vertical windows */
-
-        ctx.fillStyle = "#34576b";
-
-        const count =
-            Math.floor(t.w / 22);
-
-        for (let i = 0; i < count; i++) {
-
-            const wx =
-                t.x + 10 + i * 22;
-
-            ctx.fillRect(
-                wx,
-                t.y + 7,
-                9,
-                t.h - 12
-            );
-
-        }
-
-    }
-
-    /* top crown */
-
-    ctx.fillStyle = "#bfc1c2";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        cx,
-        28,
-        90,
-        22,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /* dark vertical fins */
-
-    ctx.fillStyle = "#555";
-
-    for (let x = 165; x <= 335; x += 10) {
-
-        ctx.fillRect(
-            x,
-            8,
-            4,
-            25
-        );
-
-    }
-
-    /* central flag pole */
-
-    ctx.strokeStyle = "#333";
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-
-    ctx.moveTo(250, 8);
-    ctx.lineTo(250, -10);
-
-    ctx.stroke();
-
-    /* NZ flag */
-
-    ctx.fillStyle = "#173b8f";
-
-    ctx.fillRect(
-        251,
-        -9,
-        34,
-        18
-    );
-
-    /* flag red details */
-
-    ctx.fillStyle = "#e52b2b";
-
-    ctx.fillRect(
-        270,
-        -5,
-        5,
-        5
-    );
-
-    ctx.fillRect(
-        263,
-        1,
-        5,
-        5
-    );
-
-    /* entrance */
-
-    ctx.fillStyle = "#222";
-
-    ctx.fillRect(
-        215,
-        108,
-        70,
-        45
-    );
-
-    /* lawn foreground */
-
-    ctx.fillStyle = "#56a447";
+    ctx.fillStyle =
+        "#3c3c3c";
 
     ctx.fillRect(
         0,
         150,
         W,
-        20
+        100
     );
+
+    drawRoadMarkings(150);
+
+
+    ctx.fillStyle =
+        "#087f4f";
+
+    ctx.fillRect(
+        0,
+        100,
+        W,
+        50
+    );
+
+    drawCycleLane(100);
+
+
+    drawParliament();
+
+    drawApartments();
 
 }
 
@@ -1522,25 +1985,62 @@ function drawBeehive() {
 
 function drawRoadMarkings(y) {
 
-    ctx.strokeStyle = "#eee";
-    ctx.lineWidth = 3;
-    ctx.setLineDash([28, 22]);
+    ctx.strokeStyle =
+        "rgba(255,255,255,.65)";
+
+    ctx.lineWidth = 2;
+
+    ctx.setLineDash([
+        20,
+        20
+    ]);
 
     ctx.beginPath();
 
     ctx.moveTo(
         0,
-        y + 52
+        y + 50
     );
 
     ctx.lineTo(
         W,
-        y + 52
+        y + 50
     );
 
     ctx.stroke();
 
     ctx.setLineDash([]);
+
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.25)";
+
+    ctx.font =
+        "bold 24px Arial";
+
+    ctx.textAlign =
+        "center";
+
+
+    const direction =
+        y === 250
+            ? "→"
+            : "←";
+
+
+    for (
+        let x = 60;
+        x < W;
+        x += 100
+    ) {
+
+        ctx.fillText(
+            direction,
+            x,
+            y + 32
+        );
+
+    }
 
 }
 
@@ -1551,17 +2051,26 @@ function drawRoadMarkings(y) {
 
 function drawCycleLane(y) {
 
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle =
+        "rgba(255,255,255,.9)";
 
-    ctx.font = "bold 12px Arial";
-    ctx.textAlign = "center";
+    ctx.font =
+        "bold 14px Arial";
 
-    for (let x = 40; x < W; x += 100) {
+    ctx.textAlign =
+        "center";
+
+
+    for (
+        let x = 55;
+        x < W;
+        x += 125
+    ) {
 
         ctx.fillText(
             "🚲",
             x,
-            y + 37
+            y + 31
         );
 
     }
@@ -1570,7 +2079,885 @@ function drawCycleLane(y) {
 
 
 /* =========================================================
-   PLAYER
+   BEEHIVE
+========================================================= */
+
+function drawParliament() {
+
+    ctx.fillStyle =
+        "#e8eee9";
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        100
+    );
+
+
+    ctx.fillStyle =
+        "#5e9254";
+
+    ctx.fillRect(
+        0,
+        73,
+        W,
+        27
+    );
+
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.06)";
+
+    for (
+        let x = 0;
+        x < W;
+        x += 18
+    ) {
+
+        ctx.fillRect(
+            x,
+            73,
+            9,
+            27
+        );
+
+    }
+
+
+    ctx.fillStyle =
+        "rgba(0,0,0,.18)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        250,
+        78,
+        185,
+        13,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.save();
+
+    ctx.translate(
+        W / 2,
+        0
+    );
+
+
+    ctx.fillStyle =
+        "#737b79";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -178,
+        70
+    );
+
+    ctx.lineTo(
+        178,
+        70
+    );
+
+    ctx.lineTo(
+        160,
+        50
+    );
+
+    ctx.lineTo(
+        -160,
+        50
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#263f4b";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -128,
+        70
+    );
+
+    ctx.lineTo(
+        128,
+        70
+    );
+
+    ctx.lineTo(
+        113,
+        35
+    );
+
+    ctx.lineTo(
+        -113,
+        35
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "rgba(100,180,210,.20)";
+
+    for (
+        let x = -105;
+        x <= 105;
+        x += 26
+    ) {
+
+        ctx.fillRect(
+            x,
+            37,
+            12,
+            32
+        );
+
+    }
+
+
+    ctx.strokeStyle =
+        "#151f22";
+
+    ctx.lineWidth = 2;
+
+    for (
+        let x = -105;
+        x <= 105;
+        x += 26
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            35
+        );
+
+        ctx.lineTo(
+            x,
+            70
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.fillStyle =
+        "#d0d3cf";
+
+    const columns = [
+        -142,
+        -112,
+        -82,
+        -52,
+        -22,
+        22,
+        52,
+        82,
+        112,
+        142
+    ];
+
+
+    columns.forEach(
+        x => {
+
+            ctx.fillRect(
+                x - 3,
+                32,
+                6,
+                39
+            );
+
+        }
+    );
+
+
+    ctx.fillStyle =
+        "#8c9391";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -158,
+        38
+    );
+
+    ctx.quadraticCurveTo(
+        0,
+        10,
+        158,
+        38
+    );
+
+    ctx.lineTo(
+        151,
+        49
+    );
+
+    ctx.quadraticCurveTo(
+        0,
+        22,
+        -151,
+        49
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    const tiers = [
+
+        {
+            y: 30,
+            width: 155,
+            height: 14
+        },
+
+        {
+            y: 22,
+            width: 145,
+            height: 13
+        },
+
+        {
+            y: 14,
+            width: 132,
+            height: 12
+        },
+
+        {
+            y: 6,
+            width: 118,
+            height: 11
+        },
+
+        {
+            y: -2,
+            width: 103,
+            height: 10
+        }
+
+    ];
+
+
+    tiers.forEach(
+        tier => {
+
+            ctx.fillStyle =
+                "#9ca3a1";
+
+            ctx.beginPath();
+
+            ctx.ellipse(
+                0,
+                tier.y,
+                tier.width,
+                tier.height,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+    );
+
+
+    ctx.fillStyle =
+        "#929997";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -158,
+        39
+    );
+
+    ctx.quadraticCurveTo(
+        -143,
+        22,
+        -132,
+        4
+    );
+
+    ctx.quadraticCurveTo(
+        -117,
+        -22,
+        -92,
+        -38
+    );
+
+    ctx.quadraticCurveTo(
+        -60,
+        -57,
+        0,
+        -61
+    );
+
+    ctx.quadraticCurveTo(
+        60,
+        -57,
+        92,
+        -38
+    );
+
+    ctx.quadraticCurveTo(
+        117,
+        -22,
+        132,
+        4
+    );
+
+    ctx.quadraticCurveTo(
+        143,
+        22,
+        158,
+        39
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "#737a78";
+
+    ctx.lineWidth = 3;
+
+
+    const bands = [
+        -43,
+        -30,
+        -17,
+        -4,
+        9,
+        22
+    ];
+
+
+    bands.forEach(
+        y => {
+
+            const halfWidth =
+                94 +
+                (y + 43) * 2.3;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                -halfWidth,
+                y
+            );
+
+            ctx.quadraticCurveTo(
+                0,
+                y + 5,
+                halfWidth,
+                y
+            );
+
+            ctx.stroke();
+
+        }
+    );
+
+
+    ctx.fillStyle =
+        "#263c46";
+
+
+    const windowRows = [
+        {
+            y: -38,
+            count: 13,
+            width: 175
+        },
+        {
+            y: -25,
+            count: 15,
+            width: 220
+        },
+        {
+            y: -12,
+            count: 17,
+            width: 255
+        },
+        {
+            y: 1,
+            count: 19,
+            width: 280
+        },
+        {
+            y: 14,
+            count: 21,
+            width: 300
+        },
+        {
+            y: 27,
+            count: 23,
+            width: 320
+        }
+    ];
+
+
+    windowRows.forEach(
+        row => {
+
+            const spacing =
+                row.width /
+                row.count;
+
+            const start =
+                -row.width / 2;
+
+
+            for (
+                let i = 0;
+                i < row.count;
+                i++
+            ) {
+
+                const x =
+                    start +
+                    i * spacing +
+                    2;
+
+                ctx.fillRect(
+                    x,
+                    row.y,
+                    5,
+                    9
+                );
+
+            }
+
+        }
+    );
+
+
+    ctx.fillStyle =
+        "#6f7775";
+
+
+    const finCount = 27;
+
+    for (
+        let i = 0;
+        i < finCount;
+        i++
+    ) {
+
+        const angle =
+            Math.PI +
+            (
+                Math.PI *
+                i /
+                (finCount - 1)
+            );
+
+        const radiusX = 92;
+        const radiusY = 21;
+
+        const x =
+            Math.cos(angle) *
+            radiusX;
+
+        const y =
+            -61 +
+            Math.sin(angle) *
+            radiusY;
+
+
+        ctx.save();
+
+        ctx.translate(
+            x,
+            y
+        );
+
+        ctx.rotate(
+            angle +
+            Math.PI / 2
+        );
+
+        ctx.fillRect(
+            -2,
+            -14,
+            4,
+            28
+        );
+
+        ctx.restore();
+
+    }
+
+
+    ctx.fillStyle =
+        "#737a78";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        -61,
+        55,
+        13,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#9da3a0";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        -66,
+        53,
+        10,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "#616866";
+
+    ctx.lineWidth = 2;
+
+    for (
+        let x = -40;
+        x <= 40;
+        x += 10
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            -72
+        );
+
+        ctx.lineTo(
+            x,
+            -59
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.strokeStyle =
+        "#333";
+
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        -75
+    );
+
+    ctx.lineTo(
+        0,
+        -105
+    );
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+        "#173f8f";
+
+    ctx.fillRect(
+        1,
+        -104,
+        31,
+        17
+    );
+
+
+    ctx.strokeStyle =
+        "#fff";
+
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        2,
+        -103
+    );
+
+    ctx.lineTo(
+        30,
+        -88
+    );
+
+    ctx.moveTo(
+        30,
+        -103
+    );
+
+    ctx.lineTo(
+        2,
+        -88
+    );
+
+    ctx.stroke();
+
+
+    ctx.strokeStyle =
+        "#d32f2f";
+
+    ctx.lineWidth = 1;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        2,
+        -103
+    );
+
+    ctx.lineTo(
+        30,
+        -88
+    );
+
+    ctx.moveTo(
+        30,
+        -103
+    );
+
+    ctx.lineTo(
+        2,
+        -88
+    );
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+        "#fff";
+
+    const stars = [
+
+        [24, -100],
+        [28, -96],
+        [24, -91],
+        [19, -96]
+
+    ];
+
+
+    stars.forEach(
+        ([x, y]) => {
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                1.4,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+    );
+
+
+    ctx.restore();
+
+}
+
+
+/* =========================================================
+   APARTMENTS
+========================================================= */
+
+function drawApartments() {
+
+    ctx.fillStyle =
+        "#183f60";
+
+    ctx.fillRect(
+        20,
+        450,
+        160,
+        150
+    );
+
+
+    ctx.fillStyle =
+        "#102c44";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        10,
+        450
+    );
+
+    ctx.lineTo(
+        190,
+        450
+    );
+
+    ctx.lineTo(
+        175,
+        438
+    );
+
+    ctx.lineTo(
+        25,
+        438
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#d9b34f";
+
+    ctx.fillRect(
+        43,
+        457,
+        114,
+        25
+    );
+
+
+    ctx.fillStyle =
+        "#111";
+
+    ctx.font =
+        "bold 13px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        "CEO HOUSE",
+        100,
+        474
+    );
+
+
+    ctx.fillStyle =
+        "#ffe08a";
+
+    for (
+        let row = 0;
+        row < 3;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < 4;
+            col++
+        ) {
+
+            ctx.fillRect(
+                40 + col * 32,
+                500 + row * 30,
+                15,
+                18
+            );
+
+        }
+
+    }
+
+
+    ctx.fillStyle =
+        "#285472";
+
+    ctx.fillRect(
+        340,
+        475,
+        140,
+        125
+    );
+
+
+    ctx.fillStyle =
+        "#f4d777";
+
+    for (
+        let row = 0;
+        row < 3;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < 3;
+            col++
+        ) {
+
+            ctx.fillRect(
+                360 + col * 35,
+                495 + row * 30,
+                16,
+                18
+            );
+
+        }
+
+    }
+
+
+    ctx.fillStyle =
+        "#999";
+
+    ctx.fillRect(
+        0,
+        590,
+        W,
+        10
+    );
+
+}
+
+
+/* =========================================================
+   CHRIS LUXON
 ========================================================= */
 
 function drawPlayer() {
@@ -1579,495 +2966,336 @@ function drawPlayer() {
         player.x +
         player.width / 2;
 
-    /* body */
+    const y =
+        player.y;
 
-    ctx.fillStyle = "#063d78";
+
+    ctx.fillStyle =
+        "#002f6c";
 
     ctx.beginPath();
 
     ctx.moveTo(
         player.x,
-        player.y + player.height
+        y + 48
     );
 
     ctx.lineTo(
-        player.x + 5,
-        player.y + 22
+        player.x + 4,
+        y + 23
     );
 
     ctx.lineTo(
-        player.x + player.width - 5,
-        player.y + 22
+        player.x + player.width - 4,
+        y + 23
     );
 
     ctx.lineTo(
         player.x + player.width,
-        player.y + player.height
+        y + 48
     );
 
     ctx.closePath();
 
     ctx.fill();
 
-    /* enormous bald head */
 
-    ctx.fillStyle = "#ffd1a9";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx,
-        player.y + 9,
-        17,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /* tiny hair fringe */
-
-    ctx.fillStyle = "#76502c";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx,
-        player.y - 1,
-        15,
-        Math.PI,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /* ears */
-
-    ctx.fillStyle = "#e9af8a";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx - 16,
-        player.y + 10,
-        4,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.arc(
-        cx + 16,
-        player.y + 10,
-        4,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /* eyes */
-
-    ctx.fillStyle = "#222";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx - 6,
-        player.y + 7,
-        1.7,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.arc(
-        cx + 6,
-        player.y + 7,
-        1.7,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /* smile */
-
-    ctx.strokeStyle = "#8a3f3f";
-    ctx.lineWidth = 1.5;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx,
-        player.y + 12,
-        6,
-        0,
-        Math.PI
-    );
-
-    ctx.stroke();
-
-    /* white shirt */
-
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle =
+        "#fff";
 
     ctx.beginPath();
 
     ctx.moveTo(
-        cx - 8,
-        player.y + 23
+        cx - 7,
+        y + 23
     );
 
     ctx.lineTo(
         cx,
-        player.y + 30
+        y + 31
     );
 
     ctx.lineTo(
-        cx + 8,
-        player.y + 23
+        cx + 7,
+        y + 23
+    );
+
+    ctx.lineTo(
+        cx + 5,
+        y + 39
+    );
+
+    ctx.lineTo(
+        cx - 5,
+        y + 39
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#0099dd";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        cx - 2,
+        y + 28
+    );
+
+    ctx.lineTo(
+        cx + 2,
+        y + 28
+    );
+
+    ctx.lineTo(
+        cx + 3,
+        y + 41
+    );
+
+    ctx.lineTo(
+        cx,
+        y + 44
+    );
+
+    ctx.lineTo(
+        cx - 3,
+        y + 41
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#efb994";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        cx - 24,
+        y + 13,
+        5,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.arc(
+        cx + 24,
+        y + 13,
+        5,
+        0,
+        Math.PI * 2
     );
 
     ctx.fill();
 
-    /* blue tie */
 
-    ctx.fillStyle = "#0099ff";
+    /*
+       Large bald head retained.
+    */
+
+    ctx.fillStyle =
+        "#f1bd98";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        cx,
+        y + 12,
+        25,
+        25,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.30)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        cx - 8,
+        y + 2,
+        8,
+        5,
+        -.25,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "#777";
+
+    ctx.lineWidth = 1.5;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        cx - 15,
+        y + 5
+    );
+
+    ctx.lineTo(
+        cx - 4,
+        y + 4
+    );
+
+    ctx.moveTo(
+        cx + 4,
+        y + 4
+    );
+
+    ctx.lineTo(
+        cx + 15,
+        y + 5
+    );
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+        "#222";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        cx - 9,
+        y + 10,
+        2,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.arc(
+        cx + 9,
+        y + 10,
+        2,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "#c88e72";
+
+    ctx.lineWidth = 1;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        cx,
+        y + 11
+    );
+
+    ctx.lineTo(
+        cx - 2,
+        y + 18
+    );
+
+    ctx.lineTo(
+        cx + 3,
+        y + 18
+    );
+
+    ctx.stroke();
+
+
+    ctx.strokeStyle =
+        "#9b4e4e";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        cx - 6,
+        y + 22
+    );
+
+    ctx.quadraticCurveTo(
+        cx,
+        y + 25,
+        cx + 6,
+        y + 22
+    );
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+        "#fff";
 
     ctx.fillRect(
-        cx - 2,
-        player.y + 28,
-        4,
-        22
+        cx - 4,
+        y + 35,
+        8,
+        5
     );
 
 }
 
 
 /* =========================================================
-   INPUT
+   COLLISION
 ========================================================= */
 
-window.addEventListener(
-    "keydown",
-    e => {
+function checkCollision(a, b) {
 
-        const k =
-            e.key.toLowerCase();
-
-        if (k === "arrowup" || k === "w")
-            keys.up = true;
-
-        if (k === "arrowdown" || k === "s")
-            keys.down = true;
-
-        if (k === "arrowleft" || k === "a")
-            keys.left = true;
-
-        if (k === "arrowright" || k === "d")
-            keys.right = true;
-
-        if (
-            [
-                "arrowup",
-                "arrowdown",
-                "arrowleft",
-                "arrowright",
-                " "
-            ].includes(k)
-        ) {
-            e.preventDefault();
-        }
-
-    },
-    { passive: false }
-);
-
-
-window.addEventListener(
-    "keyup",
-    e => {
-
-        const k =
-            e.key.toLowerCase();
-
-        if (k === "arrowup" || k === "w")
-            keys.up = false;
-
-        if (k === "arrowdown" || k === "s")
-            keys.down = false;
-
-        if (k === "arrowleft" || k === "a")
-            keys.left = false;
-
-        if (k === "arrowright" || k === "d")
-            keys.right = false;
-
-    }
-);
-
-
-/* Touch controls */
-
-function bindControl(button, direction) {
-
-    const press = e => {
-
-        e.preventDefault();
-
-        keys[direction] = true;
-
-        button.classList.add("pressed");
-
-    };
-
-    const release = e => {
-
-        e.preventDefault();
-
-        keys[direction] = false;
-
-        button.classList.remove("pressed");
-
-    };
-
-    button.addEventListener(
-        "pointerdown",
-        press
-    );
-
-    button.addEventListener(
-        "pointerup",
-        release
-    );
-
-    button.addEventListener(
-        "pointercancel",
-        release
-    );
-
-    button.addEventListener(
-        "pointerleave",
-        release
-    );
-
-}
-
-
-bindControl(controls.up, "up");
-bindControl(controls.down, "down");
-bindControl(controls.left, "left");
-bindControl(controls.right, "right");
-
-
-/* =========================================================
-   PLAYER MOVEMENT
-========================================================= */
-
-function updatePlayer() {
-
-    if (endingSequence) return;
-
-    let dx = 0;
-    let dy = 0;
-
-    if (keys.left) dx -= 1;
-    if (keys.right) dx += 1;
-    if (keys.up) dy -= 1;
-    if (keys.down) dy += 1;
-
-    /* diagonal movement normalisation */
-
-    if (dx !== 0 && dy !== 0) {
-
-        dx *= 0.707;
-        dy *= 0.707;
-
-    }
-
-    player.x += dx * player.speed;
-    player.y += dy * player.speed;
-
-    /* boundaries */
-
-    player.x = Math.max(
-        0,
-        Math.min(
-            W - player.width,
-            player.x
-        )
-    );
-
-    player.y = Math.max(
-        zones.parliament.y + 5,
-        Math.min(
-            H - player.height,
-            player.y
-        )
-    );
-
-}
-
-
-/* =========================================================
-   SPAWNING
-========================================================= */
-
-let spawnCounter = 0;
-
-function spawnObstacles() {
-
-    if (endingSequence) return;
-
-    spawnCounter++;
-
-    const multiplier =
-        levels[level].spawnMultiplier;
-
-    /* cycle lane 1 */
-
-    if (
-        Math.random() <
-        0.018 * multiplier
-    ) {
-
-        obstacles.push(
-            new Cyclist(
-                zones.cycle1.y,
-                2.7,
-                1
-            )
-        );
-
-    }
-
-    /* cycle lane 2 */
-
-    if (
-        Math.random() <
-        0.022 * multiplier
-    ) {
-
-        obstacles.push(
-            new Cyclist(
-                zones.cycle2.y,
-                3.0,
-                -1
-            )
-        );
-
-    }
-
-    /* protestor group */
-
-    if (
-        Math.random() <
-        0.018 * multiplier
-    ) {
-
-        spawnProtestorGroup(
-            zones.road1.y,
-            -1
-        );
-
-    }
-
-    if (
-        Math.random() <
-        0.016 * multiplier
-    ) {
-
-        spawnProtestorGroup(
-            zones.road2.y,
-            1
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   PROTESTOR GROUPS
-========================================================= */
-
-function spawnProtestorGroup(y, direction) {
-
-    const groupSize =
-        level === 1
-        ? 2
-        : level === 2
-        ? 3
-        : level === 3
-        ? 4
-        : 5;
-
-    const speed =
-        0.8 +
-        Math.random() * 0.6;
-
-    for (let i = 0; i < groupSize; i++) {
-
-        const slogan =
-            protestorSlogans[
-                Math.floor(
-                    Math.random() *
-                    protestorSlogans.length
-                )
-            ];
-
-        const p =
-            new Protestor(
-                y,
-                speed +
-                Math.random() * 0.35,
-                direction,
-                slogan
-            );
-
-        p.x =
-            direction === 1
-            ? -70 - i * 46
-            : W + 70 + i * 46;
-
-        obstacles.push(p);
-
-    }
-
-}
-
-
-/* =========================================================
-   COLLISIONS
-========================================================= */
-
-function collision(a, b) {
+    const padding = 5;
 
     return (
 
-        a.x <
-        b.x + b.width &&
+        a.x + padding <
+        b.x + b.width - padding
 
-        a.x + a.width >
-        b.x &&
+        &&
 
-        a.y <
-        b.y + b.height &&
+        a.x + a.width - padding >
+        b.x + padding
 
-        a.y + a.height >
-        b.y
+        &&
+
+        a.y + padding <
+        b.y + b.height - padding
+
+        &&
+
+        a.y + a.height - padding >
+        b.y + padding
 
     );
 
 }
 
 
+/* =========================================================
+   COLLISION CHECK
+========================================================= */
+
 function checkCollisions() {
 
-    if (endingSequence) return;
+    for (
+        const obstacle
+        of obstacles
+    ) {
 
-    for (const o of obstacles) {
-
-        if (collision(player, o)) {
+        if (
+            checkCollision(
+                player,
+                obstacle
+            )
+        ) {
 
             loseLife();
 
@@ -2077,20 +3305,56 @@ function checkCollisions() {
 
     }
 
-    /* reached Parliament */
+
+    /*
+       ======================================================
+       HELICOPTER TRIGGER
+
+       This is deliberately NOT tied to Level 4.
+
+       As soon as Chris Luxon crosses the first cycle lane,
+       the legitimate journey stops and the helicopter arrives.
+       ======================================================
+    */
 
     if (
-        player.y <
-        zones.parliament.y + 20
+        !helicopterTriggered &&
+        player.y <= map.cycle1.y
     ) {
 
-        if (level < 4) {
+        triggerHelicopterSequence();
+
+        return;
+
+    }
+
+
+    /*
+       Parliament entrance.
+    */
+
+    if (
+        player.y <= 35
+    ) {
+
+        const centre =
+            player.x +
+            player.width / 2;
+
+
+        if (
+            centre > 205 &&
+            centre < 295
+        ) {
 
             completeLevel();
 
         } else {
 
-            triggerHelicopterSequence();
+            player.y = 36;
+
+            statusDisplay.textContent =
+                "FIND THE BEEHIVE ENTRANCE";
 
         }
 
@@ -2100,100 +3364,142 @@ function checkCollisions() {
 
 
 /* =========================================================
-   LIVES
+   LOSE LIFE
 ========================================================= */
 
-function updateLives() {
+function loseLife() {
 
-    let text = "";
+    if (
+        helicopterAnimating
+    ) {
 
-    for (let i = 0; i < 3; i++) {
-
-        text +=
-            i < lives
-            ? "❤️ "
-            : "🖤 ";
+        return;
 
     }
 
-    livesDisplay.textContent =
-        text.trim();
-
-}
-
-
-function loseLife() {
 
     lives--;
 
     updateLives();
 
-    obstacles = [];
 
-    player.reset();
+    keys.up = false;
+    keys.down = false;
+    keys.left = false;
+    keys.right = false;
 
-    statusDisplay.textContent =
-        "BLOCKED — TRY AGAIN";
 
-    if (lives <= 0) {
+    if (
+        lives <= 0
+    ) {
 
         gameOver();
 
+        return;
+
     }
+
+
+    statusDisplay.textContent =
+        "HIT! TRY AGAIN";
+
+
+    player.reset();
+
+    obstacles = [];
 
 }
 
 
 /* =========================================================
-   LEVEL PROGRESSION
+   LEVEL COMPLETE
 ========================================================= */
 
 function completeLevel() {
 
     gameRunning = false;
 
-    obstacles = [];
-
-    const nextLevel =
-        level + 1;
-
-    levelOverlay.classList.add(
-        "visible"
+    cancelAnimationFrame(
+        animationFrame
     );
 
-    levelMessage.innerHTML =
-        `
-        LEVEL ${level} COMPLETE
-        <br>
-        <span style="
-        font-size:16px;
-        color:white;
-        ">
-        The journey gets harder...
-        </span>
-        `;
 
-    setTimeout(() => {
+    if (
+        currentLevel >= MAX_LEVEL
+    ) {
 
-        level = nextLevel;
+        showFinalWin();
 
-        levelDisplay.textContent =
-            "LEVEL " + level;
+        return;
 
-        player.reset();
+    }
 
-        statusDisplay.textContent =
-            levels[level].label;
 
-        levelOverlay.classList.remove(
-            "visible"
-        );
+    currentLevel++;
 
-        gameRunning = true;
 
-        gameLoop();
+    levelDisplay.textContent =
+        "LEVEL " +
+        currentLevel;
 
-    }, 1700);
+
+    levelTitle.textContent =
+        "LEVEL " +
+        currentLevel;
+
+
+    levelDescription.textContent =
+        levels[currentLevel].label +
+        ". Faster traffic, more protesters and increasingly ridiculous signs await.";
+
+
+    nextLevelButton.textContent =
+        "NEXT LEVEL";
+
+
+    levelScreen.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   FINAL WIN
+========================================================= */
+
+function showFinalWin() {
+
+    gameRunning = false;
+
+    cancelAnimationFrame(
+        animationFrame
+    );
+
+
+    levelDisplay.textContent =
+        "COMPLETE";
+
+
+    levelTitle.textContent =
+        "YOU MADE IT TO PARLIAMENT";
+
+
+    levelDescription.textContent =
+        "Four increasingly difficult levels of Molesworth Street have been conquered. Somehow, Chris Luxon made it all the way from CEO House to the Beehive.";
+
+
+    nextLevelButton.textContent =
+        "PLAY AGAIN";
+
+
+    nextLevelButton.dataset.final =
+        "true";
+
+
+    levelScreen.classList.remove(
+        "hidden"
+    );
 
 }
 
@@ -2206,15 +3512,50 @@ function gameOver() {
 
     gameRunning = false;
 
-    titleOverlay.classList.remove(
+    cancelAnimationFrame(
+        animationFrame
+    );
+
+
+    gameOverTitle.textContent =
+        "MISSION FAILED";
+
+
+    gameOverText.textContent =
+        "Molesworth Street has defeated Chris Luxon. The protesters remain undefeated.";
+
+
+    gameOverScreen.classList.remove(
         "hidden"
     );
 
-    startButton.textContent =
-        "TRY AGAIN";
+}
 
-    statusDisplay.textContent =
-        "MISSION FAILED";
+
+/* =========================================================
+   LIVES
+========================================================= */
+
+function updateLives() {
+
+    let hearts = "";
+
+    for (
+        let i = 0;
+        i < 3;
+        i++
+    ) {
+
+        hearts +=
+            i < lives
+                ? "❤️ "
+                : "🖤 ";
+
+    }
+
+
+    livesDisplay.textContent =
+        hearts.trim();
 
 }
 
@@ -2225,438 +3566,1105 @@ function gameOver() {
 
 function triggerHelicopterSequence() {
 
-    if (endingSequence) return;
+    if (
+        helicopterTriggered ||
+        helicopterAnimating
+    ) {
 
-    endingSequence = true;
+        return;
+
+    }
+
+
+    helicopterTriggered = true;
+
+    helicopterAnimating = true;
+
     gameRunning = false;
 
-    keys.up =
-    keys.down =
-    keys.left =
+
+    cancelAnimationFrame(
+        animationFrame
+    );
+
+
+    /*
+       Stop all input.
+    */
+
+    keys.up = false;
+    keys.down = false;
+    keys.left = false;
     keys.right = false;
 
-    statusDisplay.textContent =
-        "UNEXPECTED ASSISTANCE ARRIVING";
-
-    helicopter.reset();
-
-    helicopter.active = true;
-
-    helicopter.y =
-        zones.road2.y + 5;
-
-    helicopter.x = -180;
-
-    /* freeze current obstacles briefly */
-
-    setTimeout(() => {
-
-        destroyObstaclesWithHelicopter();
-
-    }, 700);
-
-}
-
-
-/* =========================================================
-   HELICOPTER ATTACK / SCATTER
-========================================================= */
-
-function destroyObstaclesWithHelicopter() {
-
-    const interval =
-        setInterval(() => {
-
-            if (
-                !helicopter.active
-            ) {
-
-                clearInterval(interval);
-                return;
-
-            }
-
-            const helicopterFront =
-                helicopter.x + 15;
-
-            for (
-                let i = obstacles.length - 1;
-                i >= 0;
-                i--
-            ) {
-
-                const o =
-                    obstacles[i];
-
-                if (
-                    o.x <
-                    helicopterFront + 50 &&
-                    o.x + o.width >
-                    helicopter.x - 10
-                ) {
-
-                    debris.push(
-                        new Debris(
-                            o.x +
-                            o.width / 2,
-
-                            o.y +
-                            o.height / 2,
-
-                            o.type === "cyclist"
-                            ? "bike"
-                            : "person"
-                        )
-                    );
-
-                    if (
-                        Math.random() <
-                        0.7
-                    ) {
-
-                        debris.push(
-                            new Debris(
-                                o.x +
-                                o.width / 2 +
-                                10,
-
-                                o.y +
-                                o.height / 2,
-
-                                o.type === "cyclist"
-                                ? "bike"
-                                : "person"
-                            )
-                        );
-
-                    }
-
-                    obstacles.splice(i, 1);
-
-                }
-
-            }
-
-            if (
-                helicopter.x >
-                W + 100
-            ) {
-
-                clearInterval(interval);
-
-                helicopter.boarded = true;
-
-                startParliamentFlight();
-
-            }
-
-        }, 70);
-
-}
-
-
-/* =========================================================
-   PARLIAMENT FLIGHT
-========================================================= */
-
-let flightStarted = false;
-
-function startParliamentFlight() {
-
-    if (flightStarted) return;
-
-    flightStarted = true;
 
     statusDisplay.textContent =
-        "EN ROUTE TO PARLIAMENT";
-
-    /* helicopter now loops toward Parliament */
-
-    helicopter.x =
-        W + 180;
-
-    helicopter.y =
-        zones.road2.y;
-
-    helicopter.speed =
-        -4.5;
-
-    const flight =
-        setInterval(() => {
-
-            helicopter.x +=
-                helicopter.speed;
-
-            helicopter.y -= 0.45;
-
-            helicopter.cashTimer++;
-
-            if (
-                helicopter.cashTimer % 3 === 0
-            ) {
-
-                createCash();
-
-            }
-
-            if (
-                helicopter.x <
-                235
-            ) {
-
-                clearInterval(flight);
-
-                helicopter.speed = 0;
-
-                setTimeout(
-                    beginFadeToBlack,
-                    1200
-                );
-
-            }
-
-        }, 30);
-
-}
+        "PUBLIC FUNDS DEPLOYED";
 
 
-/* =========================================================
-   FADE / FINAL QUOTE
-========================================================= */
+    /*
+       Freeze the actual game canvas exactly
+       where the player reached the cycle lane.
+    */
 
-function beginFadeToBlack() {
+    drawBackground();
 
-    endingOverlay.style.opacity = "0";
+    drawObstaclesFrozen();
 
-    endingOverlay.style.transition =
-        "opacity 3.5s ease";
+    drawPlayer();
 
-    endingOverlay.style.pointerEvents =
-        "auto";
 
-    endingOverlay.offsetHeight;
+    /*
+       Bring the cinematic layer on top.
+    */
 
-    endingOverlay.style.opacity = "1";
+    helicopterSequence.classList.remove(
+        "hidden"
+    );
+
+
+    helicopter.style.left =
+        "-210px";
+
+    helicopter.style.top =
+        "285px";
+
+    helicopter.style.transform =
+        "scale(.9)";
+
+
+    finalBlackout.style.opacity =
+        "0";
+
+    finalText.style.opacity =
+        "0";
+
+    finalText.textContent =
+        "";
+
+    cashContainer.innerHTML =
+        "";
+
+    scatteredContainer.innerHTML =
+        "";
+
+
+    /*
+       Give the helicopter a tiny pause
+       before it enters.
+    */
 
     setTimeout(
-        typeFinalQuote,
-        3500
+        animateHelicopterEntrance,
+        450
     );
 
 }
 
 
-function typeFinalQuote() {
+/* =========================================================
+   DRAW FROZEN OBSTACLES
+========================================================= */
 
-    const quote =
-        "''look, what I’d say to you is… vvrrrrrroooooommmm...''";
+function drawObstaclesFrozen() {
 
-    endingText.innerHTML =
-        '<span class="cursor"></span>';
+    for (
+        const obstacle
+        of obstacles
+    ) {
 
-    endingText.style.opacity = "1";
+        obstacle.draw();
 
-    const words =
-        quote.split(" ");
+    }
 
-    let index = 0;
+}
 
-    function nextWord() {
 
-        if (index >= words.length) {
+/* =========================================================
+   HELICOPTER ENTRANCE
+========================================================= */
 
-            const cursor =
-                endingText.querySelector(
-                    ".cursor"
-                );
+function animateHelicopterEntrance() {
 
-            if (cursor)
-                cursor.remove();
+    /*
+       Helicopter crosses the screen.
 
-            return;
+       At the same time, nearby cyclists
+       and protesters are scattered.
+    */
+
+    const startX = -210;
+
+    const endX = 570;
+
+    const duration = 2600;
+
+    const startTime =
+        performance.now();
+
+
+    function frame(now) {
+
+        const elapsed =
+            now - startTime;
+
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
+
+        /*
+           Smooth movement.
+        */
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
+
+
+        const x =
+            startX +
+            (endX - startX) *
+            eased;
+
+
+        helicopter.style.left =
+            `${x}px`;
+
+
+        /*
+           Slight vertical bob.
+        */
+
+        const bob =
+            Math.sin(
+                progress *
+                Math.PI *
+                4
+            ) *
+            4;
+
+
+        helicopter.style.top =
+            `${285 + bob}px`;
+
+
+        /*
+           Scatter objects as the helicopter
+           reaches different parts of the road.
+        */
+
+        if (
+            progress > .20 &&
+            !helicopter._scatter1
+        ) {
+
+            helicopter._scatter1 = true;
+
+            scatterNearbyObjects(
+                0.25
+            );
 
         }
 
-        const cursor =
-            endingText.querySelector(
-                ".cursor"
+
+        if (
+            progress > .43 &&
+            !helicopter._scatter2
+        ) {
+
+            helicopter._scatter2 = true;
+
+            scatterNearbyObjects(
+                0.55
             );
 
-        const word =
-            words[index];
+        }
 
-        const span =
-            document.createElement("span");
 
-        span.textContent =
-            (index === 0 ? "" : " ") +
-            word;
+        if (
+            progress > .63 &&
+            !helicopter._scatter3
+        ) {
 
-        endingText.insertBefore(
-            span,
-            cursor
+            helicopter._scatter3 = true;
+
+            scatterNearbyObjects(
+                0.80
+            );
+
+        }
+
+
+        if (
+            progress < 1
+        ) {
+
+            requestAnimationFrame(
+                frame
+            );
+
+        } else {
+
+            helicopterBoarding();
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        frame
+    );
+
+}
+
+
+/* =========================================================
+   SCATTER PROTESTERS / CYCLISTS
+========================================================= */
+
+function scatterNearbyObjects(
+    intensity
+) {
+
+    /*
+       Pick several existing obstacles.
+
+       They are not removed instantly; instead
+       they are converted into small cinematic
+       objects which fly away.
+    */
+
+    const targets =
+        obstacles.splice(
+            0,
+            Math.min(
+                obstacles.length,
+                Math.max(
+                    4,
+                    Math.floor(
+                        obstacles.length * .65
+                    )
+                )
+            )
         );
 
-        index++;
+
+    targets.forEach(
+        (obstacle, index) => {
+
+            createScatteredObject(
+                obstacle,
+                intensity,
+                index
+            );
+
+        }
+    );
+
+
+    /*
+       If there weren't enough actual obstacles
+       on screen at the exact moment, add a few
+       cinematic protesters and bicycles so the
+       helicopter still looks destructive.
+    */
+
+    if (
+        targets.length < 5
+    ) {
+
+        for (
+            let i = 0;
+            i < 5 - targets.length;
+            i++
+        ) {
+
+            createSyntheticScatteredObject(
+                intensity,
+                i
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE SCATTERED OBJECT
+========================================================= */
+
+function createScatteredObject(
+    obstacle,
+    intensity,
+    index
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.className =
+        "scattered-object";
+
+
+    /*
+       Small visual representation.
+
+       Protesters become little bodies/signs.
+       Cyclists become bicycle-like marks.
+    */
+
+    if (
+        obstacle instanceof Protestor
+    ) {
+
+        div.innerHTML =
+            `
+            <div style="
+                position:absolute;
+                width:15px;
+                height:20px;
+                background:#c96a24;
+                border-radius:5px;
+                left:7px;
+                top:11px;
+            "></div>
+
+            <div style="
+                position:absolute;
+                width:12px;
+                height:12px;
+                background:#ffd0a6;
+                border-radius:50%;
+                left:8px;
+                top:1px;
+            "></div>
+
+            <div style="
+                position:absolute;
+                width:38px;
+                height:12px;
+                background:white;
+                border:1px solid #111;
+                left:-4px;
+                top:-7px;
+                font:bold 5px Arial;
+                color:#111;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            ">
+                ${escapeHtml(obstacle.slogan)}
+            </div>
+            `;
+
+        div.style.width =
+            "38px";
+
+        div.style.height =
+            "34px";
+
+    } else {
+
+        div.innerHTML =
+            `
+            <div style="
+                position:absolute;
+                width:28px;
+                height:28px;
+                border:3px solid #111;
+                border-radius:50%;
+                left:0;
+                top:2px;
+            "></div>
+
+            <div style="
+                position:absolute;
+                width:28px;
+                height:28px;
+                border:3px solid #111;
+                border-radius:50%;
+                left:22px;
+                top:2px;
+            "></div>
+
+            <div style="
+                position:absolute;
+                width:32px;
+                height:3px;
+                background:#222;
+                left:9px;
+                top:15px;
+                transform:rotate(-20deg);
+            "></div>
+            `;
+
+        div.style.width =
+            "52px";
+
+        div.style.height =
+            "34px";
+
+    }
+
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    /*
+       Convert canvas coordinates to the
+       actual CSS dimensions of the game.
+    */
+
+    const scaleX =
+        rect.width / W;
+
+    const scaleY =
+        rect.height / H;
+
+
+    const startX =
+        obstacle.x *
+        scaleX;
+
+    const startY =
+        obstacle.y *
+        scaleY;
+
+
+    div.style.left =
+        `${startX}px`;
+
+    div.style.top =
+        `${startY}px`;
+
+
+    scatteredContainer.appendChild(
+        div
+    );
+
+
+    /*
+       Force browser to acknowledge initial
+       position before applying movement.
+    */
+
+    requestAnimationFrame(
+        () => {
+
+            const direction =
+                index % 2 === 0
+                    ? -1
+                    : 1;
+
+            const distance =
+                (
+                    90 +
+                    Math.random() * 150
+                ) *
+                intensity;
+
+
+            const vertical =
+                (
+                    90 +
+                    Math.random() * 150
+                ) *
+                intensity;
+
+
+            const rotation =
+                (
+                    Math.random() *
+                    720 -
+                    360
+                );
+
+
+            div.style.transform =
+                `
+                translate(
+                    ${direction * distance}px,
+                    ${-vertical}px
+                )
+                rotate(${rotation}deg)
+                `;
+
+            div.style.opacity =
+                "0";
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SYNTHETIC SCATTERED OBJECT
+========================================================= */
+
+function createSyntheticScatteredObject(
+    intensity,
+    index
+) {
+
+    const fake =
+        new Protestor(
+            index % 2 === 0
+                ? map.traffic1.y
+                : map.traffic2.y,
+            0,
+            index % 2 === 0
+                ? 1
+                : -1,
+            slogans[
+                Math.floor(
+                    Math.random() *
+                    slogans.length
+                )
+            ]
+        );
+
+
+    fake.x =
+        100 +
+        Math.random() * 300;
+
+
+    fake.y =
+        150 +
+        Math.random() * 200;
+
+
+    createScatteredObject(
+        fake,
+        intensity,
+        index
+    );
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(
+    text
+) {
+
+    return String(text)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   HELICOPTER BOARDING
+========================================================= */
+
+function helicopterBoarding() {
+
+    /*
+       Helicopter has now crossed the road.
+
+       Luxon is visually picked up.
+    */
+
+    statusDisplay.textContent =
+        "ENTITLEMENTS ACTIVATED";
+
+
+    /*
+       Move Luxon's canvas representation
+       upward toward the helicopter.
+    */
+
+    const startX =
+        player.x;
+
+    const startY =
+        player.y;
+
+
+    const targetX =
+        120;
+
+    const targetY =
+        295;
+
+
+    const duration =
+        1200;
+
+    const startTime =
+        performance.now();
+
+
+    function frame(now) {
+
+        const elapsed =
+            now - startTime;
+
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
+
+        const eased =
+            progress *
+            progress *
+            (
+                3 -
+                2 * progress
+            );
+
+
+        player.x =
+            startX +
+            (
+                targetX -
+                startX
+            ) *
+            eased;
+
+
+        player.y =
+            startY +
+            (
+                targetY -
+                startY
+            ) *
+            eased;
+
+
+        /*
+           Redraw the underlying canvas
+           while Luxon is being collected.
+        */
+
+        drawBackground();
+
+        drawObstaclesFrozen();
+
+        drawPlayer();
+
+
+        if (
+            progress < 1
+        ) {
+
+            requestAnimationFrame(
+                frame
+            );
+
+        } else {
+
+            startCashTrail();
+
+            helicopterFlyToParliament();
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        frame
+    );
+
+}
+
+
+/* =========================================================
+   CASH TRAIL
+========================================================= */
+
+function startCashTrail() {
+
+    /*
+       Generate a ridiculous amount of
+       falling public money.
+    */
+
+    const notes = 55;
+
+
+    for (
+        let i = 0;
+        i < notes;
+        i++
+    ) {
+
+        const note =
+            document.createElement(
+                "div"
+            );
+
+
+        note.className =
+            "cash-note";
+
+
+        note.textContent =
+            "$";
+
+
+        note.style.left =
+            (
+                80 +
+                Math.random() * 350
+            ) +
+            "px";
+
+
+        note.style.top =
+            (
+                280 +
+                Math.random() * 80
+            ) +
+            "px";
+
+
+        note.style.opacity =
+            "0";
+
+
+        cashContainer.appendChild(
+            note
+        );
+
 
         const delay =
-            170 +
-            Math.random() * 100;
+            i *
+            35;
+
 
         setTimeout(
-            nextWord,
+            () => {
+
+                note.style.opacity =
+                    "1";
+
+
+                const drift =
+                    (
+                        Math.random() *
+                        100 -
+                        50
+                    );
+
+
+                const fall =
+                    130 +
+                    Math.random() *
+                    220;
+
+
+                const rotation =
+                    Math.random() *
+                    720 -
+                    360;
+
+
+                note.style.transition =
+                    `
+                    transform
+                    ${2.5 + Math.random() * 1.5}s
+                    ease-in,
+                    opacity
+                    .2s
+                    ease
+                    `;
+
+
+                requestAnimationFrame(
+                    () => {
+
+                        note.style.transform =
+                            `
+                            translate(
+                                ${drift}px,
+                                ${fall}px
+                            )
+                            rotate(${rotation}deg)
+                            `;
+
+                    }
+                );
+
+            },
             delay
         );
 
     }
 
-    nextWord();
-
 }
 
 
 /* =========================================================
-   DRAW LOOP
+   HELICOPTER FLIGHT TO PARLIAMENT
 ========================================================= */
 
-function updateDebris() {
+function helicopterFlyToParliament() {
 
-    for (
-        let i = debris.length - 1;
-        i >= 0;
-        i--
-    ) {
-
-        debris[i].update();
-
-        if (
-            debris[i].life <= 0
-        ) {
-
-            debris.splice(i, 1);
-
-        }
-
-    }
-
-}
+    const startX =
+        parseFloat(
+            helicopter.style.left
+        );
 
 
-function drawDebris() {
-
-    for (const d of debris) {
-
-        d.draw();
-
-    }
-
-}
+    const startY =
+        parseFloat(
+            helicopter.style.top
+        );
 
 
-function updateObstacles() {
-
-    if (endingSequence) return;
-
-    for (
-        let i = obstacles.length - 1;
-        i >= 0;
-        i--
-    ) {
-
-        const o =
-            obstacles[i];
-
-        o.update();
-
-        if (
-            o.x < -120 ||
-            o.x > W + 120
-        ) {
-
-            obstacles.splice(i, 1);
-
-        }
-
-    }
-
-}
+    const targetX =
+        350;
 
 
-/* =========================================================
-   MAIN GAME LOOP
-========================================================= */
+    const targetY =
+        -70;
 
-function gameLoop() {
 
-    ctx.clearRect(
-        0,
-        0,
-        W,
-        H
-    );
+    const duration =
+        3000;
 
-    drawBackground();
 
-    if (!endingSequence) {
+    const startTime =
+        performance.now();
 
-        updatePlayer();
 
-        spawnObstacles();
+    function frame(now) {
 
-        updateObstacles();
+        const elapsed =
+            now - startTime;
 
-    }
-
-    updateDebris();
-
-    drawDebris();
-
-    for (const o of obstacles) {
-
-        o.draw();
-
-    }
-
-    if (
-        !helicopter.active ||
-        !helicopter.boarded
-    ) {
-
-        drawPlayer();
-
-    } else {
-
-        /* player rides inside helicopter */
-
-        drawPlayer();
-
-    }
-
-    helicopter.update();
-
-    helicopter.draw();
-
-    updateCash();
-
-    drawCash();
-
-    if (!endingSequence) {
-
-        checkCollisions();
-
-    }
-
-    if (
-        gameRunning ||
-        endingSequence
-    ) {
-
-        animationId =
-            requestAnimationFrame(
-                gameLoop
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
             );
 
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
+
+
+        const x =
+            startX +
+            (
+                targetX -
+                startX
+            ) *
+            eased;
+
+
+        const y =
+            startY +
+            (
+                targetY -
+                startY
+            ) *
+            eased;
+
+
+        helicopter.style.left =
+            `${x}px`;
+
+        helicopter.style.top =
+            `${y}px`;
+
+
+        /*
+           Luxon follows the helicopter.
+        */
+
+        player.x =
+            Math.min(
+                W - player.width,
+                115 +
+                200 * eased
+            );
+
+
+        player.y =
+            285 -
+            180 * eased;
+
+
+        /*
+           Keep drawing Luxon in the canvas
+           as he travels toward Parliament.
+        */
+
+        drawBackground();
+
+        drawPlayer();
+
+
+        if (
+            progress < 1
+        ) {
+
+            requestAnimationFrame(
+                frame
+            );
+
+        } else {
+
+            finishHelicopterSequence();
+
+        }
+
     }
+
+
+    requestAnimationFrame(
+        frame
+    );
+
+}
+
+
+/* =========================================================
+   FINAL FADE
+========================================================= */
+
+function finishHelicopterSequence() {
+
+    statusDisplay.textContent =
+        "ENTITLEMENTS DELIVERED";
+
+
+    /*
+       Wait briefly so the player sees the
+       helicopter reach the Beehive.
+    */
+
+    setTimeout(
+        () => {
+
+            finalBlackout.style.opacity =
+                "1";
+
+
+            /*
+               Begin typewriter after the
+               fade has substantially completed.
+            */
+
+            setTimeout(
+                startFinalTypewriter,
+                3900
+            );
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   TYPEWRITER
+========================================================= */
+
+function startFinalTypewriter() {
+
+    const message =
+        "look, what I’d say to you is… vrrrrrrmmmmmm...";
+
+
+    finalText.textContent =
+        "";
+
+    finalText.style.opacity =
+        "1";
+
+
+    let index = 0;
+
+
+    function typeNext() {
+
+        if (
+            index >= message.length
+        ) {
+
+            helicopterAnimating = false;
+
+            return;
+
+        }
+
+
+        finalText.textContent +=
+            message[index];
+
+
+        index++;
+
+
+        /*
+           Slightly variable timing makes it
+           look less mechanically typed.
+        */
+
+        const delay =
+            message[index - 1] === " "
+                ? 85
+                : 48 +
+                  Math.random() * 35;
+
+
+        setTimeout(
+            typeNext,
+            delay
+        );
+
+    }
+
+
+    typeNext();
 
 }
 
@@ -2667,46 +4675,82 @@ function gameLoop() {
 
 function startGame() {
 
-    cancelAnimationFrame(
-        animationId
-    );
+    currentLevel = 1;
 
-    level = 1;
     lives = 3;
 
-    endingSequence = false;
-    flightStarted = false;
-
     obstacles = [];
-    debris = [];
-    cash = [];
 
-    helicopter.reset();
+    helicopterTriggered = false;
 
-    helicopter.speed = 5.5;
+    helicopterAnimating = false;
+
+    helicopter._scatter1 = false;
+    helicopter._scatter2 = false;
+    helicopter._scatter3 = false;
+
 
     player.reset();
 
     updateLives();
 
+
     levelDisplay.textContent =
         "LEVEL 1";
 
+
     statusDisplay.textContent =
-        "MAKE THE JOURNEY";
+        "GO";
 
-    endingOverlay.style.opacity =
-        "0";
 
-    endingOverlay.style.pointerEvents =
-        "none";
-
-    endingText.style.opacity =
-        "0";
-
-    titleOverlay.classList.add(
+    titleScreen.classList.add(
         "hidden"
     );
+
+    levelScreen.classList.add(
+        "hidden"
+    );
+
+    gameOverScreen.classList.add(
+        "hidden"
+    );
+
+
+    helicopterSequence.classList.add(
+        "hidden"
+    );
+
+
+    finalBlackout.style.opacity =
+        "0";
+
+
+    finalText.style.opacity =
+        "0";
+
+
+    finalText.textContent =
+        "";
+
+
+    cashContainer.innerHTML =
+        "";
+
+    scatteredContainer.innerHTML =
+        "";
+
+
+    helicopter.style.left =
+        "-210px";
+
+
+    helicopter.style.top =
+        "285px";
+
+
+    nextLevelButton.dataset.final =
+        "false";
+
 
     gameRunning = true;
 
@@ -2715,22 +4759,187 @@ function startGame() {
 }
 
 
-startButton.addEventListener(
+/* =========================================================
+   NEXT LEVEL / PLAY AGAIN
+========================================================= */
+
+nextLevelButton.addEventListener(
+    "click",
+    () => {
+
+        if (
+            nextLevelButton.dataset.final ===
+            "true"
+        ) {
+
+            startGame();
+
+            return;
+
+        }
+
+
+        obstacles = [];
+
+        player.reset();
+
+        statusDisplay.textContent =
+            "GO";
+
+
+        levelScreen.classList.add(
+            "hidden"
+        );
+
+
+        gameRunning = true;
+
+        gameLoop();
+
+    }
+);
+
+
+/* =========================================================
+   PLAY
+========================================================= */
+
+playButton.addEventListener(
     "click",
     startGame
 );
 
 
 /* =========================================================
+   RESTART
+========================================================= */
+
+restartButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+/* =========================================================
+   GAME LOOP
+========================================================= */
+
+function gameLoop() {
+
+    if (!gameRunning) {
+        return;
+    }
+
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    drawBackground();
+
+
+    handleInput();
+
+
+    spawnObstacles();
+
+
+    for (
+        let i = obstacles.length - 1;
+        i >= 0;
+        i--
+    ) {
+
+        const obstacle =
+            obstacles[i];
+
+
+        obstacle.update();
+
+        obstacle.draw();
+
+
+        if (
+            obstacle.x <
+            -130
+
+            ||
+
+            obstacle.x >
+            W + 130
+        ) {
+
+            obstacles.splice(
+                i,
+                1
+            );
+
+        }
+
+    }
+
+
+    drawPlayer();
+
+
+    checkCollisions();
+
+
+    if (gameRunning) {
+
+        animationFrame =
+            requestAnimationFrame(
+                gameLoop
+            );
+
+    }
+
+}
+
+
+/* =========================================================
    INITIAL DRAW
 ========================================================= */
 
-player.reset();
+drawBackground();
+
+drawPlayer();
 
 updateLives();
 
-drawBackground();
-drawPlayer();
+
+/* =========================================================
+   MOBILE GESTURE PREVENTION
+========================================================= */
+
+document.addEventListener(
+    "touchmove",
+    event => {
+
+        event.preventDefault();
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+document.addEventListener(
+    "gesturestart",
+    event => {
+
+        event.preventDefault();
+
+    },
+    {
+        passive: false
+    }
+);
 
 </script>
 
