@@ -1,381 +1,585 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    >
+<meta charset="UTF-8">
 
-    <title>Molesworth Maze: The Great Escape</title>
+<meta
+    name="viewport"
+    content="width=device-width,
+             initial-scale=1,
+             maximum-scale=1,
+             user-scalable=no,
+             viewport-fit=cover">
 
-    <style>
+<title>Molesworth Maze: The Great Escape</title>
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+<style>
 
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100%;
-            background: #151515;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            touch-action: manipulation;
-        }
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #111;
+    font-family: Arial, Helvetica, sans-serif;
+    touch-action: none;
+}
 
-        h1 {
-            margin: 5px 0;
-            font-size: 23px;
-            text-align: center;
-            color: #ffcc00;
-        }
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .instructions {
-            margin: 3px 10px 8px;
-            font-size: 13px;
-            line-height: 1.35;
-            color: #ccc;
-            text-align: center;
-            max-width: 500px;
-        }
+/* =========================================================
+   GAME SHELL
+========================================================= */
 
-        #scoreBoard {
-            width: 500px;
-            max-width: calc(100vw - 20px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-            font-size: 14px;
-            font-weight: bold;
-        }
+#gameShell {
+    position: relative;
 
-        #gameWrapper {
-            width: 500px;
-            max-width: calc(100vw - 20px);
-        }
+    width: min(100vw, 500px);
 
-        #gameContainer {
-            position: relative;
-            width: 500px;
-            height: 600px;
-            max-width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,.55);
-        }
+    /*
+       Keep the entire game inside one phone viewport.
+    */
+    height: min(100vh, 760px);
 
-        canvas {
-            display: block;
-            width: 500px;
-            height: 600px;
-            max-width: 100%;
-            background: #333;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        /* =========================================================
-           OVERLAY
-        ========================================================= */
+    background: #111;
+}
 
-        #uiOverlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 30px;
-            background: rgba(0,0,0,.84);
-            z-index: 20;
-        }
+#game {
+    position: relative;
 
-        #overlayTitle {
-            margin: 0;
-            color: #ffcc00;
-            font-size: 28px;
-        }
+    width: 100%;
+    height: 100%;
 
-        #overlayText {
-            color: #ddd;
-            line-height: 1.5;
-            margin: 12px 0;
-        }
+    overflow: hidden;
 
-        .btn {
-            background: #00529b;
-            color: white;
-            border: none;
-            padding: 13px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 12px;
-            box-shadow: 0 4px 0 #003366;
-        }
+    background: #222;
+}
 
-        .btn:hover {
-            background: #0066cc;
-        }
 
-        .btn:active {
-            transform: translateY(3px);
-            box-shadow: none;
-        }
+/* =========================================================
+   CANVAS
+========================================================= */
 
-        /* =========================================================
-           MOBILE CONTROLS
-        ========================================================= */
+canvas {
+    position: absolute;
 
-        #mobileControls {
-            display: none;
-            width: 100%;
-            height: 150px;
-            margin-top: 10px;
-            position: relative;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: none;
-        }
+    left: 0;
+    top: 0;
 
-        .controlButton {
-            position: absolute;
-            width: 72px;
-            height: 56px;
+    width: 100%;
+    height: 100%;
 
-            border: 1px solid #555;
-            border-radius: 12px;
+    display: block;
+}
 
-            background: #292929;
-            color: white;
 
-            font-size: 28px;
-            font-weight: bold;
+/* =========================================================
+   TOP HUD
+========================================================= */
 
-            box-shadow:
-                0 4px 0 #111,
-                inset 0 1px 0 rgba(255,255,255,.1);
+#hud {
+    position: absolute;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    top: env(safe-area-inset-top, 8px);
+    left: 0;
 
-            touch-action: none;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+    width: 100%;
 
-        .controlButton:active,
-        .controlButton.pressed {
-            background: #00529b;
-            transform: translateY(3px);
-            box-shadow: 0 1px 0 #111;
-        }
+    padding: 8px 10px;
 
-        #upButton {
-            left: 50%;
-            top: 5px;
-            transform: translateX(-50%);
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-        #downButton {
-            left: 50%;
-            bottom: 5px;
-            transform: translateX(-50%);
-        }
+    z-index: 5;
 
-        #leftButton {
-            left: calc(50% - 120px);
-            top: 47px;
-        }
+    pointer-events: none;
 
-        #rightButton {
-            left: calc(50% + 48px);
-            top: 47px;
-        }
+    font-size: 13px;
+    font-weight: bold;
 
-        #mobileHint {
-            text-align: center;
-            color: #888;
-            font-size: 11px;
-            margin-top: -2px;
-        }
+    text-shadow:
+        0 1px 2px #000;
+}
 
-        .hidden {
-            display: none !important;
-        }
+.hudBox {
+    background: rgba(0,0,0,.55);
 
-        /* =========================================================
-           MOBILE LAYOUT
-        ========================================================= */
+    padding: 5px 8px;
 
-        @media (max-width: 600px) {
+    border-radius: 6px;
 
-            body {
-                justify-content: flex-start;
-                padding-top: 5px;
-            }
+    white-space: nowrap;
+}
 
-            h1 {
-                font-size: 19px;
-                margin: 3px 0;
-            }
 
-            .instructions {
-                font-size: 11px;
-                margin-bottom: 5px;
-            }
+/* =========================================================
+   TITLE / GAME OVER SCREEN
+========================================================= */
 
-            #scoreBoard {
-                font-size: 11px;
-                margin-bottom: 5px;
-            }
+#titleScreen {
+    position: absolute;
 
-            #mobileControls {
-                display: block;
-            }
+    inset: 0;
 
-            #mobileHint {
-                display: block;
-            }
+    z-index: 20;
 
-            #gameContainer {
-                border-radius: 6px;
-            }
+    display: flex;
+    flex-direction: column;
 
-        }
+    justify-content: center;
+    align-items: center;
 
-        @media (min-width: 601px) {
+    padding: 25px;
 
-            #mobileControls {
-                display: none;
-            }
+    text-align: center;
 
-            #mobileHint {
-                display: none;
-            }
+    background:
+        linear-gradient(
+            rgba(0,0,0,.55),
+            rgba(0,0,0,.82)
+        );
+}
 
-        }
+#titleScreen h1 {
+    margin: 0;
 
-    </style>
+    color: #ffcc00;
+
+    font-size: clamp(27px, 7vw, 38px);
+
+    line-height: 1.05;
+
+    text-shadow:
+        0 3px 8px #000;
+}
+
+#titleScreen h2 {
+    margin: 8px 0 18px;
+
+    color: #fff;
+
+    font-size: 16px;
+
+    font-weight: normal;
+}
+
+#titleScreen p {
+    max-width: 360px;
+
+    margin: 0 0 20px;
+
+    color: #ddd;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+#playButton {
+
+    border: 0;
+
+    border-radius: 10px;
+
+    padding: 14px 38px;
+
+    background: #00529b;
+
+    color: white;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    box-shadow:
+        0 5px 0 #00345f;
+
+    touch-action: manipulation;
+}
+
+#playButton:active {
+    transform: translateY(4px);
+
+    box-shadow:
+        0 1px 0 #00345f;
+}
+
+
+/* =========================================================
+   LEVEL MESSAGE
+========================================================= */
+
+#levelMessage {
+
+    position: absolute;
+
+    left: 50%;
+    top: 42%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 10;
+
+    width: 80%;
+
+    padding: 16px;
+
+    border-radius: 10px;
+
+    background: rgba(0,0,0,.82);
+
+    text-align: center;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition: opacity .2s;
+}
+
+#levelMessage.show {
+    opacity: 1;
+}
+
+#levelMessageTitle {
+
+    color: #ffcc00;
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+}
+
+#levelMessageText {
+
+    margin-top: 6px;
+
+    color: white;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   MOBILE CONTROLS
+========================================================= */
+
+#controls {
+
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+
+    height: 135px;
+
+    z-index: 8;
+
+    /*
+       Transparent enough that the player can still see
+       the lower part of the road.
+    */
+    background:
+        linear-gradient(
+            transparent,
+            rgba(0,0,0,.42)
+        );
+
+    pointer-events: none;
+}
+
+
+/*
+   All buttons use pointer events.
+
+   This is considerably more reliable than touchstart +
+   setInterval for iPhone Safari.
+*/
+
+.control {
+
+    position: absolute;
+
+    width: 62px;
+    height: 52px;
+
+    border: 1px solid rgba(255,255,255,.25);
+
+    border-radius: 13px;
+
+    background:
+        rgba(20,20,20,.78);
+
+    color: white;
+
+    font-size: 25px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        0 4px 0 rgba(0,0,0,.8);
+
+    pointer-events: auto;
+
+    touch-action: none;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    cursor: pointer;
+
+    transition:
+        transform .04s,
+        background .04s;
+}
+
+.control.pressed {
+
+    background: #0069b4;
+
+    transform:
+        translateY(3px);
+
+    box-shadow:
+        0 1px 0 rgba(0,0,0,.8);
+}
+
+
+/*
+       D-pad layout
+*/
+
+#up {
+    left: 50%;
+    bottom: 73px;
+
+    transform:
+        translateX(-50%);
+}
+
+#down {
+    left: 50%;
+    bottom: 9px;
+
+    transform:
+        translateX(-50%);
+}
+
+#left {
+    left: calc(50% - 105px);
+    bottom: 41px;
+}
+
+#right {
+    left: calc(50% + 43px);
+    bottom: 41px;
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 601px) {
+
+    #gameShell {
+        height: min(100vh, 760px);
+
+        border-radius: 10px;
+
+        box-shadow:
+            0 10px 40px rgba(0,0,0,.7);
+    }
+
+    #controls {
+        height: 115px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-height: 650px) {
+
+    #controls {
+        height: 105px;
+    }
+
+    .control {
+        width: 55px;
+        height: 46px;
+
+        font-size: 21px;
+    }
+
+    #up {
+        bottom: 58px;
+    }
+
+    #down {
+        bottom: 5px;
+    }
+
+    #left {
+        left: calc(50% - 93px);
+        bottom: 31px;
+    }
+
+    #right {
+        left: calc(50% + 38px);
+        bottom: 31px;
+    }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
-    <h1>Molesworth Maze: The Great Escape</h1>
+<div id="gameShell">
 
-    <p class="instructions">
-        Cross four increasingly difficult zones and reach Parliament.
-        Desktop: Arrow Keys / WASD.
-        Mobile: use the controls below.
-    </p>
+    <div id="game">
 
-    <div id="scoreBoard">
-
-        <div id="livesDisplay">
-            LIVES: ❤️ ❤️ ❤️
-        </div>
-
-        <div id="levelDisplay">
-            LEVEL 1 / 4
-        </div>
-
-        <div id="statusDisplay">
-            READY
-        </div>
-
-    </div>
+        <canvas
+            id="canvas"
+            width="500"
+            height="760">
+        </canvas>
 
 
-    <div id="gameWrapper">
+        <!-- HUD -->
 
-        <div id="gameContainer">
+        <div id="hud">
 
-            <canvas
-                id="gameCanvas"
-                width="500"
-                height="600">
-            </canvas>
+            <div
+                class="hudBox"
+                id="lives">
+                ❤️ ❤️ ❤️
+            </div>
 
-            <div id="uiOverlay">
+            <div
+                class="hudBox"
+                id="level">
+                LEVEL 1 / 4
+            </div>
 
-                <h2 id="overlayTitle">
-                    PREPARE TO CROSS
-                </h2>
-
-                <p id="overlayText">
-                    Get Chris Luxon safely from the apartment district
-                    to Parliament.<br><br>
-
-                    Each level gets harder.<br>
-                    Avoid cyclists and protestors.
-                </p>
-
-                <button
-                    id="startBtn"
-                    class="btn">
-                    START MISSION
-                </button>
-
+            <div
+                class="hudBox"
+                id="status">
+                READY
             </div>
 
         </div>
 
 
-        <!-- MOBILE CONTROLS -->
+        <!-- LEVEL MESSAGE -->
 
-        <div id="mobileControls">
+        <div id="levelMessage">
+
+            <div id="levelMessageTitle">
+                LEVEL 1
+            </div>
+
+            <div id="levelMessageText">
+                Reach Parliament
+            </div>
+
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div id="controls">
 
             <button
-                id="upButton"
-                class="controlButton"
+                class="control"
+                id="up"
                 aria-label="Move up">
                 ▲
             </button>
 
             <button
-                id="leftButton"
-                class="controlButton"
+                class="control"
+                id="left"
                 aria-label="Move left">
                 ◀
             </button>
 
             <button
-                id="rightButton"
-                class="controlButton"
+                class="control"
+                id="right"
                 aria-label="Move right">
                 ▶
             </button>
 
             <button
-                id="downButton"
-                class="controlButton"
+                class="control"
+                id="down"
                 aria-label="Move down">
                 ▼
             </button>
 
         </div>
 
-        <div id="mobileHint">
-            ▲ ▼ change lanes &nbsp; • &nbsp; ◀ ▶ move across
+
+        <!-- TITLE SCREEN -->
+
+        <div id="titleScreen">
+
+            <h1>
+                MOLESWORTH<br>
+                MAZE
+            </h1>
+
+            <h2>
+                The Great Escape
+            </h2>
+
+            <p id="titleDescription">
+                Help Chris Luxon cross Molesworth Street
+                and reach Parliament.
+                <br><br>
+                Four levels. Increasing traffic.
+                Three lives.
+            </p>
+
+            <button id="playButton">
+                PLAY
+            </button>
+
         </div>
 
     </div>
+
+</div>
 
 
 <script>
@@ -383,259 +587,545 @@
 "use strict";
 
 
-/* ================================================================
+/* =========================================================
    CANVAS
-================================================================ */
+========================================================= */
 
 const canvas =
-    document.getElementById("gameCanvas");
+    document.getElementById("canvas");
 
 const ctx =
     canvas.getContext("2d");
 
-const WIDTH = canvas.width;
-const HEIGHT = canvas.height;
+const W = canvas.width;
+const H = canvas.height;
 
 
-/* ================================================================
+/* =========================================================
    UI
-================================================================ */
+========================================================= */
 
-const uiOverlay =
-    document.getElementById("uiOverlay");
+const titleScreen =
+    document.getElementById("titleScreen");
 
-const overlayTitle =
-    document.getElementById("overlayTitle");
+const playButton =
+    document.getElementById("playButton");
 
-const overlayText =
-    document.getElementById("overlayText");
+const livesUI =
+    document.getElementById("lives");
 
-const startBtn =
-    document.getElementById("startBtn");
+const levelUI =
+    document.getElementById("level");
 
-const livesDisplay =
-    document.getElementById("livesDisplay");
+const statusUI =
+    document.getElementById("status");
 
-const levelDisplay =
-    document.getElementById("levelDisplay");
+const levelMessage =
+    document.getElementById("levelMessage");
 
-const statusDisplay =
-    document.getElementById("statusDisplay");
+const levelMessageTitle =
+    document.getElementById("levelMessageTitle");
+
+const levelMessageText =
+    document.getElementById("levelMessageText");
 
 
-/* ================================================================
-   GAME SETTINGS
-================================================================ */
-
-const TOTAL_LEVELS = 4;
-
-const GATE_LEFT = 210;
-const GATE_RIGHT = 290;
+/* =========================================================
+   GAME CONSTANTS
+========================================================= */
 
 
 /*
-    These are the player's vertical positions.
+   The screen is divided into horizontal lanes.
 
-    Instead of allowing arbitrary vertical movement, up/down moves
-    between these defined positions.
+   IMPORTANT:
 
-    This is the major gameplay change for mobile usability.
+   The player can move freely vertically, like Frogger.
+
+   These Y values are the centres of the different
+   road / cycle lanes, not forced player positions.
 */
+
+const START_Y = 690;
+
+const PARLIAMENT_Y = 80;
+
+
+/*
+   Road layout:
+
+       Parliament
+       ----------------
+       Cycle lane
+       ----------------
+       Traffic
+       ----------------
+       Traffic
+       ----------------
+       Cycle lane
+       ----------------
+       Apartments
+*/
+
 
 const LANES = [
 
     {
-        name: "START",
-        y: 520,
-        type: "safe"
+        top: 585,
+        bottom: 635,
+        type: "cycle",
+        direction: 1
     },
 
     {
-        name: "CYCLE LANE",
-        y: 375,
-        type: "cycle"
+        top: 485,
+        bottom: 585,
+        type: "road",
+        direction: -1
     },
 
     {
-        name: "TRAFFIC",
-        y: 300,
-        type: "traffic"
+        top: 385,
+        bottom: 485,
+        type: "road",
+        direction: 1
     },
 
     {
-        name: "TRAFFIC",
-        y: 200,
-        type: "traffic"
-    },
-
-    {
-        name: "CYCLE LANE",
-        y: 125,
-        type: "cycle"
-    },
-
-    {
-        name: "PARLIAMENT",
-        y: 65,
-        type: "safe"
+        top: 315,
+        bottom: 365,
+        type: "cycle",
+        direction: -1
     }
 
 ];
 
 
-/*
-    Level corresponds to the furthest dangerous lane reached.
+/* =========================================================
+   LEVEL SETTINGS
+========================================================= */
 
-    Level 1 = first cycle lane
-    Level 2 = lower traffic
-    Level 3 = upper traffic
-    Level 4 = final cycle lane
-*/
-
-const LEVEL_BY_LANE = {
-
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 4
-
-};
-
-
-/* ================================================================
-   LEVEL DIFFICULTY
-================================================================ */
-
-const levels = [
+const LEVELS = [
 
     {
-        speedMultiplier: 0.70,
-        spawnInterval: 85,
-        maxObstacles: 2
+        speed: 0.72,
+        spawnRate: 0.010,
+        maxObstacles: 7,
+        groupChance: 0.18
     },
 
     {
-        speedMultiplier: 0.85,
-        spawnInterval: 70,
-        maxObstacles: 4
+        speed: 0.92,
+        spawnRate: 0.014,
+        maxObstacles: 9,
+        groupChance: 0.30
     },
 
     {
-        speedMultiplier: 1.00,
-        spawnInterval: 58,
-        maxObstacles: 6
+        speed: 1.15,
+        spawnRate: 0.019,
+        maxObstacles: 11,
+        groupChance: 0.48
     },
 
     {
-        speedMultiplier: 1.15,
-        spawnInterval: 45,
-        maxObstacles: 8
+        speed: 1.38,
+        spawnRate: 0.024,
+        maxObstacles: 14,
+        groupChance: 0.65
     }
 
 ];
 
-
-/* ================================================================
-   GAME STATE
-================================================================ */
-
-let gameRunning = false;
-
-let lives = 3;
-
-let currentLane = 0;
 
 let currentLevel = 1;
 
+let lives = 3;
+
+let gameRunning = false;
+
 let obstacles = [];
-
-let spawnTimer = 50;
-
-let collisionCooldown = 0;
 
 let animationFrame = null;
 
-let levelMessageTimer = 0;
+let levelTransition = false;
+
+let transitionTimer = 0;
 
 
-/* ================================================================
+/* =========================================================
    PLAYER
-================================================================ */
+========================================================= */
 
 const player = {
 
-    x: 235,
+    x: W / 2 - 18,
 
-    y: LANES[0].y,
+    y: START_Y,
 
-    width: 30,
+    width: 36,
 
-    height: 45,
+    height: 58,
 
-    horizontalSpeed: 5.5,
+    speed: 4.8,
 
     reset() {
 
-        this.x = 235;
+        this.x =
+            W / 2 -
+            this.width / 2;
 
-        currentLane = 0;
-
-        this.y = LANES[0].y;
+        this.y =
+            START_Y;
 
     }
 
 };
 
 
-/* ================================================================
-   PLAYER HITBOX
+/* =========================================================
+   INPUT
+========================================================= */
 
-   Smaller than the visible player for fair collisions.
-================================================================ */
+const input = {
 
-function getPlayerHitbox() {
+    up: false,
 
-    return {
+    down: false,
 
-        x: player.x + 6,
+    left: false,
 
-        y: player.y + 8,
+    right: false
 
-        width: player.width - 12,
+};
 
-        height: player.height - 14
 
-    };
+/* =========================================================
+   TOUCH / POINTER CONTROLS
+========================================================= */
+
+function bindButton(
+    id,
+    direction
+) {
+
+    const button =
+        document.getElementById(id);
+
+
+    function press(event) {
+
+        event.preventDefault();
+
+        input[direction] = true;
+
+        button.classList.add(
+            "pressed"
+        );
+
+
+        /*
+           Pointer capture is important.
+
+           Without it, if the user's finger moves a few
+           pixels outside the button while holding it,
+           Safari can stop delivering events.
+        */
+
+        try {
+
+            button.setPointerCapture(
+                event.pointerId
+            );
+
+        } catch (e) {}
+
+    }
+
+
+    function release(event) {
+
+        event.preventDefault();
+
+        input[direction] = false;
+
+        button.classList.remove(
+            "pressed"
+        );
+
+    }
+
+
+    button.addEventListener(
+        "pointerdown",
+        press,
+        {
+            passive: false
+        }
+    );
+
+
+    button.addEventListener(
+        "pointerup",
+        release,
+        {
+            passive: false
+        }
+    );
+
+
+    button.addEventListener(
+        "pointercancel",
+        release,
+        {
+            passive: false
+        }
+    );
+
+
+    button.addEventListener(
+        "lostpointercapture",
+        release
+    );
 
 }
 
 
-/* ================================================================
-   OBSTACLE BASE
-================================================================ */
+bindButton(
+    "up",
+    "up"
+);
+
+bindButton(
+    "down",
+    "down"
+);
+
+bindButton(
+    "left",
+    "left"
+);
+
+bindButton(
+    "right",
+    "right"
+);
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+window.addEventListener(
+    "keydown",
+    event => {
+
+        if (!gameRunning) {
+            return;
+        }
+
+        switch (
+            event.key.toLowerCase()
+        ) {
+
+            case "arrowup":
+            case "w":
+                input.up = true;
+                break;
+
+            case "arrowdown":
+            case "s":
+                input.down = true;
+                break;
+
+            case "arrowleft":
+            case "a":
+                input.left = true;
+                break;
+
+            case "arrowright":
+            case "d":
+                input.right = true;
+                break;
+
+        }
+
+    }
+);
+
+
+window.addEventListener(
+    "keyup",
+    event => {
+
+        switch (
+            event.key.toLowerCase()
+        ) {
+
+            case "arrowup":
+            case "w":
+                input.up = false;
+                break;
+
+            case "arrowdown":
+            case "s":
+                input.down = false;
+                break;
+
+            case "arrowleft":
+            case "a":
+                input.left = false;
+                break;
+
+            case "arrowright":
+            case "d":
+                input.right = false;
+                break;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PLAYER UPDATE
+========================================================= */
+
+function updatePlayer() {
+
+    if (input.left) {
+
+        player.x -=
+            player.speed;
+
+    }
+
+    if (input.right) {
+
+        player.x +=
+            player.speed;
+
+    }
+
+    if (input.up) {
+
+        player.y -=
+            player.speed;
+
+    }
+
+    if (input.down) {
+
+        player.y +=
+            player.speed;
+
+    }
+
+
+    /*
+       Keep player inside the screen.
+    */
+
+    player.x =
+        Math.max(
+            0,
+            Math.min(
+                W - player.width,
+                player.x
+            )
+        );
+
+
+    player.y =
+        Math.max(
+            45,
+            Math.min(
+                START_Y,
+                player.y
+            )
+        );
+
+
+    /*
+       Reaching the Parliament area completes
+       the current level.
+    */
+
+    if (
+        player.y <
+        PARLIAMENT_Y + 35
+    ) {
+
+        completeLevel();
+
+    }
+
+}
+
+
+/* =========================================================
+   OBSTACLE CLASS
+========================================================= */
 
 class Obstacle {
 
     constructor(
         lane,
+        x,
         speed,
-        direction
+        direction,
+        type,
+        slogan = ""
     ) {
 
-        this.lane = lane;
-
-        this.speed = speed;
-
-        this.direction = direction;
+        this.lane =
+            lane;
 
         this.x =
-            direction === 1
-                ? -80
-                : WIDTH + 80;
+            x;
 
-        this.hitboxPadding = 4;
+        this.speed =
+            speed;
+
+        this.direction =
+            direction;
+
+        this.type =
+            type;
+
+        this.slogan =
+            slogan;
+
+
+        if (
+            type === "cyclist"
+        ) {
+
+            this.width = 30;
+            this.height = 38;
+
+        } else {
+
+            this.width = 35;
+            this.height = 55;
+
+        }
+
+
+        const laneData =
+            LANES[lane];
+
+
+        this.y =
+            (
+                laneData.top +
+                laneData.bottom
+            ) / 2 -
+            this.height / 2;
 
     }
+
 
     update() {
 
@@ -645,426 +1135,167 @@ class Obstacle {
 
     }
 
-    isOffScreen() {
+
+    offScreen() {
 
         return (
-            this.x < -130 ||
-            this.x > WIDTH + 130
+            this.x <
+                -100 ||
+            this.x >
+                W + 100
         );
 
     }
 
-    getHitbox() {
+
+    hitbox() {
+
+        /*
+           Slightly smaller collision box than
+           the artwork.
+
+           This makes the game considerably less
+           frustrating.
+        */
 
         return {
 
             x:
-                this.x +
-                this.hitboxPadding,
+                this.x + 5,
 
             y:
-                this.y +
-                this.hitboxPadding,
+                this.y + 6,
 
             width:
-                this.width -
-                this.hitboxPadding * 2,
+                this.width - 10,
 
             height:
-                this.height -
-                this.hitboxPadding * 2
+                this.height - 10
 
         };
 
     }
 
-}
-
-
-/* ================================================================
-   CYCLIST
-================================================================ */
-
-class Cyclist extends Obstacle {
-
-    constructor(
-        lane,
-        speed,
-        direction
-    ) {
-
-        super(
-            lane,
-            speed,
-            direction
-        );
-
-        this.width = 25;
-        this.height = 30;
-
-        this.y =
-            LANES[lane].y + 10;
-
-    }
 
     draw() {
 
-        // Wheels
+        if (
+            this.type === "cyclist"
+        ) {
 
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 2;
+            drawCyclist(
+                this
+            );
 
-        ctx.beginPath();
+        } else {
 
-        ctx.arc(
-            this.x + 5,
-            this.y + 31,
-            6,
-            0,
-            Math.PI * 2
-        );
+            drawProtestor(
+                this
+            );
 
-        ctx.stroke();
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-            this.x + 20,
-            this.y + 31,
-            6,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.stroke();
-
-
-        // Body
-
-        ctx.fillStyle = "#e53935";
-
-        ctx.fillRect(
-            this.x,
-            this.y,
-            this.width,
-            this.height
-        );
-
-
-        // Head
-
-        ctx.fillStyle = "#ffd1a9";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            this.x + 12,
-            this.y - 3,
-            6,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-
-        // Helmet
-
-        ctx.fillStyle = "#222";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            this.x + 12,
-            this.y - 6,
-            6,
-            Math.PI,
-            Math.PI * 2
-        );
-
-        ctx.fill();
+        }
 
     }
 
 }
 
 
-/* ================================================================
-   PROTESTOR
-================================================================ */
+/* =========================================================
+   PROTESTOR GROUPS
+========================================================= */
 
-class Protestor extends Obstacle {
-
-    constructor(
-        lane,
-        speed,
-        direction,
-        slogan
-    ) {
-
-        super(
-            lane,
-            speed,
-            direction
-        );
-
-        this.width = 30;
-        this.height = 40;
-
-        this.y =
-            LANES[lane].y + 5;
-
-        this.slogan = slogan;
-
-    }
-
-    draw() {
-
-        // Body
-
-        ctx.fillStyle = "#d66a16";
-
-        ctx.fillRect(
-            this.x,
-            this.y + 15,
-            this.width,
-            this.height - 15
-        );
-
-
-        // Head
-
-        ctx.fillStyle = "#ffcc99";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            this.x + 15,
-            this.y + 10,
-            8,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-
-        // Sign
-
-        const signX =
-            this.x - 12;
-
-        const signY =
-            this.y - 20;
-
-        ctx.fillStyle = "#fff";
-
-        ctx.strokeStyle = "#222";
-
-        ctx.lineWidth = 1;
-
-        ctx.fillRect(
-            signX,
-            signY,
-            54,
-            18
-        );
-
-        ctx.strokeRect(
-            signX,
-            signY,
-            54,
-            18
-        );
-
-
-        // Pole
-
-        ctx.fillStyle = "#633";
-
-        ctx.fillRect(
-            this.x + 14,
-            signY + 18,
-            3,
-            28
-        );
-
-
-        // Slogan
-
-        ctx.fillStyle = "#111";
-
-        ctx.font =
-            "bold 7px Arial";
-
-        ctx.textAlign =
-            "center";
-
-        ctx.fillText(
-            this.slogan,
-            signX + 27,
-            signY + 12
-        );
-
-    }
-
-}
-
-
-/* ================================================================
-   SLOGANS
-================================================================ */
-
-const slogans = [
+const SLOGANS = [
 
     "FIX ROADS",
-    "SAVE CITY",
-    "NO CUTS",
     "MORE BUSES",
-    "BIKE POWER"
+    "SAVE WELLINGTON",
+    "NO CUTS",
+    "BIKE POWER",
+    "STOP THIS"
 
 ];
 
 
-/* ================================================================
-   SPAWNING
-================================================================ */
+/*
+   This creates actual groups rather than isolated
+   protesters.
 
-function spawnObstacles() {
+   A group travels together with a small gap.
+*/
 
-    if (
-        !gameRunning ||
-        levelMessageTimer > 0
-    ) {
-        return;
-    }
-
-
-    spawnTimer--;
-
-    if (spawnTimer > 0) {
-        return;
-    }
-
+function spawnProtestorGroup(
+    lane
+) {
 
     const settings =
-        levels[currentLevel - 1];
-
-
-    spawnTimer =
-        settings.spawnInterval;
-
-
-    if (
-        obstacles.length >=
-        settings.maxObstacles
-    ) {
-        return;
-    }
-
-
-    /*
-        Only spawn hazards in lanes the player has reached.
-
-        This means the game does not randomly kill the player from
-        something happening several lanes away.
-    */
-
-    const availableLanes = [];
-
-
-    for (
-        let i = 1;
-        i <= currentLevel;
-        i++
-    ) {
-
-        availableLanes.push(i);
-
-    }
-
-
-    const lane =
-        availableLanes[
-            Math.floor(
-                Math.random() *
-                availableLanes.length
-            )
+        LEVELS[
+            currentLevel - 1
         ];
 
 
-    /*
-        Don't spawn another obstacle too close to an existing one
-        in the same lane.
-    */
-
-    const tooClose =
-        obstacles.some(
-            obstacle =>
-                obstacle.lane === lane &&
-                Math.abs(
-                    obstacle.x -
-                    WIDTH / 2
-                ) < 150
+    const count =
+        2 +
+        Math.floor(
+            Math.random() * 3
         );
-
-
-    if (tooClose) {
-        return;
-    }
 
 
     const direction =
-        lane === 1 ||
-        lane === 3
-            ? 1
-            : -1;
+        LANES[lane].direction;
 
 
-    const speed =
-        lane === 1 ||
-        lane === 4
-            ? 3.0
-            : 1.25;
+    const baseSpeed =
+        1.5 *
+        settings.speed;
 
 
-    const finalSpeed =
-        speed *
-        settings.speedMultiplier;
+    const startX =
+        direction === 1
+            ? -60
+            : W + 60;
 
 
-    if (
-        LANES[lane].type ===
-        "cycle"
+    for (
+        let i = 0;
+        i < count;
+        i++
     ) {
 
-        obstacles.push(
-            new Cyclist(
-                lane,
-                finalSpeed,
-                direction
-            )
-        );
+        const spacing =
+            48 * i;
 
-    } else {
+
+        const x =
+            direction === 1
+                ? startX - spacing
+                : startX + spacing;
+
 
         const slogan =
-            slogans[
+            SLOGANS[
                 Math.floor(
                     Math.random() *
-                    slogans.length
+                    SLOGANS.length
                 )
             ];
 
 
         obstacles.push(
-            new Protestor(
+
+            new Obstacle(
                 lane,
-                finalSpeed,
+                x,
+                baseSpeed *
+                    (
+                        .9 +
+                        Math.random() *
+                        .15
+                    ),
                 direction,
+                "protestor",
                 slogan
             )
+
         );
 
     }
@@ -1072,923 +1303,203 @@ function spawnObstacles() {
 }
 
 
-/* ================================================================
-   PLAYER LANE MOVEMENT
-================================================================ */
+/* =========================================================
+   SPAWN OBSTACLES
+========================================================= */
 
-function moveUp() {
+function spawnObstacles() {
 
-    if (!gameRunning) {
+    if (
+        levelTransition ||
+        obstacles.length >=
+        LEVELS[
+            currentLevel - 1
+        ].maxObstacles
+    ) {
+
         return;
+
     }
+
+
+    const settings =
+        LEVELS[
+            currentLevel - 1
+        ];
 
 
     if (
-        currentLane <
-        LANES.length - 1
+        Math.random() >
+        settings.spawnRate
     ) {
 
-        currentLane++;
-
-        player.y =
-            LANES[currentLane].y;
-
-        checkLevelProgress();
-
-    }
-
-}
-
-
-function moveDown() {
-
-    if (!gameRunning) {
         return;
-    }
-
-
-    if (currentLane > 0) {
-
-        currentLane--;
-
-        player.y =
-            LANES[currentLane].y;
-
-    }
-
-}
-
-
-/* ================================================================
-   LEVEL PROGRESSION
-================================================================ */
-
-function checkLevelProgress() {
-
-    /*
-        Lane 1 = Level 1
-        Lane 2 = Level 2
-        Lane 3 = Level 3
-        Lane 4 = Level 4
-        Lane 5 = Parliament
-    */
-
-    if (
-        currentLane >= 1 &&
-        currentLane <= 4
-    ) {
-
-        const newLevel =
-            LEVEL_BY_LANE[currentLane];
-
-
-        if (
-            newLevel >
-            currentLevel
-        ) {
-
-            currentLevel =
-                newLevel;
-
-            obstacles = [];
-
-            levelMessageTimer = 80;
-
-            statusDisplay.textContent =
-                `LEVEL ${currentLevel}!`;
-
-            updateUI();
-
-        }
 
     }
 
 
     /*
-        Final lane = Parliament.
+       Pick one of the four dangerous lanes.
     */
-
-    if (
-        currentLane === 5
-    ) {
-
-        if (
-            isAtGate()
-        ) {
-
-            handleWin();
-
-        } else {
-
-            /*
-                If they reached Parliament without aligning
-                with the gate, put them back at the final
-                cycle lane.
-            */
-
-            currentLane = 4;
-
-            player.y =
-                LANES[4].y;
-
-            statusDisplay.textContent =
-                "ALIGN WITH THE PARLIAMENT GATE";
-
-        }
-
-    }
-
-}
-
-
-/* ================================================================
-   BACKGROUND
-================================================================ */
-
-function drawBackground() {
-
-    drawStartArea();
-
-    drawCycleLane(
-        350,
-        400
-    );
-
-    drawTrafficLane(
-        250,
-        350,
-        true
-    );
-
-    drawTrafficLane(
-        150,
-        250,
-        false
-    );
-
-    drawCycleLane(
-        100,
-        150
-    );
-
-    drawParliament();
-
-    drawLaneBoundaries();
-
-    drawCurrentLaneHighlight();
-
-}
-
-
-/* ================================================================
-   START AREA
-================================================================ */
-
-function drawStartArea() {
-
-    ctx.fillStyle =
-        "#07528c";
-
-    ctx.fillRect(
-        0,
-        400,
-        WIDTH,
-        200
-    );
-
-
-    // Buildings
-
-    ctx.fillStyle =
-        "#174d75";
-
-    ctx.fillRect(
-        20,
-        430,
-        90,
-        140
-    );
-
-    ctx.fillRect(
-        390,
-        440,
-        90,
-        130
-    );
-
-
-    // Windows
-
-    ctx.fillStyle =
-        "#ffcc66";
-
-
-    for (
-        let x = 35;
-        x < 100;
-        x += 25
-    ) {
-
-        for (
-            let y = 450;
-            y < 550;
-            y += 30
-        ) {
-
-            ctx.fillRect(
-                x,
-                y,
-                10,
-                14
-            );
-
-        }
-
-    }
-
-
-    for (
-        let x = 405;
-        x < 470;
-        x += 25
-    ) {
-
-        for (
-            let y = 460;
-            y < 550;
-            y += 30
-        ) {
-
-            ctx.fillRect(
-                x,
-                y,
-                10,
-                14
-            );
-
-        }
-
-    }
-
-
-    // START label
-
-    ctx.fillStyle =
-        "rgba(255,255,255,.65)";
-
-    ctx.font =
-        "bold 12px Arial";
-
-    ctx.textAlign =
-        "center";
-
-    ctx.fillText(
-        "START",
-        250,
-        580
-    );
-
-}
-
-
-/* ================================================================
-   CYCLE LANE
-================================================================ */
-
-function drawCycleLane(
-    top,
-    bottom
-) {
-
-    ctx.fillStyle =
-        "#087f4d";
-
-    ctx.fillRect(
-        0,
-        top,
-        WIDTH,
-        bottom - top
-    );
-
-
-    // Boundaries
-
-    ctx.fillStyle =
-        "rgba(255,255,255,.2)";
-
-    ctx.fillRect(
-        0,
-        top,
-        WIDTH,
-        2
-    );
-
-    ctx.fillRect(
-        0,
-        bottom - 2,
-        WIDTH,
-        2
-    );
-
-
-    // Cycle symbols
-
-    ctx.fillStyle =
-        "rgba(255,255,255,.75)";
-
-    ctx.font =
-        "18px Arial";
-
-    ctx.textAlign =
-        "center";
-
-
-    for (
-        let x = 45;
-        x < WIDTH;
-        x += 120
-    ) {
-
-        ctx.fillText(
-            "🚲",
-            x,
-            top + 33
-        );
-
-    }
-
-}
-
-
-/* ================================================================
-   TRAFFIC LANE
-================================================================ */
-
-function drawTrafficLane(
-    top,
-    bottom,
-    directionRight
-) {
-
-    ctx.fillStyle =
-        directionRight
-            ? "#555"
-            : "#484848";
-
-    ctx.fillRect(
-        0,
-        top,
-        WIDTH,
-        bottom - top
-    );
-
-
-    // Centre road line
-
-    ctx.strokeStyle =
-        "rgba(255,255,255,.3)";
-
-    ctx.lineWidth = 2;
-
-    ctx.setLineDash([
-        20,
-        15
-    ]);
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        0,
-        (top + bottom) / 2
-    );
-
-    ctx.lineTo(
-        WIDTH,
-        (top + bottom) / 2
-    );
-
-    ctx.stroke();
-
-    ctx.setLineDash([]);
-
-
-    // Direction arrows
-
-    ctx.fillStyle =
-        "rgba(255,255,255,.22)";
-
-    ctx.font =
-        "18px Arial";
-
-    ctx.textAlign =
-        "center";
-
-
-    for (
-        let x = 50;
-        x < WIDTH;
-        x += 100
-    ) {
-
-        ctx.fillText(
-            directionRight
-                ? "→"
-                : "←",
-            x,
-            bottom - 14
-        );
-
-    }
-
-}
-
-
-/* ================================================================
-   PARLIAMENT
-================================================================ */
-
-function drawParliament() {
-
-    ctx.fillStyle =
-        "#e7f0ed";
-
-    ctx.fillRect(
-        0,
-        0,
-        WIDTH,
-        100
-    );
-
-
-    // Building
-
-    ctx.fillStyle =
-        "#7f8c8d";
-
-    ctx.fillRect(
-        180,
-        25,
-        140,
-        55
-    );
-
-
-    // Roof
-
-    ctx.fillStyle =
-        "#bdc3c7";
-
-    ctx.fillRect(
-        195,
-        15,
-        110,
-        15
-    );
-
-
-    // Columns
-
-    ctx.fillStyle =
-        "#ecf0f1";
-
-
-    for (
-        let x = 195;
-        x <= 305;
-        x += 22
-    ) {
-
-        ctx.fillRect(
-            x,
-            35,
-            8,
-            40
-        );
-
-    }
-
-
-    // Gate
-
-    ctx.fillStyle =
-        "#263238";
-
-    ctx.fillRect(
-        GATE_LEFT,
-        78,
-        GATE_RIGHT - GATE_LEFT,
-        22
-    );
-
-
-    ctx.strokeStyle =
-        "#ffcc00";
-
-    ctx.lineWidth = 2;
-
-    ctx.strokeRect(
-        GATE_LEFT,
-        78,
-        GATE_RIGHT - GATE_LEFT,
-        22
-    );
-
-
-    ctx.fillStyle =
-        "#ffcc00";
-
-    ctx.font =
-        "bold 9px Arial";
-
-    ctx.textAlign =
-        "center";
-
-    ctx.fillText(
-        "PARLIAMENT",
-        250,
-        93
-    );
-
-}
-
-
-/* ================================================================
-   LANE BOUNDARIES
-================================================================ */
-
-function drawLaneBoundaries() {
-
-    const boundaries = [
-        100,
-        150,
-        250,
-        350,
-        400
-    ];
-
-
-    ctx.strokeStyle =
-        "rgba(255,255,255,.25)";
-
-    ctx.lineWidth = 1;
-
-
-    for (
-        const y of boundaries
-    ) {
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            0,
-            y
-        );
-
-        ctx.lineTo(
-            WIDTH,
-            y
-        );
-
-        ctx.stroke();
-
-    }
-
-}
-
-
-/* ================================================================
-   CURRENT LANE HIGHLIGHT
-================================================================ */
-
-function drawCurrentLaneHighlight() {
-
-    if (
-        currentLane === 0 ||
-        currentLane === 5
-    ) {
-        return;
-    }
-
 
     const lane =
-        LANES[currentLane];
+        Math.floor(
+            Math.random() *
+            LANES.length
+        );
 
 
-    const laneHeight =
-        currentLane === 1 ||
-        currentLane === 4
-            ? 50
-            : 100;
-
-
-    const top =
-        currentLane === 1
-            ? 350
-            : currentLane === 2
-                ? 250
-                : currentLane === 3
-                    ? 150
-                    : 100;
-
-
-    ctx.fillStyle =
-        "rgba(255,255,255,.055)";
-
-    ctx.fillRect(
-        0,
-        top,
-        WIDTH,
-        laneHeight
-    );
+    const direction =
+        LANES[lane].direction;
 
 
     /*
-        Small indicator showing the current lane.
+       Protester groups become increasingly common.
     */
 
-    ctx.fillStyle =
-        "rgba(255,204,0,.7)";
-
-    ctx.fillRect(
-        4,
-        lane.y - 1,
-        4,
-        47
-    );
-
-}
-
-
-/* ================================================================
-   PLAYER
-================================================================ */
-
-function drawPlayer() {
-
-    const cx =
-        player.x +
-        player.width / 2;
-
-
-    // Shadow
-
-    ctx.fillStyle =
-        "rgba(0,0,0,.25)";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        cx,
-        player.y + 43,
-        14,
-        4,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    // Body
-
-    ctx.fillStyle =
-        "#002f6c";
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        player.x,
-        player.y + 45
-    );
-
-    ctx.lineTo(
-        player.x + 5,
-        player.y + 18
-    );
-
-    ctx.lineTo(
-        player.x + 25,
-        player.y + 18
-    );
-
-    ctx.lineTo(
-        player.x + 30,
-        player.y + 45
-    );
-
-    ctx.closePath();
-
-    ctx.fill();
-
-
-    // Shirt
-
-    ctx.fillStyle =
-        "#fff";
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        cx - 4,
-        player.y + 18
-    );
-
-    ctx.lineTo(
-        cx,
-        player.y + 24
-    );
-
-    ctx.lineTo(
-        cx + 4,
-        player.y + 18
-    );
-
-    ctx.fill();
-
-
-    // Tie
-
-    ctx.fillStyle =
-        "#0099ff";
-
-    ctx.fillRect(
-        cx - 1.5,
-        player.y + 23,
-        3,
-        10
-    );
-
-
-    // Head
-
-    ctx.fillStyle =
-        "#ffd1a9";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx,
-        player.y + 10,
-        10,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    // Hair
-
-    ctx.fillStyle =
-        "#d5d5d5";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx,
-        player.y + 5,
-        9,
-        Math.PI,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    // Eyes
-
-    ctx.fillStyle =
-        "#333";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx - 3,
-        player.y + 8,
-        1.2,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.arc(
-        cx + 3,
-        player.y + 8,
-        1.2,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-}
-
-
-/* ================================================================
-   HORIZONTAL MOVEMENT
-================================================================ */
-
-function moveLeft() {
-
-    if (!gameRunning) {
-        return;
-    }
-
-    player.x -=
-        player.horizontalSpeed;
-
-    if (player.x < 0) {
-        player.x = 0;
-    }
-
-}
-
-
-function moveRight() {
-
-    if (!gameRunning) {
-        return;
-    }
-
-    player.x +=
-        player.horizontalSpeed;
-
     if (
-        player.x >
-        WIDTH - player.width
+        Math.random() <
+        settings.groupChance
     ) {
 
-        player.x =
-            WIDTH - player.width;
+        spawnProtestorGroup(
+            lane
+        );
+
+        return;
 
     }
+
+
+    /*
+       Otherwise spawn a cyclist on cycle lanes
+       or an individual protestor on roads.
+    */
+
+    const isCycleLane =
+        LANES[lane].type ===
+        "cycle";
+
+
+    const speed =
+        (
+            isCycleLane
+                ? 2.7
+                : 1.45
+        ) *
+        settings.speed;
+
+
+    const x =
+        direction === 1
+            ? -60
+            : W + 60;
+
+
+    const type =
+        isCycleLane
+            ? "cyclist"
+            : "protestor";
+
+
+    const slogan =
+        SLOGANS[
+            Math.floor(
+                Math.random() *
+                SLOGANS.length
+            )
+        ];
+
+
+    obstacles.push(
+
+        new Obstacle(
+            lane,
+            x,
+            speed,
+            direction,
+            type,
+            slogan
+        )
+
+    );
 
 }
 
 
-/* ================================================================
+/* =========================================================
    COLLISION
-================================================================ */
+========================================================= */
 
-function rectanglesOverlap(
+function overlap(
     a,
     b
 ) {
 
     return (
-        a.x < b.x + b.width &&
-        a.x + a.width > b.x &&
-        a.y < b.y + b.height &&
-        a.y + a.height > b.y
+
+        a.x <
+            b.x + b.width &&
+
+        a.x + a.width >
+            b.x &&
+
+        a.y <
+            b.y + b.height &&
+
+        a.y + a.height >
+            b.y
+
     );
+
+}
+
+
+function playerHitbox() {
+
+    return {
+
+        x:
+            player.x + 8,
+
+        y:
+            player.y + 8,
+
+        width:
+            player.width - 16,
+
+        height:
+            player.height - 14
+
+    };
 
 }
 
 
 function checkCollisions() {
 
-    if (
-        collisionCooldown > 0
-    ) {
-
-        collisionCooldown--;
-
-        return;
-
-    }
-
-
-    const playerBox =
-        getPlayerHitbox();
+    const p =
+        playerHitbox();
 
 
     for (
-        const obstacle of obstacles
+        const obstacle
+        of obstacles
     ) {
 
         /*
-            Only check obstacles in the player's current lane.
-            This makes the lane system explicit and fair.
+           Only collision-check if the player is
+           actually vertically overlapping the obstacle.
         */
 
         if (
-            obstacle.lane !==
-            currentLane
-        ) {
-
-            continue;
-
-        }
-
-
-        if (
-            rectanglesOverlap(
-                playerBox,
-                obstacle.getHitbox()
+            overlap(
+                p,
+                obstacle.hitbox()
             )
         ) {
 
-            handleFailure();
+            hitPlayer();
 
             return;
 
@@ -1999,61 +1510,152 @@ function checkCollisions() {
 }
 
 
-/* ================================================================
-   FAILURE
-================================================================ */
+/* =========================================================
+   PLAYER HIT
+========================================================= */
 
-function handleFailure() {
+function hitPlayer() {
 
     lives--;
 
-    updateUI();
+    updateHUD();
+
+
+    /*
+       Clear the current traffic so the player isn't
+       immediately hit again.
+    */
 
     obstacles = [];
 
+
     player.reset();
 
-    collisionCooldown = 50;
 
-    statusDisplay.textContent =
-        "HIT! BACK TO START";
+    statusUI.textContent =
+        "WATCH THE TRAFFIC";
 
 
     if (
         lives <= 0
     ) {
 
-        endGame(
-            false,
-            "MISSION FAILED",
-            "The traffic and protesters got the better of you."
-        );
+        gameOver();
 
     }
 
 }
 
 
-/* ================================================================
-   WIN
-================================================================ */
+/* =========================================================
+   LEVEL COMPLETE
+========================================================= */
 
-function handleWin() {
+function completeLevel() {
 
-    endGame(
-        true,
-        "MISSION ACCOMPLISHED!",
-        "Chris Luxon successfully reached Parliament."
+    if (
+        levelTransition ||
+        !gameRunning
+    ) {
+
+        return;
+
+    }
+
+
+    levelTransition = true;
+
+    obstacles = [];
+
+
+    /*
+       Last level = game won.
+    */
+
+    if (
+        currentLevel >= 4
+    ) {
+
+        gameWon();
+
+        return;
+
+    }
+
+
+    /*
+       Move to next level.
+    */
+
+    currentLevel++;
+
+
+    updateHUD();
+
+
+    levelMessageTitle.textContent =
+        `LEVEL ${currentLevel}`;
+
+    levelMessageText.textContent =
+        "Traffic is getting faster.";
+
+
+    levelMessage.classList.add(
+        "show"
     );
+
+
+    transitionTimer = 100;
 
 }
 
 
-/* ================================================================
-   UI
-================================================================ */
+/* =========================================================
+   TRANSITION
+========================================================= */
 
-function updateUI() {
+function updateTransition() {
+
+    if (
+        !levelTransition
+    ) {
+
+        return;
+
+    }
+
+
+    transitionTimer--;
+
+
+    if (
+        transitionTimer <= 0
+    ) {
+
+        levelTransition =
+            false;
+
+
+        levelMessage.classList.remove(
+            "show"
+        );
+
+
+        player.reset();
+
+        statusUI.textContent =
+            "CROSS THE ROAD";
+
+    }
+
+}
+
+
+/* =========================================================
+   HUD
+========================================================= */
+
+function updateHUD() {
 
     let hearts = "";
 
@@ -2071,110 +1673,566 @@ function updateUI() {
     }
 
 
-    livesDisplay.textContent =
-        `LIVES: ${hearts}`;
+    livesUI.textContent =
+        hearts;
 
 
-    levelDisplay.textContent =
-        `LEVEL ${currentLevel} / ${TOTAL_LEVELS}`;
+    levelUI.textContent =
+        `LEVEL ${currentLevel} / 4`;
 
 }
 
 
-/* ================================================================
-   END GAME
-================================================================ */
+/* =========================================================
+   DRAW BACKGROUND
+========================================================= */
 
-function endGame(
-    success,
-    title,
-    text
-) {
+function drawBackground() {
 
-    gameRunning = false;
+    /*
+       Apartments
+    */
 
+    ctx.fillStyle =
+        "#07528c";
 
-    if (
-        animationFrame !== null
-    ) {
-
-        cancelAnimationFrame(
-            animationFrame
-        );
-
-        animationFrame = null;
-
-    }
-
-
-    overlayTitle.textContent =
-        title;
-
-
-    overlayTitle.style.color =
-        success
-            ? "#00eaff"
-            : "#ff3333";
-
-
-    overlayText.textContent =
-        text;
-
-
-    startBtn.textContent =
-        success
-            ? "PLAY AGAIN"
-            : "TRY AGAIN";
-
-
-    uiOverlay.classList.remove(
-        "hidden"
+    ctx.fillRect(
+        0,
+        635,
+        W,
+        125
     );
 
 
-    statusDisplay.textContent =
-        success
-            ? "MISSION COMPLETE"
-            : "MISSION FAILED";
+    drawApartments();
+
+
+    /*
+       Cycle lane 1
+    */
+
+    drawCycleLane(
+        LANES[0]
+    );
+
+
+    /*
+       Traffic 1
+    */
+
+    drawRoad(
+        LANES[1]
+    );
+
+
+    /*
+       Traffic 2
+    */
+
+    drawRoad(
+        LANES[2]
+    );
+
+
+    /*
+       Cycle lane 2
+    */
+
+    drawCycleLane(
+        LANES[3]
+    );
+
+
+    /*
+       Parliament
+    */
+
+    drawParliament();
+
+
+    /*
+       Lane boundaries
+    */
+
+    ctx.strokeStyle =
+        "rgba(255,255,255,.25)";
+
+    ctx.lineWidth = 2;
+
+
+    for (
+        const lane
+        of LANES
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            0,
+            lane.top
+        );
+
+        ctx.lineTo(
+            W,
+            lane.top
+        );
+
+        ctx.stroke();
+
+    }
 
 }
 
 
-/* ================================================================
-   LEVEL MESSAGE
-================================================================ */
+/* =========================================================
+   APARTMENTS
+========================================================= */
 
-function drawLevelMessage() {
+function drawApartments() {
 
-    if (
-        levelMessageTimer <= 0
+    ctx.fillStyle =
+        "#174d75";
+
+
+    ctx.fillRect(
+        15,
+        655,
+        110,
+        90
+    );
+
+
+    ctx.fillRect(
+        375,
+        665,
+        110,
+        80
+    );
+
+
+    ctx.fillStyle =
+        "#ffd36a";
+
+
+    for (
+        let x = 30;
+        x < 110;
+        x += 28
     ) {
 
-        return;
+        for (
+            let y = 670;
+            y < 735;
+            y += 25
+        ) {
+
+            ctx.fillRect(
+                x,
+                y,
+                10,
+                13
+            );
+
+        }
 
     }
 
 
-    const alpha =
-        Math.min(
-            1,
-            levelMessageTimer / 25
+    ctx.fillStyle =
+        "rgba(255,255,255,.6)";
+
+    ctx.font =
+        "bold 12px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        "APARTMENTS",
+        250,
+        735
+    );
+
+}
+
+
+/* =========================================================
+   CYCLE LANE
+========================================================= */
+
+function drawCycleLane(
+    lane
+) {
+
+    ctx.fillStyle =
+        "#087f4d";
+
+
+    ctx.fillRect(
+        0,
+        lane.top,
+        W,
+        lane.bottom -
+        lane.top
+    );
+
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.7)";
+
+    ctx.font =
+        "18px Arial";
+
+    ctx.textAlign =
+        "center";
+
+
+    for (
+        let x = 45;
+        x < W;
+        x += 105
+    ) {
+
+        ctx.fillText(
+            "🚲",
+            x,
+            lane.top + 34
         );
 
+    }
+
+}
+
+
+/* =========================================================
+   ROAD
+========================================================= */
+
+function drawRoad(
+    lane
+) {
+
+    ctx.fillStyle =
+        "#505050";
+
+
+    ctx.fillRect(
+        0,
+        lane.top,
+        W,
+        lane.bottom -
+        lane.top
+    );
+
+
+    ctx.strokeStyle =
+        "rgba(255,255,255,.35)";
+
+    ctx.lineWidth = 2;
+
+    ctx.setLineDash([
+        22,
+        16
+    ]);
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        (
+            lane.top +
+            lane.bottom
+        ) / 2
+    );
+
+    ctx.lineTo(
+        W,
+        (
+            lane.top +
+            lane.bottom
+        ) / 2
+    );
+
+    ctx.stroke();
+
+
+    ctx.setLineDash([]);
+
+
+    /*
+       Direction arrows
+    */
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.22)";
+
+    ctx.font =
+        "18px Arial";
+
+    ctx.textAlign =
+        "center";
+
+
+    const arrow =
+        lane.direction === 1
+            ? "→"
+            : "←";
+
+
+    for (
+        let x = 50;
+        x < W;
+        x += 110
+    ) {
+
+        ctx.fillText(
+            arrow,
+            x,
+            lane.bottom - 15
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   NEW ZEALAND PARLIAMENT / BEEHIVE
+========================================================= */
+
+function drawParliament() {
+
+    /*
+       Background lawn.
+    */
+
+    ctx.fillStyle =
+        "#e8f0ec";
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        315
+    );
+
+
+    /*
+       Lawn / forecourt.
+    */
+
+    ctx.fillStyle =
+        "#78956c";
+
+    ctx.fillRect(
+        0,
+        265,
+        W,
+        50
+    );
+
+
+    /*
+       Parliament building.
+
+       The Beehive is represented by its distinctive
+       circular / stepped form, rather than a rectangle.
+    */
 
     ctx.save();
 
-    ctx.globalAlpha =
-        alpha;
+    ctx.translate(
+        W / 2,
+        155
+    );
+
+
+    /*
+       Main lower stepped body.
+    */
 
     ctx.fillStyle =
-        "rgba(0,0,0,.75)";
+        "#9da6a5";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -95,
+        105
+    );
+
+    ctx.lineTo(
+        -70,
+        65
+    );
+
+    ctx.lineTo(
+        -55,
+        25
+    );
+
+    ctx.lineTo(
+        -40,
+        -15
+    );
+
+    ctx.lineTo(
+        40,
+        -15
+    );
+
+    ctx.lineTo(
+        55,
+        25
+    );
+
+    ctx.lineTo(
+        70,
+        65
+    );
+
+    ctx.lineTo(
+        95,
+        105
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+       Circular Beehive centre.
+    */
+
+    ctx.fillStyle =
+        "#aeb6b5";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        -5,
+        72,
+        105,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Horizontal stepped rings.
+    */
+
+    ctx.strokeStyle =
+        "rgba(65,75,75,.55)";
+
+    ctx.lineWidth = 3;
+
+
+    for (
+        let y = -55;
+        y <= 55;
+        y += 20
+    ) {
+
+        const width =
+            35 +
+            Math.abs(y) * .35;
+
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            0,
+            y,
+            width,
+            8,
+            0,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /*
+       Top dome.
+    */
+
+    ctx.fillStyle =
+        "#8d9897";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -87,
+        27,
+        Math.PI,
+        0
+    );
+
+    ctx.fill();
+
+
+    /*
+       Flag pole.
+    */
+
+    ctx.strokeStyle =
+        "#333";
+
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        -113
+    );
+
+    ctx.lineTo(
+        0,
+        -145
+    );
+
+    ctx.stroke();
+
+
+    /*
+       New Zealand-style blue flag.
+    */
+
+    ctx.fillStyle =
+        "#173c8c";
 
     ctx.fillRect(
-        100,
-        250,
-        300,
-        100
+        1,
+        -144,
+        22,
+        13
+    );
+
+
+    /*
+       Parliament entrance.
+    */
+
+    ctx.fillStyle =
+        "#303838";
+
+    ctx.fillRect(
+        -28,
+        62,
+        56,
+        43
     );
 
 
@@ -2182,93 +2240,827 @@ function drawLevelMessage() {
         "#ffcc00";
 
     ctx.font =
-        "bold 30px Arial";
+        "bold 9px Arial";
 
     ctx.textAlign =
         "center";
 
     ctx.fillText(
-        `LEVEL ${currentLevel}`,
-        250,
-        295
+        "PARLIAMENT",
+        0,
+        94
     );
+
+
+    ctx.restore();
+
+
+    /*
+       Label.
+    */
+
+    ctx.fillStyle =
+        "#333";
+
+    ctx.font =
+        "bold 12px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        "PARLIAMENTARY PRECINCT",
+        W / 2,
+        290
+    );
+
+}
+
+
+/* =========================================================
+   CYCLIST DRAWING
+========================================================= */
+
+function drawCyclist(
+    o
+) {
+
+    /*
+       Wheels
+    */
+
+    ctx.strokeStyle =
+        "#151515";
+
+    ctx.lineWidth = 3;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        o.x + 7,
+        o.y + 31,
+        7,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.stroke();
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        o.x + 23,
+        o.y + 31,
+        7,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.stroke();
+
+
+    /*
+       Bike frame
+    */
+
+    ctx.strokeStyle =
+        "#111";
+
+    ctx.lineWidth = 2;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        o.x + 7,
+        o.y + 31
+    );
+
+    ctx.lineTo(
+        o.x + 14,
+        o.y + 18
+    );
+
+    ctx.lineTo(
+        o.x + 23,
+        o.y + 31
+    );
+
+    ctx.lineTo(
+        o.x + 7,
+        o.y + 31
+    );
+
+    ctx.stroke();
+
+
+    /*
+       Rider
+    */
+
+    ctx.fillStyle =
+        "#e33";
+
+    ctx.fillRect(
+        o.x + 9,
+        o.y + 9,
+        13,
+        15
+    );
+
+
+    /*
+       Head
+    */
+
+    ctx.fillStyle =
+        "#ffd1aa";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        o.x + 15,
+        o.y + 5,
+        6,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Helmet
+    */
+
+    ctx.fillStyle =
+        "#222";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        o.x + 15,
+        o.y + 3,
+        6,
+        Math.PI,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+}
+
+
+/* =========================================================
+   PROTESTOR DRAWING
+========================================================= */
+
+function drawProtestor(
+    o
+) {
+
+    /*
+       Body
+    */
+
+    ctx.fillStyle =
+        "#cc6818";
+
+    ctx.fillRect(
+        o.x + 5,
+        o.y + 20,
+        25,
+        34
+    );
+
+
+    /*
+       Head
+    */
+
+    ctx.fillStyle =
+        "#ffd0a5";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        o.x + 17,
+        o.y + 13,
+        9,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Sign
+    */
+
+    const signX =
+        o.x - 15;
+
+    const signY =
+        o.y - 13;
 
 
     ctx.fillStyle =
         "#fff";
 
-    ctx.font =
-        "14px Arial";
+    ctx.strokeStyle =
+        "#222";
 
-    ctx.fillText(
-        "Traffic is getting heavier...",
-        250,
-        320
+    ctx.lineWidth = 1;
+
+
+    ctx.fillRect(
+        signX,
+        signY,
+        65,
+        20
     );
 
-    ctx.restore();
+    ctx.strokeRect(
+        signX,
+        signY,
+        65,
+        20
+    );
+
+
+    /*
+       Sign pole
+    */
+
+    ctx.fillStyle =
+        "#634326";
+
+    ctx.fillRect(
+        o.x + 16,
+        signY + 20,
+        3,
+        34
+    );
+
+
+    /*
+       Slogan
+    */
+
+    ctx.fillStyle =
+        "#111";
+
+    ctx.font =
+        "bold 7px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        o.slogan,
+        signX + 32,
+        signY + 13
+    );
 
 }
 
 
-/* ================================================================
+/* =========================================================
+   LUXON
+========================================================= */
+
+function drawPlayer() {
+
+    const cx =
+        player.x +
+        player.width / 2;
+
+
+    /*
+       Shadow
+    */
+
+    ctx.fillStyle =
+        "rgba(0,0,0,.3)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        cx,
+        player.y +
+            player.height -
+            2,
+        17,
+        5,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       BODY
+    */
+
+    ctx.fillStyle =
+        "#002f6c";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        player.x,
+        player.y + 58
+    );
+
+    ctx.lineTo(
+        player.x + 4,
+        player.y + 25
+    );
+
+    ctx.lineTo(
+        player.x + 32,
+        player.y + 25
+    );
+
+    ctx.lineTo(
+        player.x + 36,
+        player.y + 58
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+       WHITE SHIRT
+    */
+
+    ctx.fillStyle =
+        "#fff";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        cx - 6,
+        player.y + 24
+    );
+
+    ctx.lineTo(
+        cx,
+        player.y + 33
+    );
+
+    ctx.lineTo(
+        cx + 6,
+        player.y + 24
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /*
+       BLUE TIE
+    */
+
+    ctx.fillStyle =
+        "#0099ff";
+
+    ctx.fillRect(
+        cx - 2,
+        player.y + 31,
+        4,
+        14
+    );
+
+
+    /*
+       COMICALLY LARGE BALD HEAD
+
+       This is intentionally disproportionate.
+    */
+
+    ctx.fillStyle =
+        "#ffd2ad";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        cx,
+        player.y + 12,
+        19,
+        20,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Bare scalp highlight
+    */
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.32)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        cx - 5,
+        player.y + 5,
+        7,
+        5,
+        -.3,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Ears
+    */
+
+    ctx.fillStyle =
+        "#efb994";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        cx - 18,
+        player.y + 13,
+        4,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.arc(
+        cx + 18,
+        player.y + 13,
+        4,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Eyes
+    */
+
+    ctx.fillStyle =
+        "#222";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        cx - 7,
+        player.y + 11,
+        1.8,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.arc(
+        cx + 7,
+        player.y + 11,
+        1.8,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Eyebrows
+    */
+
+    ctx.strokeStyle =
+        "#777";
+
+    ctx.lineWidth = 1.5;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        cx - 12,
+        player.y + 7
+    );
+
+    ctx.lineTo(
+        cx - 3,
+        player.y + 6
+    );
+
+    ctx.moveTo(
+        cx + 3,
+        player.y + 6
+    );
+
+    ctx.lineTo(
+        cx + 12,
+        player.y + 7
+    );
+
+    ctx.stroke();
+
+
+    /*
+       Nose
+    */
+
+    ctx.strokeStyle =
+        "#c58d70";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        cx,
+        player.y + 11
+    );
+
+    ctx.lineTo(
+        cx - 2,
+        player.y + 18
+    );
+
+    ctx.lineTo(
+        cx + 2,
+        player.y + 18
+    );
+
+    ctx.stroke();
+
+
+    /*
+       Smile
+    */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        cx,
+        player.y + 18,
+        6,
+        0,
+        Math.PI
+    );
+
+    ctx.stroke();
+
+}
+
+
+/* =========================================================
+   GAME OVER
+========================================================= */
+
+function gameOver() {
+
+    gameRunning =
+        false;
+
+
+    titleScreen.style.display =
+        "flex";
+
+
+    document.querySelector(
+        "#titleScreen h1"
+    ).innerHTML =
+        "MISSION<br>FAILED";
+
+
+    document.querySelector(
+        "#titleScreen h2"
+    ).textContent =
+        "The Molesworth Maze wins this round.";
+
+
+    document.getElementById(
+        "titleDescription"
+    ).textContent =
+        "You ran out of lives. Try again and make it through all four levels.";
+
+
+    playButton.textContent =
+        "TRY AGAIN";
+
+
+    statusUI.textContent =
+        "FAILED";
+
+
+    if (
+        animationFrame
+    ) {
+
+        cancelAnimationFrame(
+            animationFrame
+        );
+
+        animationFrame =
+            null;
+
+    }
+
+}
+
+
+/* =========================================================
+   GAME WON
+========================================================= */
+
+function gameWon() {
+
+    gameRunning =
+        false;
+
+
+    titleScreen.style.display =
+        "flex";
+
+
+    document.querySelector(
+        "#titleScreen h1"
+    ).innerHTML =
+        "MISSION<br>ACCOMPLISHED";
+
+
+    document.querySelector(
+        "#titleScreen h2"
+    ).textContent =
+        "You've made it to Parliament!";
+
+
+    document.getElementById(
+        "titleDescription"
+    ).textContent =
+        "Chris Luxon successfully survived all four levels of the Molesworth Maze.";
+
+
+    playButton.textContent =
+        "PLAY AGAIN";
+
+
+    statusUI.textContent =
+        "COMPLETE";
+
+
+    if (
+        animationFrame
+    ) {
+
+        cancelAnimationFrame(
+            animationFrame
+        );
+
+        animationFrame =
+            null;
+
+    }
+
+}
+
+
+/* =========================================================
+   START GAME
+========================================================= */
+
+function startGame() {
+
+    currentLevel =
+        1;
+
+    lives =
+        3;
+
+    obstacles =
+        [];
+
+    levelTransition =
+        false;
+
+    transitionTimer =
+        0;
+
+
+    player.reset();
+
+
+    updateHUD();
+
+
+    statusUI.textContent =
+        "CROSS THE ROAD";
+
+
+    titleScreen.style.display =
+        "none";
+
+
+    levelMessage.classList.remove(
+        "show"
+    );
+
+
+    gameRunning =
+        true;
+
+
+    gameLoop();
+
+}
+
+
+playButton.addEventListener(
+    "click",
+    startGame
+);
+
+
+/* =========================================================
    GAME LOOP
-================================================================ */
+========================================================= */
 
 function gameLoop() {
 
-    if (!gameRunning) {
+    if (
+        !gameRunning
+    ) {
+
         return;
+
     }
 
 
     ctx.clearRect(
         0,
         0,
-        WIDTH,
-        HEIGHT
+        W,
+        H
     );
 
 
     drawBackground();
 
 
+    updateTransition();
+
+
     /*
-        Level transition pauses spawning briefly.
+       Don't allow movement during the short
+       level transition.
     */
 
     if (
-        levelMessageTimer > 0
+        !levelTransition
     ) {
 
-        levelMessageTimer--;
+        updatePlayer();
+
+        spawnObstacles();
 
     }
 
 
-    spawnObstacles();
-
-
     /*
-        Update obstacles.
+       Obstacles
     */
 
     for (
-        let i = obstacles.length - 1;
+        let i =
+            obstacles.length - 1;
+
         i >= 0;
+
         i--
     ) {
 
         const obstacle =
             obstacles[i];
 
+
         obstacle.update();
+
 
         obstacle.draw();
 
 
         if (
-            obstacle.isOffScreen()
+            obstacle.offScreen()
         ) {
 
             obstacles.splice(
@@ -2283,243 +3075,31 @@ function gameLoop() {
 
     drawPlayer();
 
-    checkCollisions();
 
-    drawLevelMessage();
+    if (
+        !levelTransition
+    ) {
 
-
-    if (gameRunning) {
-
-        animationFrame =
-            requestAnimationFrame(
-                gameLoop
-            );
+        checkCollisions();
 
     }
+
+
+    animationFrame =
+        requestAnimationFrame(
+            gameLoop
+        );
 
 }
 
 
-/* ================================================================
-   START GAME
-================================================================ */
+/* =========================================================
+   INITIAL SCREEN
+========================================================= */
 
-startBtn.addEventListener(
-    "click",
-    startGame
-);
+updateHUD();
 
-
-function startGame() {
-
-    if (gameRunning) {
-        return;
-    }
-
-
-    lives = 3;
-
-    currentLevel = 1;
-
-    currentLane = 0;
-
-    obstacles = [];
-
-    spawnTimer = 55;
-
-    collisionCooldown = 0;
-
-    levelMessageTimer = 0;
-
-
-    player.reset();
-
-
-    updateUI();
-
-
-    statusDisplay.textContent =
-        "CROSS THE ROAD";
-
-
-    uiOverlay.classList.add(
-        "hidden"
-    );
-
-
-    gameRunning = true;
-
-
-    gameLoop();
-
-}
-
-
-/* ================================================================
-   DESKTOP KEYBOARD
-================================================================ */
-
-window.addEventListener(
-    "keydown",
-    event => {
-
-        if (!gameRunning) {
-            return;
-        }
-
-
-        switch (
-            event.key.toLowerCase()
-        ) {
-
-            case "arrowup":
-            case "w":
-                moveUp();
-                break;
-
-            case "arrowdown":
-            case "s":
-                moveDown();
-                break;
-
-            case "arrowleft":
-            case "a":
-                moveLeft();
-                break;
-
-            case "arrowright":
-            case "d":
-                moveRight();
-                break;
-
-        }
-
-    }
-);
-
-
-/* ================================================================
-   MOBILE CONTROLS
-================================================================ */
-
-function setupTouchButton(
-    elementId,
-    action
-) {
-
-    const button =
-        document.getElementById(
-            elementId
-        );
-
-
-    let interval = null;
-
-
-    function startPress(event) {
-
-        event.preventDefault();
-
-        button.classList.add(
-            "pressed"
-        );
-
-
-        action();
-
-
-        /*
-            Repeating movement while held.
-        */
-
-        interval =
-            setInterval(
-                action,
-                65
-            );
-
-    }
-
-
-    function endPress(event) {
-
-        event.preventDefault();
-
-        button.classList.remove(
-            "pressed"
-        );
-
-
-        if (
-            interval !== null
-        ) {
-
-            clearInterval(
-                interval
-            );
-
-            interval = null;
-
-        }
-
-    }
-
-
-    button.addEventListener(
-        "pointerdown",
-        startPress
-    );
-
-
-    button.addEventListener(
-        "pointerup",
-        endPress
-    );
-
-
-    button.addEventListener(
-        "pointercancel",
-        endPress
-    );
-
-
-    button.addEventListener(
-        "pointerleave",
-        endPress
-    );
-
-}
-
-
-setupTouchButton(
-    "upButton",
-    moveUp
-);
-
-
-setupTouchButton(
-    "downButton",
-    moveDown
-);
-
-
-setupTouchButton(
-    "leftButton",
-    moveLeft
-);
-
-
-setupTouchButton(
-    "rightButton",
-    moveRight
-);
-
-
-/* ================================================================
-   INITIAL DRAW
-================================================================ */
-
-updateUI();
+player.reset();
 
 drawBackground();
 
