@@ -48,28 +48,22 @@ button {
     width: min(100vw, 520px);
     height: 100vh;
     max-height: 100vh;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     padding: 5px;
 }
 
 #gameHeader {
     width: 100%;
     height: 38px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 0 8px;
-
     font-weight: bold;
     font-size: 13px;
-
     flex-shrink: 0;
 }
 
@@ -88,21 +82,13 @@ button {
 
 #gameContainer {
     position: relative;
-
     width: 100%;
     max-width: 500px;
-
     aspect-ratio: 5 / 6;
-
     background: #222;
-
     border-radius: 10px;
-
     overflow: hidden;
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.65);
-
+    box-shadow: 0 8px 30px rgba(0,0,0,.65);
     flex-shrink: 1;
 }
 
@@ -116,24 +102,18 @@ canvas {
 .overlay {
     position: absolute;
     inset: 0;
-
     display: flex;
     flex-direction: column;
-
     align-items: center;
     justify-content: center;
-
     text-align: center;
-
     padding: 24px;
-
     background:
         radial-gradient(
             circle at center,
             rgba(20,30,40,.84),
             rgba(0,0,0,.96)
         );
-
     z-index: 20;
 }
 
@@ -143,148 +123,89 @@ canvas {
 
 .overlay h1 {
     margin: 0 0 10px 0;
-
     color: #ffcc00;
-
     font-size: clamp(21px, 5.8vw, 31px);
-
     line-height: 1.08;
-
     text-transform: uppercase;
-
-    text-shadow:
-        2px 2px 0 #000;
+    text-shadow: 2px 2px 0 #000;
 }
 
 .overlay h2 {
     margin: 5px 0 18px;
-
     color: #fff;
-
     font-size: clamp(15px, 4vw, 21px);
-
     letter-spacing: 1.5px;
 }
 
 .overlay p {
     max-width: 390px;
-
     margin: 7px auto 17px;
-
     color: #ddd;
-
     font-size: 14px;
-
     line-height: 1.5;
 }
 
 .levelMessage {
     color: #ffcc00 !important;
-
     font-size: 24px !important;
-
     font-weight: bold;
-
     margin-bottom: 5px !important;
 }
 
 .gameButton {
     appearance: none;
-
     border: none;
-
     border-radius: 7px;
-
     background: #00529b;
-
     color: white;
-
     padding: 13px 32px;
-
     min-width: 180px;
-
     font-size: 17px;
-
     font-weight: bold;
-
     cursor: pointer;
-
-    box-shadow:
-        0 4px 0 #003b70;
-
+    box-shadow: 0 4px 0 #003b70;
     user-select: none;
-
     touch-action: manipulation;
 }
 
 .gameButton:active {
     transform: translateY(3px);
-
-    box-shadow:
-        0 1px 0 #003b70;
+    box-shadow: 0 1px 0 #003b70;
 }
 
 #controls {
     width: 100%;
     max-width: 500px;
-
     height: 88px;
-
     display: grid;
-
-    grid-template-columns:
-        1fr 1fr 1fr;
-
-    grid-template-rows:
-        1fr 1fr;
-
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 5px;
-
     padding: 4px 25px;
-
     flex-shrink: 0;
 }
 
 .controlButton {
     border: 1px solid #555;
-
     border-radius: 8px;
-
-    background:
-        linear-gradient(
-            #3d3d3d,
-            #272727
-        );
-
+    background: linear-gradient(#3d3d3d, #272727);
     color: white;
-
     font-size: 21px;
-
     font-weight: bold;
-
     user-select: none;
-
     touch-action: none;
-
     display: flex;
-
     justify-content: center;
     align-items: center;
-
-    box-shadow:
-        0 3px 0 #111;
-
+    box-shadow: 0 3px 0 #111;
     cursor: pointer;
 }
 
 .controlButton:active,
 .controlButton.active {
     background: #00529b;
-
     transform: translateY(2px);
-
-    box-shadow:
-        0 1px 0 #111;
+    box-shadow: 0 1px 0 #111;
 }
 
 #upButton {
@@ -307,363 +228,6 @@ canvas {
     grid-row: 2;
 }
 
-
-/* =========================================================
-   FINAL HELICOPTER SEQUENCE
-========================================================= */
-
-#helicopterSequence {
-    position: absolute;
-    inset: 0;
-
-    z-index: 50;
-
-    pointer-events: none;
-
-    background: transparent;
-
-    overflow: hidden;
-}
-
-#finalBlackout {
-    position: absolute;
-    inset: 0;
-
-    background: #000;
-
-    opacity: 0;
-
-    z-index: 100;
-
-    pointer-events: none;
-
-    transition: opacity 4s ease;
-}
-
-#finalText {
-    position: absolute;
-
-    left: 8%;
-    right: 8%;
-
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    color: white;
-
-    font-family:
-        "Courier New",
-        Courier,
-        monospace;
-
-    font-size:
-        clamp(18px, 5vw, 27px);
-
-    line-height: 1.45;
-
-    font-weight: bold;
-
-    text-align: center;
-
-    opacity: 0;
-
-    z-index: 110;
-
-    text-shadow:
-        0 0 2px #fff;
-
-    white-space: normal;
-}
-
-
-/* =========================================================
-   HELICOPTER
-========================================================= */
-
-.helicopter {
-    position: absolute;
-
-    width: 170px;
-    height: 90px;
-
-    left: -210px;
-    top: 285px;
-
-    transform: scale(.9);
-
-    z-index: 80;
-}
-
-.heli-body {
-    position: absolute;
-
-    left: 45px;
-    top: 25px;
-
-    width: 82px;
-    height: 38px;
-
-    background: #68716d;
-
-    border: 3px solid #252927;
-
-    border-radius:
-        45% 55% 45% 40%;
-
-    box-shadow:
-        inset -8px -5px 0 rgba(0,0,0,.16);
-}
-
-.heli-window {
-    position: absolute;
-
-    left: 55px;
-    top: 30px;
-
-    width: 33px;
-    height: 20px;
-
-    background: #263d4a;
-
-    border: 2px solid #151a1b;
-
-    border-radius:
-        60% 35% 35% 60%;
-}
-
-.heli-door-window {
-    position: absolute;
-
-    left: 91px;
-    top: 31px;
-
-    width: 25px;
-    height: 18px;
-
-    background: #263d4a;
-
-    border: 2px solid #151a1b;
-
-    border-radius: 30%;
-}
-
-.heli-tail {
-    position: absolute;
-
-    left: 116px;
-    top: 36px;
-
-    width: 49px;
-    height: 8px;
-
-    background: #5b625f;
-
-    border: 2px solid #252927;
-
-    transform:
-        rotate(-8deg);
-
-    transform-origin: left center;
-}
-
-.heli-tail-fin {
-    position: absolute;
-
-    left: 145px;
-    top: 23px;
-
-    width: 20px;
-    height: 22px;
-
-    background: #5b625f;
-
-    clip-path:
-        polygon(0 100%, 100% 0, 75% 100%);
-}
-
-.heli-skid-left,
-.heli-skid-right {
-    position: absolute;
-
-    top: 64px;
-
-    width: 45px;
-    height: 5px;
-
-    border-bottom: 4px solid #242826;
-
-    border-radius: 50%;
-}
-
-.heli-skid-left {
-    left: 42px;
-}
-
-.heli-skid-right {
-    left: 92px;
-}
-
-.heli-strut-left,
-.heli-strut-right {
-    position: absolute;
-
-    top: 55px;
-
-    width: 3px;
-    height: 14px;
-
-    background: #252927;
-}
-
-.heli-strut-left {
-    left: 52px;
-}
-
-.heli-strut-right {
-    left: 105px;
-}
-
-.heli-rotor {
-    position: absolute;
-
-    left: 40px;
-    top: 10px;
-
-    width: 100px;
-    height: 4px;
-
-    background: #1c211f;
-
-    border-radius: 50%;
-
-    transform-origin: center;
-
-    animation:
-        rotorSpin .08s linear infinite;
-}
-
-.heli-rotor::after {
-    content: "";
-
-    position: absolute;
-
-    left: 48px;
-    top: -8px;
-
-    width: 4px;
-    height: 20px;
-
-    background: #1c211f;
-
-    border-radius: 50%;
-}
-
-.heli-light {
-    position: absolute;
-
-    left: 48px;
-    top: 52px;
-
-    width: 7px;
-    height: 7px;
-
-    border-radius: 50%;
-
-    background: #e22;
-
-    box-shadow:
-        0 0 8px rgba(255,0,0,.7);
-}
-
-@keyframes rotorSpin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(180deg);
-    }
-}
-
-
-/* =========================================================
-   CASH
-========================================================= */
-
-.cash-note {
-    position: absolute;
-
-    width: 30px;
-    height: 14px;
-
-    background: #8dbf72;
-
-    border: 1px solid #284c26;
-
-    color: #183518;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 7px;
-
-    font-weight: bold;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    z-index: 70;
-
-    opacity: 0;
-
-    transform:
-        rotate(0deg);
-}
-
-
-/* =========================================================
-   SCATTERED OBSTACLES
-========================================================= */
-
-.scattered-object {
-    position: absolute;
-
-    z-index: 75;
-
-    pointer-events: none;
-
-    transition:
-        transform 1.5s cubic-bezier(.1,.8,.2,1),
-        opacity 1.8s ease;
-}
-
-
-/* =========================================================
-   FINAL SCREEN
-========================================================= */
-
-#finalSequenceMessage {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 120;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   SMALL SCREENS
-========================================================= */
-
 @media (max-height: 700px) {
 
     #app {
@@ -682,12 +246,10 @@ canvas {
     .controlButton {
         font-size: 18px;
     }
-
 }
 
 </style>
 </head>
-
 
 <body>
 
@@ -719,9 +281,7 @@ canvas {
         </canvas>
 
 
-        <!-- =================================================
-             TITLE SCREEN
-        ================================================== -->
+        <!-- TITLE SCREEN -->
 
         <div
             id="titleScreen"
@@ -757,9 +317,7 @@ canvas {
         </div>
 
 
-        <!-- =================================================
-             LEVEL COMPLETE
-        ================================================== -->
+        <!-- LEVEL COMPLETE -->
 
         <div
             id="levelScreen"
@@ -788,9 +346,7 @@ canvas {
         </div>
 
 
-        <!-- =================================================
-             GAME OVER
-        ================================================== -->
+        <!-- GAME OVER -->
 
         <div
             id="gameOverScreen"
@@ -812,64 +368,10 @@ canvas {
 
         </div>
 
-
-        <!-- =================================================
-             HELICOPTER END SEQUENCE
-        ================================================== -->
-
-        <div
-            id="helicopterSequence"
-            class="hidden">
-
-            <div
-                id="helicopter"
-                class="helicopter">
-
-                <div class="heli-rotor"></div>
-
-                <div class="heli-body"></div>
-
-                <div class="heli-window"></div>
-
-                <div class="heli-door-window"></div>
-
-                <div class="heli-tail"></div>
-
-                <div class="heli-tail-fin"></div>
-
-                <div class="heli-skid-left"></div>
-
-                <div class="heli-skid-right"></div>
-
-                <div class="heli-strut-left"></div>
-
-                <div class="heli-strut-right"></div>
-
-                <div class="heli-light"></div>
-
-            </div>
-
-
-            <div id="cashContainer"></div>
-
-            <div id="scatteredContainer"></div>
-
-            <div id="finalBlackout"></div>
-
-            <div id="finalSequenceMessage">
-
-                <div id="finalText"></div>
-
-            </div>
-
-        </div>
-
     </div>
 
 
-    <!-- =====================================================
-         MOBILE CONTROLS
-    ====================================================== -->
+    <!-- MOBILE CONTROLS -->
 
     <div id="controls">
 
@@ -963,41 +465,6 @@ const gameOverText =
 
 
 /* =========================================================
-   HELICOPTER UI
-========================================================= */
-
-const helicopterSequence =
-    document.getElementById(
-        "helicopterSequence"
-    );
-
-const helicopter =
-    document.getElementById(
-        "helicopter"
-    );
-
-const cashContainer =
-    document.getElementById(
-        "cashContainer"
-    );
-
-const scatteredContainer =
-    document.getElementById(
-        "scatteredContainer"
-    );
-
-const finalBlackout =
-    document.getElementById(
-        "finalBlackout"
-    );
-
-const finalText =
-    document.getElementById(
-        "finalText"
-    );
-
-
-/* =========================================================
    GAME STATE
 ========================================================= */
 
@@ -1014,14 +481,36 @@ let animationFrame = null;
 let obstacles = [];
 
 
-/*
-   Prevent the helicopter sequence from
-   accidentally triggering more than once.
-*/
+/* =========================================================
+   HELICOPTER STATE
+========================================================= */
 
-let helicopterTriggered = false;
+let helicopterSequence = false;
 
-let helicopterAnimating = false;
+let helicopterPhase = "approach";
+
+let helicopterX = -180;
+
+let helicopterProgress = 0;
+
+let helicopterCash = [];
+
+let helicopterDebris = [];
+
+let helicopterFade = 0;
+
+let helicopterText = "";
+
+let helicopterTextIndex = 0;
+
+let helicopterTextTimer = 0;
+
+let helicopterDelivered = false;
+
+let helicopterEndTimer = 0;
+
+const helicopterQuote =
+    "look, what I’d say to you is… I’m entitled to my entitlements.";
 
 
 /* =========================================================
@@ -1160,7 +649,6 @@ window.addEventListener(
         ) {
 
             keys.up = true;
-
             event.preventDefault();
 
         }
@@ -1171,7 +659,6 @@ window.addEventListener(
         ) {
 
             keys.down = true;
-
             event.preventDefault();
 
         }
@@ -1182,7 +669,6 @@ window.addEventListener(
         ) {
 
             keys.left = true;
-
             event.preventDefault();
 
         }
@@ -1193,7 +679,6 @@ window.addEventListener(
         ) {
 
             keys.right = true;
-
             event.preventDefault();
 
         }
@@ -1214,36 +699,28 @@ window.addEventListener(
             key === "arrowup" ||
             key === "w"
         ) {
-
             keys.up = false;
-
         }
 
         if (
             key === "arrowdown" ||
             key === "s"
         ) {
-
             keys.down = false;
-
         }
 
         if (
             key === "arrowleft" ||
             key === "a"
         ) {
-
             keys.left = false;
-
         }
 
         if (
             key === "arrowright" ||
             key === "d"
         ) {
-
             keys.right = false;
-
         }
 
     }
@@ -1269,14 +746,6 @@ function setupControl(
 
         event.preventDefault();
 
-        if (
-            helicopterAnimating
-        ) {
-
-            return;
-
-        }
-
         keys[direction] = true;
 
         button.classList.add(
@@ -1284,11 +753,9 @@ function setupControl(
         );
 
         try {
-
             button.setPointerCapture(
                 event.pointerId
             );
-
         } catch (_) {}
 
     }
@@ -1334,25 +801,10 @@ function setupControl(
 }
 
 
-setupControl(
-    "upButton",
-    "up"
-);
-
-setupControl(
-    "downButton",
-    "down"
-);
-
-setupControl(
-    "leftButton",
-    "left"
-);
-
-setupControl(
-    "rightButton",
-    "right"
-);
+setupControl("upButton", "up");
+setupControl("downButton", "down");
+setupControl("leftButton", "left");
+setupControl("rightButton", "right");
 
 
 /* =========================================================
@@ -1364,7 +816,6 @@ function handleInput() {
     if (!gameRunning) {
         return;
     }
-
 
     if (keys.up) {
         player.y -= player.speed;
@@ -1382,7 +833,6 @@ function handleInput() {
         player.x += player.speed;
     }
 
-
     player.x =
         Math.max(
             0,
@@ -1391,7 +841,6 @@ function handleInput() {
                 player.x
             )
         );
-
 
     player.y =
         Math.max(
@@ -1452,10 +901,7 @@ class Cyclist {
         const x = this.x;
         const y = this.y;
 
-
-        ctx.strokeStyle =
-            "#111";
-
+        ctx.strokeStyle = "#111";
         ctx.lineWidth = 3;
 
         ctx.beginPath();
@@ -1478,10 +924,7 @@ class Cyclist {
 
         ctx.stroke();
 
-
-        ctx.strokeStyle =
-            "#222";
-
+        ctx.strokeStyle = "#222";
         ctx.lineWidth = 2;
 
         ctx.beginPath();
@@ -1518,9 +961,7 @@ class Cyclist {
 
         ctx.stroke();
 
-
-        ctx.fillStyle =
-            "#d83b3b";
+        ctx.fillStyle = "#d83b3b";
 
         ctx.fillRect(
             x + 10,
@@ -1529,9 +970,7 @@ class Cyclist {
             10
         );
 
-
-        ctx.fillStyle =
-            "#f2c09c";
+        ctx.fillStyle = "#f2c09c";
 
         ctx.beginPath();
 
@@ -1602,9 +1041,7 @@ class Protestor {
         const x = this.x;
         const y = this.y;
 
-
-        ctx.fillStyle =
-            "#c96a24";
+        ctx.fillStyle = "#c96a24";
 
         ctx.fillRect(
             x + 5,
@@ -1613,9 +1050,7 @@ class Protestor {
             24
         );
 
-
-        ctx.fillStyle =
-            "#ffd0a6";
+        ctx.fillStyle = "#ffd0a6";
 
         ctx.beginPath();
 
@@ -1629,10 +1064,7 @@ class Protestor {
 
         ctx.fill();
 
-
-        ctx.strokeStyle =
-            "#ffd0a6";
-
+        ctx.strokeStyle = "#ffd0a6";
         ctx.lineWidth = 4;
 
         ctx.beginPath();
@@ -1649,19 +1081,14 @@ class Protestor {
 
         ctx.stroke();
 
-
         const signX =
             x - 14;
 
         const signY =
             y - 18;
 
-        ctx.fillStyle =
-            "#fff";
-
-        ctx.strokeStyle =
-            "#111";
-
+        ctx.fillStyle = "#fff";
+        ctx.strokeStyle = "#111";
         ctx.lineWidth = 1;
 
         ctx.fillRect(
@@ -1678,9 +1105,7 @@ class Protestor {
             18
         );
 
-
-        ctx.fillStyle =
-            "#74451f";
+        ctx.fillStyle = "#74451f";
 
         ctx.fillRect(
             x + 14,
@@ -1689,9 +1114,7 @@ class Protestor {
             17
         );
 
-
-        ctx.fillStyle =
-            "#111";
+        ctx.fillStyle = "#111";
 
         ctx.font =
             "bold 7px Arial";
@@ -1739,7 +1162,6 @@ function spawnObstacles() {
     if (!gameRunning) {
         return;
     }
-
 
     const settings =
         levels[currentLevel];
@@ -1828,33 +1250,25 @@ function spawnProtestorGroup(
     const settings =
         levels[currentLevel];
 
-
     let groupSize = 1;
-
 
     if (
         Math.random() <
         settings.groupChance
     ) {
 
-        if (
-            currentLevel === 1
-        ) {
+        if (currentLevel === 1) {
 
             groupSize = 2;
 
-        } else if (
-            currentLevel === 2
-        ) {
+        } else if (currentLevel === 2) {
 
             groupSize =
                 Math.random() < 0.6
                     ? 2
                     : 3;
 
-        } else if (
-            currentLevel === 3
-        ) {
+        } else if (currentLevel === 3) {
 
             groupSize =
                 Math.random() < 0.5
@@ -2011,7 +1425,6 @@ function drawRoadMarkings(y) {
 
     ctx.setLineDash([]);
 
-
     ctx.fillStyle =
         "rgba(255,255,255,.25)";
 
@@ -2020,7 +1433,6 @@ function drawRoadMarkings(y) {
 
     ctx.textAlign =
         "center";
-
 
     const direction =
         y === 250
@@ -2059,7 +1471,6 @@ function drawCycleLane(y) {
 
     ctx.textAlign =
         "center";
-
 
     for (
         let x = 55;
@@ -2156,26 +1567,10 @@ function drawParliament() {
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        -178,
-        70
-    );
-
-    ctx.lineTo(
-        178,
-        70
-    );
-
-    ctx.lineTo(
-        160,
-        50
-    );
-
-    ctx.lineTo(
-        -160,
-        50
-    );
-
+    ctx.moveTo(-178,70);
+    ctx.lineTo(178,70);
+    ctx.lineTo(160,50);
+    ctx.lineTo(-160,50);
     ctx.closePath();
 
     ctx.fill();
@@ -2186,26 +1581,10 @@ function drawParliament() {
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        -128,
-        70
-    );
-
-    ctx.lineTo(
-        128,
-        70
-    );
-
-    ctx.lineTo(
-        113,
-        35
-    );
-
-    ctx.lineTo(
-        -113,
-        35
-    );
-
+    ctx.moveTo(-128,70);
+    ctx.lineTo(128,70);
+    ctx.lineTo(113,35);
+    ctx.lineTo(-113,35);
     ctx.closePath();
 
     ctx.fill();
@@ -2243,15 +1622,8 @@ function drawParliament() {
 
         ctx.beginPath();
 
-        ctx.moveTo(
-            x,
-            35
-        );
-
-        ctx.lineTo(
-            x,
-            70
-        );
+        ctx.moveTo(x,35);
+        ctx.lineTo(x,70);
 
         ctx.stroke();
 
@@ -2262,18 +1634,9 @@ function drawParliament() {
         "#d0d3cf";
 
     const columns = [
-        -142,
-        -112,
-        -82,
-        -52,
-        -22,
-        22,
-        52,
-        82,
-        112,
-        142
+        -142,-112,-82,-52,-22,
+        22,52,82,112,142
     ];
-
 
     columns.forEach(
         x => {
@@ -2294,10 +1657,7 @@ function drawParliament() {
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        -158,
-        38
-    );
+    ctx.moveTo(-158,38);
 
     ctx.quadraticCurveTo(
         0,
@@ -2306,10 +1666,7 @@ function drawParliament() {
         38
     );
 
-    ctx.lineTo(
-        151,
-        49
-    );
+    ctx.lineTo(151,49);
 
     ctx.quadraticCurveTo(
         0,
@@ -2323,115 +1680,41 @@ function drawParliament() {
     ctx.fill();
 
 
-    const tiers = [
-
-        {
-            y: 30,
-            width: 155,
-            height: 14
-        },
-
-        {
-            y: 22,
-            width: 145,
-            height: 13
-        },
-
-        {
-            y: 14,
-            width: 132,
-            height: 12
-        },
-
-        {
-            y: 6,
-            width: 118,
-            height: 11
-        },
-
-        {
-            y: -2,
-            width: 103,
-            height: 10
-        }
-
-    ];
-
-
-    tiers.forEach(
-        tier => {
-
-            ctx.fillStyle =
-                "#9ca3a1";
-
-            ctx.beginPath();
-
-            ctx.ellipse(
-                0,
-                tier.y,
-                tier.width,
-                tier.height,
-                0,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-        }
-    );
-
-
     ctx.fillStyle =
         "#929997";
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        -158,
-        39
+    ctx.moveTo(-158,39);
+
+    ctx.quadraticCurveTo(
+        -143,22,
+        -132,4
     );
 
     ctx.quadraticCurveTo(
-        -143,
-        22,
-        -132,
-        4
+        -117,-22,
+        -92,-38
     );
 
     ctx.quadraticCurveTo(
-        -117,
-        -22,
-        -92,
-        -38
+        -60,-57,
+        0,-61
     );
 
     ctx.quadraticCurveTo(
-        -60,
-        -57,
-        0,
-        -61
+        60,-57,
+        92,-38
     );
 
     ctx.quadraticCurveTo(
-        60,
-        -57,
-        92,
-        -38
+        117,-22,
+        132,4
     );
 
     ctx.quadraticCurveTo(
-        117,
-        -22,
-        132,
-        4
-    );
-
-    ctx.quadraticCurveTo(
-        143,
-        22,
-        158,
-        39
+        143,22,
+        158,39
     );
 
     ctx.closePath();
@@ -2444,16 +1727,9 @@ function drawParliament() {
 
     ctx.lineWidth = 3;
 
-
     const bands = [
-        -43,
-        -30,
-        -17,
-        -4,
-        9,
-        22
+        -43,-30,-17,-4,9,22
     ];
-
 
     bands.forEach(
         y => {
@@ -2485,38 +1761,15 @@ function drawParliament() {
     ctx.fillStyle =
         "#263c46";
 
-
     const windowRows = [
-        {
-            y: -38,
-            count: 13,
-            width: 175
-        },
-        {
-            y: -25,
-            count: 15,
-            width: 220
-        },
-        {
-            y: -12,
-            count: 17,
-            width: 255
-        },
-        {
-            y: 1,
-            count: 19,
-            width: 280
-        },
-        {
-            y: 14,
-            count: 21,
-            width: 300
-        },
-        {
-            y: 27,
-            count: 23,
-            width: 320
-        }
+
+        { y:-38,count:13,width:175 },
+        { y:-25,count:15,width:220 },
+        { y:-12,count:17,width:255 },
+        { y:1,count:19,width:280 },
+        { y:14,count:21,width:300 },
+        { y:27,count:23,width:320 }
+
     ];
 
 
@@ -2529,7 +1782,6 @@ function drawParliament() {
 
             const start =
                 -row.width / 2;
-
 
             for (
                 let i = 0;
@@ -2557,7 +1809,6 @@ function drawParliament() {
 
     ctx.fillStyle =
         "#6f7775";
-
 
     const finCount = 27;
 
@@ -2587,13 +1838,9 @@ function drawParliament() {
             Math.sin(angle) *
             radiusY;
 
-
         ctx.save();
 
-        ctx.translate(
-            x,
-            y
-        );
+        ctx.translate(x,y);
 
         ctx.rotate(
             angle +
@@ -2696,6 +1943,8 @@ function drawParliament() {
     ctx.stroke();
 
 
+    /* NZ FLAG */
+
     ctx.fillStyle =
         "#173f8f";
 
@@ -2706,7 +1955,6 @@ function drawParliament() {
         17
     );
 
-
     ctx.strokeStyle =
         "#fff";
 
@@ -2714,28 +1962,13 @@ function drawParliament() {
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        2,
-        -103
-    );
+    ctx.moveTo(2,-103);
+    ctx.lineTo(30,-88);
 
-    ctx.lineTo(
-        30,
-        -88
-    );
-
-    ctx.moveTo(
-        30,
-        -103
-    );
-
-    ctx.lineTo(
-        2,
-        -88
-    );
+    ctx.moveTo(30,-103);
+    ctx.lineTo(2,-88);
 
     ctx.stroke();
-
 
     ctx.strokeStyle =
         "#d32f2f";
@@ -2744,25 +1977,11 @@ function drawParliament() {
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        2,
-        -103
-    );
+    ctx.moveTo(2,-103);
+    ctx.lineTo(30,-88);
 
-    ctx.lineTo(
-        30,
-        -88
-    );
-
-    ctx.moveTo(
-        30,
-        -103
-    );
-
-    ctx.lineTo(
-        2,
-        -88
-    );
+    ctx.moveTo(30,-103);
+    ctx.lineTo(2,-88);
 
     ctx.stroke();
 
@@ -2771,17 +1990,14 @@ function drawParliament() {
         "#fff";
 
     const stars = [
-
-        [24, -100],
-        [28, -96],
-        [24, -91],
-        [19, -96]
-
+        [24,-100],
+        [28,-96],
+        [24,-91],
+        [19,-96]
     ];
 
-
     stars.forEach(
-        ([x, y]) => {
+        ([x,y]) => {
 
             ctx.beginPath();
 
@@ -2797,7 +2013,6 @@ function drawParliament() {
 
         }
     );
-
 
     ctx.restore();
 
@@ -2826,26 +2041,10 @@ function drawApartments() {
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        10,
-        450
-    );
-
-    ctx.lineTo(
-        190,
-        450
-    );
-
-    ctx.lineTo(
-        175,
-        438
-    );
-
-    ctx.lineTo(
-        25,
-        438
-    );
-
+    ctx.moveTo(10,450);
+    ctx.lineTo(190,450);
+    ctx.lineTo(175,438);
+    ctx.lineTo(25,438);
     ctx.closePath();
 
     ctx.fill();
@@ -3094,9 +2293,7 @@ function drawPlayer() {
     ctx.fill();
 
 
-    /*
-       Large bald head retained.
-    */
+    /* LARGE BALD HEAD */
 
     ctx.fillStyle =
         "#f1bd98";
@@ -3250,7 +2447,7 @@ function drawPlayer() {
    COLLISION
 ========================================================= */
 
-function checkCollision(a, b) {
+function checkCollision(a,b) {
 
     const padding = 5;
 
@@ -3285,9 +2482,30 @@ function checkCollision(a, b) {
 
 function checkCollisions() {
 
+    /*
+       IMPORTANT:
+
+       Level 4 triggers the helicopter when
+       Luxon reaches the FIRST bike lane.
+
+       Levels 1-3 do NOT trigger this.
+    */
+
+    if (
+        currentLevel === 4 &&
+        player.y <= map.cycle1.y &&
+        !helicopterSequence
+    ) {
+
+        triggerHelicopterSequence();
+
+        return;
+
+    }
+
+
     for (
-        const obstacle
-        of obstacles
+        const obstacle of obstacles
     ) {
 
         if (
@@ -3306,33 +2524,6 @@ function checkCollisions() {
     }
 
 
-    /*
-       ======================================================
-       HELICOPTER TRIGGER
-
-       This is deliberately NOT tied to Level 4.
-
-       As soon as Chris Luxon crosses the first cycle lane,
-       the legitimate journey stops and the helicopter arrives.
-       ======================================================
-    */
-
-    if (
-        !helicopterTriggered &&
-        player.y <= map.cycle1.y
-    ) {
-
-        triggerHelicopterSequence();
-
-        return;
-
-    }
-
-
-    /*
-       Parliament entrance.
-    */
-
     if (
         player.y <= 35
     ) {
@@ -3340,7 +2531,6 @@ function checkCollisions() {
         const centre =
             player.x +
             player.width / 2;
-
 
         if (
             centre > 205 &&
@@ -3369,19 +2559,9 @@ function checkCollisions() {
 
 function loseLife() {
 
-    if (
-        helicopterAnimating
-    ) {
-
-        return;
-
-    }
-
-
     lives--;
 
     updateLives();
-
 
     keys.up = false;
     keys.down = false;
@@ -3402,7 +2582,6 @@ function loseLife() {
 
     statusDisplay.textContent =
         "HIT! TRY AGAIN";
-
 
     player.reset();
 
@@ -3437,25 +2616,20 @@ function completeLevel() {
 
     currentLevel++;
 
-
     levelDisplay.textContent =
         "LEVEL " +
         currentLevel;
-
 
     levelTitle.textContent =
         "LEVEL " +
         currentLevel;
 
-
     levelDescription.textContent =
         levels[currentLevel].label +
         ". Faster traffic, more protesters and increasingly ridiculous signs await.";
 
-
     nextLevelButton.textContent =
         "NEXT LEVEL";
-
 
     levelScreen.classList.remove(
         "hidden"
@@ -3476,26 +2650,20 @@ function showFinalWin() {
         animationFrame
     );
 
-
     levelDisplay.textContent =
         "COMPLETE";
-
 
     levelTitle.textContent =
         "YOU MADE IT TO PARLIAMENT";
 
-
     levelDescription.textContent =
         "Four increasingly difficult levels of Molesworth Street have been conquered. Somehow, Chris Luxon made it all the way from CEO House to the Beehive.";
-
 
     nextLevelButton.textContent =
         "PLAY AGAIN";
 
-
     nextLevelButton.dataset.final =
         "true";
-
 
     levelScreen.classList.remove(
         "hidden"
@@ -3516,14 +2684,11 @@ function gameOver() {
         animationFrame
     );
 
-
     gameOverTitle.textContent =
         "MISSION FAILED";
 
-
     gameOverText.textContent =
         "Molesworth Street has defeated Chris Luxon. The protesters remain undefeated.";
-
 
     gameOverScreen.classList.remove(
         "hidden"
@@ -3553,7 +2718,6 @@ function updateLives() {
 
     }
 
-
     livesDisplay.textContent =
         hearts.trim();
 
@@ -3567,30 +2731,16 @@ function updateLives() {
 function triggerHelicopterSequence() {
 
     if (
-        helicopterTriggered ||
-        helicopterAnimating
+        currentLevel !== 4 ||
+        helicopterSequence
     ) {
-
         return;
-
     }
 
 
-    helicopterTriggered = true;
-
-    helicopterAnimating = true;
+    helicopterSequence = true;
 
     gameRunning = false;
-
-
-    cancelAnimationFrame(
-        animationFrame
-    );
-
-
-    /*
-       Stop all input.
-    */
 
     keys.up = false;
     keys.down = false;
@@ -3598,1073 +2748,1233 @@ function triggerHelicopterSequence() {
     keys.right = false;
 
 
+    helicopterPhase =
+        "approach";
+
+    helicopterX =
+        -180;
+
+    helicopterProgress =
+        0;
+
+    helicopterCash =
+        [];
+
+    helicopterDebris =
+        [];
+
+    helicopterFade =
+        0;
+
+    helicopterText =
+        "";
+
+    helicopterTextIndex =
+        0;
+
+    helicopterTextTimer =
+        0;
+
+    helicopterDelivered =
+        false;
+
+    helicopterEndTimer =
+        0;
+
+
     statusDisplay.textContent =
-        "PUBLIC FUNDS DEPLOYED";
+        "ENTITLEMENT APPROVED";
+
+
+    runHelicopterSequence();
+
+}
+
+
+/* =========================================================
+   HELICOPTER
+========================================================= */
+
+function drawHelicopter() {
+
+    const x =
+        helicopterX;
+
+    /*
+       The helicopter moves vertically
+       depending on its phase.
+    */
+
+    let y = 300;
+
+    if (
+        helicopterPhase === "delivery"
+    ) {
+
+        y = 145;
+
+    }
+
+
+    ctx.save();
+
+
+    /* Main rotor */
+
+    ctx.strokeStyle =
+        "#222";
+
+    ctx.lineWidth = 4;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x - 55,
+        y - 25
+    );
+
+    ctx.lineTo(
+        x + 55,
+        y - 25
+    );
+
+    ctx.stroke();
+
+
+    /* Rotor mast */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x,
+        y - 25
+    );
+
+    ctx.lineTo(
+        x,
+        y - 5
+    );
+
+    ctx.stroke();
+
+
+    /* Body */
+
+    ctx.fillStyle =
+        "#4d5960";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x,
+        y,
+        55,
+        23,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /* Nose */
+
+    ctx.fillStyle =
+        "#68757b";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x + 43,
+        y,
+        19,
+        -Math.PI / 2,
+        Math.PI / 2
+    );
+
+    ctx.fill();
+
+
+    /* Windows */
+
+    ctx.fillStyle =
+        "#182d38";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x + 27,
+        y - 5,
+        18,
+        10,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x + 4,
+        y - 7,
+        15,
+        10,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /* Tail */
+
+    ctx.fillStyle =
+        "#4d5960";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x - 45,
+        y - 5
+    );
+
+    ctx.lineTo(
+        x - 115,
+        y - 25
+    );
+
+    ctx.lineTo(
+        x - 118,
+        y - 13
+    );
+
+    ctx.lineTo(
+        x - 45,
+        y + 8
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /* Tail rotor */
+
+    ctx.strokeStyle =
+        "#222";
+
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x - 121,
+        y - 31
+    );
+
+    ctx.lineTo(
+        x - 121,
+        y - 7
+    );
+
+    ctx.moveTo(
+        x - 130,
+        y - 19
+    );
+
+    ctx.lineTo(
+        x - 112,
+        y - 19
+    );
+
+    ctx.stroke();
+
+
+    /* Landing skids */
+
+    ctx.strokeStyle =
+        "#222";
+
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x - 30,
+        y + 22
+    );
+
+    ctx.lineTo(
+        x + 30,
+        y + 22
+    );
+
+    ctx.moveTo(
+        x - 25,
+        y + 15
+    );
+
+    ctx.lineTo(
+        x - 30,
+        y + 22
+    );
+
+    ctx.moveTo(
+        x + 25,
+        y + 15
+    );
+
+    ctx.lineTo(
+        x + 30,
+        y + 22
+    );
+
+    ctx.stroke();
+
+
+    /* Beacon */
+
+    ctx.fillStyle =
+        helicopterProgress % 20 < 10
+            ? "#d71920"
+            : "#eee";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x - 5,
+        y - 25,
+        3,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+/* =========================================================
+   HELICOPTER DEBRIS
+========================================================= */
+
+function createHelicopterDebris() {
+
+    for (
+        let i = 0;
+        i < obstacles.length;
+        i++
+    ) {
+
+        const obstacle =
+            obstacles[i];
+
+        helicopterDebris.push({
+
+            x:
+                obstacle.x +
+                obstacle.width / 2,
+
+            y:
+                obstacle.y +
+                obstacle.height / 2,
+
+            vx:
+                (Math.random() - 0.5) *
+                8,
+
+            vy:
+                -Math.random() *
+                7 - 2,
+
+            rotation:
+                Math.random() *
+                Math.PI,
+
+            rotationSpeed:
+                (Math.random() - 0.5) *
+                0.25,
+
+            life:
+                100,
+
+            type:
+                obstacle instanceof Cyclist
+                    ? "bike"
+                    : "protestor"
+
+        });
+
+    }
+
+    obstacles = [];
+
+}
+
+
+/* =========================================================
+   CASH
+========================================================= */
+
+function createCash() {
+
+    /*
+       Cash trail originates behind the
+       helicopter as it travels toward Parliament.
+    */
+
+    for (
+        let i = 0;
+        i < 75;
+        i++
+    ) {
+
+        helicopterCash.push({
+
+            x:
+                helicopterX -
+                35 -
+                Math.random() * 30,
+
+            y:
+                145 +
+                Math.random() * 15,
+
+            vx:
+                -Math.random() *
+                1.5,
+
+            vy:
+                Math.random() *
+                1.5 +
+                0.8,
+
+            rotation:
+                Math.random() *
+                Math.PI,
+
+            rotationSpeed:
+                (Math.random() - 0.5) *
+                0.15,
+
+            life:
+                220
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   UPDATE HELICOPTER
+========================================================= */
+
+function updateHelicopterEffects() {
+
+    helicopterProgress++;
+
+
+    /* -----------------------------------------
+       PHASE 1 — APPROACH
+    ----------------------------------------- */
+
+    if (
+        helicopterPhase === "approach"
+    ) {
+
+        helicopterX += 6;
+
+
+        /*
+           Helicopter reaches centre of
+           screen and destroys everything
+           in the roadway.
+        */
+
+        if (
+            helicopterProgress === 38
+        ) {
+
+            createHelicopterDebris();
+
+        }
+
+
+        /*
+           Once the helicopter is positioned
+           alongside Luxon, collect him.
+        */
+
+        if (
+            helicopterProgress >= 58
+        ) {
+
+            helicopterPhase =
+                "pickup";
+
+        }
+
+    }
+
+
+    /* -----------------------------------------
+       PHASE 2 — PICKUP
+    ----------------------------------------- */
+
+    if (
+        helicopterPhase === "pickup"
+    ) {
+
+        /*
+           Helicopter stops alongside Luxon.
+        */
+
+        const helicopterY =
+            300;
+
+        /*
+           Move Luxon toward the helicopter.
+        */
+
+        player.x +=
+            (
+                helicopterX -
+                player.x
+            ) * 0.10;
+
+        player.y +=
+            (
+                helicopterY -
+                28 -
+                player.y
+            ) * 0.10;
+
+
+        /*
+           Once close enough, he is considered
+           aboard.
+        */
+
+        if (
+            Math.abs(
+                player.x -
+                helicopterX
+            ) < 5 &&
+
+            Math.abs(
+                player.y -
+                (helicopterY - 28)
+            ) < 5
+        ) {
+
+            helicopterPhase =
+                "delivery";
+
+            helicopterProgress =
+                0;
+
+            helicopterX =
+                Math.max(
+                    helicopterX,
+                    60
+                );
+
+        }
+
+    }
+
+
+    /* -----------------------------------------
+       PHASE 3 — DELIVERY TO PARLIAMENT
+    ----------------------------------------- */
+
+    if (
+        helicopterPhase === "delivery"
+    ) {
+
+        /*
+           Fly diagonally upward toward
+           the Beehive.
+        */
+
+        helicopterX += 5;
+
+        const targetX =
+            250;
+
+        const targetY =
+            55;
+
+
+        /*
+           Luxon remains attached to
+           the helicopter.
+        */
+
+        player.x +=
+            (
+                targetX -
+                player.x
+            ) * 0.045;
+
+        player.y +=
+            (
+                targetY -
+                player.y
+            ) * 0.045;
+
+
+        /*
+           Cash trail begins once the
+           helicopter crosses the road.
+        */
+
+        if (
+            helicopterProgress % 10 === 0 &&
+            helicopterProgress > 20
+        ) {
+
+            createCash();
+
+        }
+
+
+        /*
+           Once the helicopter reaches
+           Parliament, deliver Luxon.
+        */
+
+        if (
+            helicopterX >= 245 &&
+            Math.abs(
+                player.y -
+                targetY
+            ) < 8
+        ) {
+
+            helicopterPhase =
+                "departure";
+
+            helicopterDelivered =
+                true;
+
+            player.x =
+                234;
+
+            player.y =
+                42;
+
+        }
+
+    }
+
+
+    /* -----------------------------------------
+       PHASE 4 — DEPARTURE
+    ----------------------------------------- */
+
+    if (
+        helicopterPhase === "departure"
+    ) {
+
+        /*
+           Helicopter leaves the screen,
+           having delivered Luxon.
+        */
+
+        helicopterX += 8;
+
+        helicopterProgress++;
+
+
+        /*
+           Continue producing a diminishing
+           cash trail.
+        */
+
+        if (
+            helicopterProgress % 12 === 0 &&
+            helicopterX < W + 120
+        ) {
+
+            createCash();
+
+        }
+
+
+        /*
+           Begin fade once helicopter is
+           substantially off-screen.
+        */
+
+        if (
+            helicopterX >
+            W + 80
+        ) {
+
+            helicopterFade +=
+                0.018;
+
+        }
+
+    }
+
+
+    /* -----------------------------------------
+       DEBRIS PHYSICS
+    ----------------------------------------- */
+
+    helicopterDebris.forEach(
+        debris => {
+
+            debris.x +=
+                debris.vx;
+
+            debris.y +=
+                debris.vy;
+
+            debris.vy +=
+                0.18;
+
+            debris.rotation +=
+                debris.rotationSpeed;
+
+            debris.life--;
+
+        }
+    );
+
+
+    helicopterDebris =
+        helicopterDebris.filter(
+            debris =>
+                debris.life > 0 &&
+                debris.y < H + 100
+        );
+
+
+    /* -----------------------------------------
+       CASH PHYSICS
+    ----------------------------------------- */
+
+    helicopterCash.forEach(
+        cash => {
+
+            cash.x +=
+                cash.vx;
+
+            cash.y +=
+                cash.vy;
+
+            cash.vy +=
+                0.045;
+
+            cash.rotation +=
+                cash.rotationSpeed;
+
+            cash.life--;
+
+        }
+    );
+
+
+    helicopterCash =
+        helicopterCash.filter(
+            cash =>
+                cash.life > 0 &&
+                cash.y < H + 30
+        );
+
+
+    /* -----------------------------------------
+       TYPEWRITER
+    ----------------------------------------- */
+
+    if (
+        helicopterFade > 0.45
+    ) {
+
+        helicopterTextTimer++;
+
+
+        if (
+            helicopterTextTimer % 4 === 0 &&
+            helicopterTextIndex <
+            helicopterQuote.length
+        ) {
+
+            helicopterText +=
+                helicopterQuote[
+                    helicopterTextIndex
+                ];
+
+            helicopterTextIndex++;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   DRAW HELICOPTER EFFECTS
+========================================================= */
+
+function drawHelicopterEffects() {
+
+    /*
+       Debris
+    */
+
+    helicopterDebris.forEach(
+        debris => {
+
+            ctx.save();
+
+            ctx.translate(
+                debris.x,
+                debris.y
+            );
+
+            ctx.rotate(
+                debris.rotation
+            );
+
+
+            if (
+                debris.type === "bike"
+            ) {
+
+                ctx.strokeStyle =
+                    "#111";
+
+                ctx.lineWidth = 3;
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    -7,
+                    0,
+                    6,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.arc(
+                    8,
+                    0,
+                    6,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.stroke();
+
+            } else {
+
+                ctx.fillStyle =
+                    "#c96a24";
+
+                ctx.fillRect(
+                    -7,
+                    -10,
+                    14,
+                    20
+                );
+
+                ctx.fillStyle =
+                    "#ffd0a6";
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    0,
+                    -13,
+                    6,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+
+            }
+
+            ctx.restore();
+
+        }
+    );
 
 
     /*
-       Freeze the actual game canvas exactly
-       where the player reached the cycle lane.
+       Money
+    */
+
+    helicopterCash.forEach(
+        cash => {
+
+            ctx.save();
+
+            ctx.translate(
+                cash.x,
+                cash.y
+            );
+
+            ctx.rotate(
+                cash.rotation
+            );
+
+            ctx.fillStyle =
+                "#74a85a";
+
+            ctx.fillRect(
+                -7,
+                -4,
+                14,
+                8
+            );
+
+            ctx.strokeStyle =
+                "#315b2c";
+
+            ctx.lineWidth = 1;
+
+            ctx.strokeRect(
+                -7,
+                -4,
+                14,
+                8
+            );
+
+            ctx.fillStyle =
+                "#315b2c";
+
+            ctx.font =
+                "bold 7px Arial";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.fillText(
+                "$",
+                0,
+                3
+            );
+
+            ctx.restore();
+
+        }
+    );
+
+
+    /*
+       Helicopter.
+
+       Don't draw it after it has left.
+    */
+
+    if (
+        helicopterPhase !== "departure" ||
+        helicopterX < W + 120
+    ) {
+
+        if (
+            helicopterPhase !== "departure" ||
+            helicopterX < W + 100
+        ) {
+
+            drawHelicopter();
+
+        }
+
+    }
+
+
+    /*
+       Fade.
+    */
+
+    if (
+        helicopterFade > 0
+    ) {
+
+        ctx.fillStyle =
+            `rgba(0,0,0,${Math.min(
+                helicopterFade,
+                1
+            )})`;
+
+        ctx.fillRect(
+            0,
+            0,
+            W,
+            H
+        );
+
+    }
+
+
+    /*
+       Typewriter text.
+    */
+
+    if (
+        helicopterFade > 0.45
+    ) {
+
+        const alpha =
+            Math.min(
+                1,
+                (
+                    helicopterFade -
+                    0.45
+                ) * 4
+            );
+
+        ctx.save();
+
+        ctx.globalAlpha =
+            alpha;
+
+        ctx.fillStyle =
+            "#fff";
+
+        ctx.font =
+            "bold 25px monospace";
+
+        ctx.textAlign =
+            "center";
+
+
+        const words =
+            helicopterText.split(" ");
+
+        let line = "";
+
+        const lines = [];
+
+
+        for (
+            const word of words
+        ) {
+
+            const test =
+                line.length
+                    ? line +
+                      " " +
+                      word
+                    : word;
+
+
+            if (
+                test.length > 28
+            ) {
+
+                lines.push(line);
+
+                line =
+                    word;
+
+            } else {
+
+                line =
+                    test;
+
+            }
+
+        }
+
+
+        if (line) {
+            lines.push(line);
+        }
+
+
+        const startY =
+            275 -
+            (
+                lines.length - 1
+            ) * 17;
+
+
+        lines.forEach(
+            (text,index) => {
+
+                ctx.fillText(
+                    text,
+                    W / 2,
+                    startY +
+                    index * 34
+                );
+
+            }
+        );
+
+
+        ctx.restore();
+
+    }
+
+}
+
+
+/* =========================================================
+   HELICOPTER LOOP
+========================================================= */
+
+function runHelicopterSequence() {
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    /*
+       Normal world remains visible.
     */
 
     drawBackground();
 
-    drawObstaclesFrozen();
-
-    drawPlayer();
-
 
     /*
-       Bring the cinematic layer on top.
-    */
-
-    helicopterSequence.classList.remove(
-        "hidden"
-    );
-
-
-    helicopter.style.left =
-        "-210px";
-
-    helicopter.style.top =
-        "285px";
-
-    helicopter.style.transform =
-        "scale(.9)";
-
-
-    finalBlackout.style.opacity =
-        "0";
-
-    finalText.style.opacity =
-        "0";
-
-    finalText.textContent =
-        "";
-
-    cashContainer.innerHTML =
-        "";
-
-    scatteredContainer.innerHTML =
-        "";
-
-
-    /*
-       Give the helicopter a tiny pause
-       before it enters.
-    */
-
-    setTimeout(
-        animateHelicopterEntrance,
-        450
-    );
-
-}
-
-
-/* =========================================================
-   DRAW FROZEN OBSTACLES
-========================================================= */
-
-function drawObstaclesFrozen() {
-
-    for (
-        const obstacle
-        of obstacles
-    ) {
-
-        obstacle.draw();
-
-    }
-
-}
-
-
-/* =========================================================
-   HELICOPTER ENTRANCE
-========================================================= */
-
-function animateHelicopterEntrance() {
-
-    /*
-       Helicopter crosses the screen.
-
-       At the same time, nearby cyclists
-       and protesters are scattered.
-    */
-
-    const startX = -210;
-
-    const endX = 570;
-
-    const duration = 2600;
-
-    const startTime =
-        performance.now();
-
-
-    function frame(now) {
-
-        const elapsed =
-            now - startTime;
-
-        const progress =
-            Math.min(
-                elapsed / duration,
-                1
-            );
-
-
-        /*
-           Smooth movement.
-        */
-
-        const eased =
-            1 -
-            Math.pow(
-                1 - progress,
-                3
-            );
-
-
-        const x =
-            startX +
-            (endX - startX) *
-            eased;
-
-
-        helicopter.style.left =
-            `${x}px`;
-
-
-        /*
-           Slight vertical bob.
-        */
-
-        const bob =
-            Math.sin(
-                progress *
-                Math.PI *
-                4
-            ) *
-            4;
-
-
-        helicopter.style.top =
-            `${285 + bob}px`;
-
-
-        /*
-           Scatter objects as the helicopter
-           reaches different parts of the road.
-        */
-
-        if (
-            progress > .20 &&
-            !helicopter._scatter1
-        ) {
-
-            helicopter._scatter1 = true;
-
-            scatterNearbyObjects(
-                0.25
-            );
-
-        }
-
-
-        if (
-            progress > .43 &&
-            !helicopter._scatter2
-        ) {
-
-            helicopter._scatter2 = true;
-
-            scatterNearbyObjects(
-                0.55
-            );
-
-        }
-
-
-        if (
-            progress > .63 &&
-            !helicopter._scatter3
-        ) {
-
-            helicopter._scatter3 = true;
-
-            scatterNearbyObjects(
-                0.80
-            );
-
-        }
-
-
-        if (
-            progress < 1
-        ) {
-
-            requestAnimationFrame(
-                frame
-            );
-
-        } else {
-
-            helicopterBoarding();
-
-        }
-
-    }
-
-
-    requestAnimationFrame(
-        frame
-    );
-
-}
-
-
-/* =========================================================
-   SCATTER PROTESTERS / CYCLISTS
-========================================================= */
-
-function scatterNearbyObjects(
-    intensity
-) {
-
-    /*
-       Pick several existing obstacles.
-
-       They are not removed instantly; instead
-       they are converted into small cinematic
-       objects which fly away.
-    */
-
-    const targets =
-        obstacles.splice(
-            0,
-            Math.min(
-                obstacles.length,
-                Math.max(
-                    4,
-                    Math.floor(
-                        obstacles.length * .65
-                    )
-                )
-            )
-        );
-
-
-    targets.forEach(
-        (obstacle, index) => {
-
-            createScatteredObject(
-                obstacle,
-                intensity,
-                index
-            );
-
-        }
-    );
-
-
-    /*
-       If there weren't enough actual obstacles
-       on screen at the exact moment, add a few
-       cinematic protesters and bicycles so the
-       helicopter still looks destructive.
+       Draw remaining road traffic
+       before destruction.
     */
 
     if (
-        targets.length < 5
+        helicopterProgress < 38
     ) {
 
         for (
-            let i = 0;
-            i < 5 - targets.length;
-            i++
+            const obstacle of obstacles
         ) {
 
-            createSyntheticScatteredObject(
-                intensity,
-                i
-            );
+            obstacle.draw();
 
         }
 
     }
 
-}
-
-
-/* =========================================================
-   CREATE SCATTERED OBJECT
-========================================================= */
-
-function createScatteredObject(
-    obstacle,
-    intensity,
-    index
-) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.className =
-        "scattered-object";
-
 
     /*
-       Small visual representation.
-
-       Protesters become little bodies/signs.
-       Cyclists become bicycle-like marks.
+       Draw Luxon before he is collected.
     */
 
     if (
-        obstacle instanceof Protestor
+        !helicopterDelivered
     ) {
-
-        div.innerHTML =
-            `
-            <div style="
-                position:absolute;
-                width:15px;
-                height:20px;
-                background:#c96a24;
-                border-radius:5px;
-                left:7px;
-                top:11px;
-            "></div>
-
-            <div style="
-                position:absolute;
-                width:12px;
-                height:12px;
-                background:#ffd0a6;
-                border-radius:50%;
-                left:8px;
-                top:1px;
-            "></div>
-
-            <div style="
-                position:absolute;
-                width:38px;
-                height:12px;
-                background:white;
-                border:1px solid #111;
-                left:-4px;
-                top:-7px;
-                font:bold 5px Arial;
-                color:#111;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-            ">
-                ${escapeHtml(obstacle.slogan)}
-            </div>
-            `;
-
-        div.style.width =
-            "38px";
-
-        div.style.height =
-            "34px";
-
-    } else {
-
-        div.innerHTML =
-            `
-            <div style="
-                position:absolute;
-                width:28px;
-                height:28px;
-                border:3px solid #111;
-                border-radius:50%;
-                left:0;
-                top:2px;
-            "></div>
-
-            <div style="
-                position:absolute;
-                width:28px;
-                height:28px;
-                border:3px solid #111;
-                border-radius:50%;
-                left:22px;
-                top:2px;
-            "></div>
-
-            <div style="
-                position:absolute;
-                width:32px;
-                height:3px;
-                background:#222;
-                left:9px;
-                top:15px;
-                transform:rotate(-20deg);
-            "></div>
-            `;
-
-        div.style.width =
-            "52px";
-
-        div.style.height =
-            "34px";
-
-    }
-
-
-    const rect =
-        canvas.getBoundingClientRect();
-
-
-    /*
-       Convert canvas coordinates to the
-       actual CSS dimensions of the game.
-    */
-
-    const scaleX =
-        rect.width / W;
-
-    const scaleY =
-        rect.height / H;
-
-
-    const startX =
-        obstacle.x *
-        scaleX;
-
-    const startY =
-        obstacle.y *
-        scaleY;
-
-
-    div.style.left =
-        `${startX}px`;
-
-    div.style.top =
-        `${startY}px`;
-
-
-    scatteredContainer.appendChild(
-        div
-    );
-
-
-    /*
-       Force browser to acknowledge initial
-       position before applying movement.
-    */
-
-    requestAnimationFrame(
-        () => {
-
-            const direction =
-                index % 2 === 0
-                    ? -1
-                    : 1;
-
-            const distance =
-                (
-                    90 +
-                    Math.random() * 150
-                ) *
-                intensity;
-
-
-            const vertical =
-                (
-                    90 +
-                    Math.random() * 150
-                ) *
-                intensity;
-
-
-            const rotation =
-                (
-                    Math.random() *
-                    720 -
-                    360
-                );
-
-
-            div.style.transform =
-                `
-                translate(
-                    ${direction * distance}px,
-                    ${-vertical}px
-                )
-                rotate(${rotation}deg)
-                `;
-
-            div.style.opacity =
-                "0";
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SYNTHETIC SCATTERED OBJECT
-========================================================= */
-
-function createSyntheticScatteredObject(
-    intensity,
-    index
-) {
-
-    const fake =
-        new Protestor(
-            index % 2 === 0
-                ? map.traffic1.y
-                : map.traffic2.y,
-            0,
-            index % 2 === 0
-                ? 1
-                : -1,
-            slogans[
-                Math.floor(
-                    Math.random() *
-                    slogans.length
-                )
-            ]
-        );
-
-
-    fake.x =
-        100 +
-        Math.random() * 300;
-
-
-    fake.y =
-        150 +
-        Math.random() * 200;
-
-
-    createScatteredObject(
-        fake,
-        intensity,
-        index
-    );
-
-}
-
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
-function escapeHtml(
-    text
-) {
-
-    return String(text)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================================
-   HELICOPTER BOARDING
-========================================================= */
-
-function helicopterBoarding() {
-
-    /*
-       Helicopter has now crossed the road.
-
-       Luxon is visually picked up.
-    */
-
-    statusDisplay.textContent =
-        "ENTITLEMENTS ACTIVATED";
-
-
-    /*
-       Move Luxon's canvas representation
-       upward toward the helicopter.
-    */
-
-    const startX =
-        player.x;
-
-    const startY =
-        player.y;
-
-
-    const targetX =
-        120;
-
-    const targetY =
-        295;
-
-
-    const duration =
-        1200;
-
-    const startTime =
-        performance.now();
-
-
-    function frame(now) {
-
-        const elapsed =
-            now - startTime;
-
-        const progress =
-            Math.min(
-                elapsed / duration,
-                1
-            );
-
-
-        const eased =
-            progress *
-            progress *
-            (
-                3 -
-                2 * progress
-            );
-
-
-        player.x =
-            startX +
-            (
-                targetX -
-                startX
-            ) *
-            eased;
-
-
-        player.y =
-            startY +
-            (
-                targetY -
-                startY
-            ) *
-            eased;
-
-
-        /*
-           Redraw the underlying canvas
-           while Luxon is being collected.
-        */
-
-        drawBackground();
-
-        drawObstaclesFrozen();
 
         drawPlayer();
 
-
-        if (
-            progress < 1
-        ) {
-
-            requestAnimationFrame(
-                frame
-            );
-
-        } else {
-
-            startCashTrail();
-
-            helicopterFlyToParliament();
-
-        }
-
     }
 
-
-    requestAnimationFrame(
-        frame
-    );
-
-}
-
-
-/* =========================================================
-   CASH TRAIL
-========================================================= */
-
-function startCashTrail() {
 
     /*
-       Generate a ridiculous amount of
-       falling public money.
+       Update helicopter, debris,
+       cash and transport.
     */
 
-    const notes = 55;
+    updateHelicopterEffects();
 
 
-    for (
-        let i = 0;
-        i < notes;
-        i++
+    /*
+       Draw helicopter effects on top.
+    */
+
+    drawHelicopterEffects();
+
+
+    /*
+       During pickup/delivery, redraw
+       Luxon so he is visibly attached
+       to the helicopter.
+
+       He is deliberately rendered after
+       the helicopter during these phases.
+    */
+
+    if (
+        helicopterPhase === "pickup" ||
+        helicopterPhase === "delivery"
     ) {
-
-        const note =
-            document.createElement(
-                "div"
-            );
-
-
-        note.className =
-            "cash-note";
-
-
-        note.textContent =
-            "$";
-
-
-        note.style.left =
-            (
-                80 +
-                Math.random() * 350
-            ) +
-            "px";
-
-
-        note.style.top =
-            (
-                280 +
-                Math.random() * 80
-            ) +
-            "px";
-
-
-        note.style.opacity =
-            "0";
-
-
-        cashContainer.appendChild(
-            note
-        );
-
-
-        const delay =
-            i *
-            35;
-
-
-        setTimeout(
-            () => {
-
-                note.style.opacity =
-                    "1";
-
-
-                const drift =
-                    (
-                        Math.random() *
-                        100 -
-                        50
-                    );
-
-
-                const fall =
-                    130 +
-                    Math.random() *
-                    220;
-
-
-                const rotation =
-                    Math.random() *
-                    720 -
-                    360;
-
-
-                note.style.transition =
-                    `
-                    transform
-                    ${2.5 + Math.random() * 1.5}s
-                    ease-in,
-                    opacity
-                    .2s
-                    ease
-                    `;
-
-
-                requestAnimationFrame(
-                    () => {
-
-                        note.style.transform =
-                            `
-                            translate(
-                                ${drift}px,
-                                ${fall}px
-                            )
-                            rotate(${rotation}deg)
-                            `;
-
-                    }
-                );
-
-            },
-            delay
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   HELICOPTER FLIGHT TO PARLIAMENT
-========================================================= */
-
-function helicopterFlyToParliament() {
-
-    const startX =
-        parseFloat(
-            helicopter.style.left
-        );
-
-
-    const startY =
-        parseFloat(
-            helicopter.style.top
-        );
-
-
-    const targetX =
-        350;
-
-
-    const targetY =
-        -70;
-
-
-    const duration =
-        3000;
-
-
-    const startTime =
-        performance.now();
-
-
-    function frame(now) {
-
-        const elapsed =
-            now - startTime;
-
-        const progress =
-            Math.min(
-                elapsed / duration,
-                1
-            );
-
-
-        const eased =
-            1 -
-            Math.pow(
-                1 - progress,
-                3
-            );
-
-
-        const x =
-            startX +
-            (
-                targetX -
-                startX
-            ) *
-            eased;
-
-
-        const y =
-            startY +
-            (
-                targetY -
-                startY
-            ) *
-            eased;
-
-
-        helicopter.style.left =
-            `${x}px`;
-
-        helicopter.style.top =
-            `${y}px`;
-
-
-        /*
-           Luxon follows the helicopter.
-        */
-
-        player.x =
-            Math.min(
-                W - player.width,
-                115 +
-                200 * eased
-            );
-
-
-        player.y =
-            285 -
-            180 * eased;
-
-
-        /*
-           Keep drawing Luxon in the canvas
-           as he travels toward Parliament.
-        */
-
-        drawBackground();
 
         drawPlayer();
 
+    }
 
-        if (
-            progress < 1
-        ) {
 
-            requestAnimationFrame(
-                frame
-            );
+    /*
+       Once delivered, place Luxon visibly
+       in front of the Beehive entrance.
+    */
 
-        } else {
+    if (
+        helicopterDelivered &&
+        helicopterFade < 0.25
+    ) {
 
-            finishHelicopterSequence();
-
-        }
+        drawPlayer();
 
     }
 
 
-    requestAnimationFrame(
-        frame
-    );
-
-}
-
-
-/* =========================================================
-   FINAL FADE
-========================================================= */
-
-function finishHelicopterSequence() {
-
-    statusDisplay.textContent =
-        "ENTITLEMENTS DELIVERED";
-
-
     /*
-       Wait briefly so the player sees the
-       helicopter reach the Beehive.
+       End after the complete quotation
+       has appeared.
     */
 
-    setTimeout(
-        () => {
+    if (
+        helicopterFade >= 1 &&
+        helicopterTextIndex >=
+        helicopterQuote.length
+    ) {
 
-            finalBlackout.style.opacity =
-                "1";
+        helicopterEndTimer++;
 
-
-            /*
-               Begin typewriter after the
-               fade has substantially completed.
-            */
-
-            setTimeout(
-                startFinalTypewriter,
-                3900
-            );
-
-        },
-        500
-    );
-
-}
-
-
-/* =========================================================
-   TYPEWRITER
-========================================================= */
-
-function startFinalTypewriter() {
-
-    const message =
-        "look, what I’d say to you is… vrrrrrrmmmmmm...";
-
-
-    finalText.textContent =
-        "";
-
-    finalText.style.opacity =
-        "1";
-
-
-    let index = 0;
-
-
-    function typeNext() {
 
         if (
-            index >= message.length
+            helicopterEndTimer > 90
         ) {
 
-            helicopterAnimating = false;
+            levelScreen.classList.remove(
+                "hidden"
+            );
+
+            levelTitle.textContent =
+                "PARLIAMENT — ACHIEVED";
+
+            levelDescription.textContent =
+                "Chris Luxon completed Level 4 by calling in a military helicopter rather than walking the remaining distance.";
+
+            nextLevelButton.textContent =
+                "PLAY AGAIN";
+
+            nextLevelButton.dataset.final =
+                "true";
 
             return;
 
         }
 
-
-        finalText.textContent +=
-            message[index];
-
-
-        index++;
-
-
-        /*
-           Slightly variable timing makes it
-           look less mechanically typed.
-        */
-
-        const delay =
-            message[index - 1] === " "
-                ? 85
-                : 48 +
-                  Math.random() * 35;
-
-
-        setTimeout(
-            typeNext,
-            delay
-        );
-
     }
 
 
-    typeNext();
+    requestAnimationFrame(
+        runHelicopterSequence
+    );
 
 }
 
@@ -4681,23 +3991,54 @@ function startGame() {
 
     obstacles = [];
 
-    helicopterTriggered = false;
-
-    helicopterAnimating = false;
-
-    helicopter._scatter1 = false;
-    helicopter._scatter2 = false;
-    helicopter._scatter3 = false;
-
-
     player.reset();
 
     updateLives();
 
 
+    /*
+       Reset helicopter completely.
+    */
+
+    helicopterSequence =
+        false;
+
+    helicopterPhase =
+        "approach";
+
+    helicopterX =
+        -180;
+
+    helicopterProgress =
+        0;
+
+    helicopterCash =
+        [];
+
+    helicopterDebris =
+        [];
+
+    helicopterFade =
+        0;
+
+    helicopterText =
+        "";
+
+    helicopterTextIndex =
+        0;
+
+    helicopterTextTimer =
+        0;
+
+    helicopterDelivered =
+        false;
+
+    helicopterEndTimer =
+        0;
+
+
     levelDisplay.textContent =
         "LEVEL 1";
-
 
     statusDisplay.textContent =
         "GO";
@@ -4716,43 +4057,12 @@ function startGame() {
     );
 
 
-    helicopterSequence.classList.add(
-        "hidden"
-    );
-
-
-    finalBlackout.style.opacity =
-        "0";
-
-
-    finalText.style.opacity =
-        "0";
-
-
-    finalText.textContent =
-        "";
-
-
-    cashContainer.innerHTML =
-        "";
-
-    scatteredContainer.innerHTML =
-        "";
-
-
-    helicopter.style.left =
-        "-210px";
-
-
-    helicopter.style.top =
-        "285px";
-
-
     nextLevelButton.dataset.final =
         "false";
 
 
-    gameRunning = true;
+    gameRunning =
+        true;
 
     gameLoop();
 
@@ -4760,7 +4070,7 @@ function startGame() {
 
 
 /* =========================================================
-   NEXT LEVEL / PLAY AGAIN
+   NEXT LEVEL
 ========================================================= */
 
 nextLevelButton.addEventListener(
@@ -4786,13 +4096,12 @@ nextLevelButton.addEventListener(
         statusDisplay.textContent =
             "GO";
 
-
         levelScreen.classList.add(
             "hidden"
         );
 
-
-        gameRunning = true;
+        gameRunning =
+            true;
 
         gameLoop();
 
@@ -4864,13 +4173,8 @@ function gameLoop() {
 
 
         if (
-            obstacle.x <
-            -130
-
-            ||
-
-            obstacle.x >
-            W + 130
+            obstacle.x < -130 ||
+            obstacle.x > W + 130
         ) {
 
             obstacles.splice(
